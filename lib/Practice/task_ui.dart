@@ -1,7 +1,9 @@
+import 'package:ai_food/Practice/article_ui.dart';
 import 'package:ai_food/Practice/list_management_provider.dart';
 import 'package:ai_food/Practice/task_class.dart';
 import 'package:ai_food/Practice/widgets.dart';
 import 'package:ai_food/Utils/widgets/others/app_text.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -20,6 +22,12 @@ class _TasksUIState extends State<TasksUI> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Tasks UI"),
+        actions: [
+          IconButton(onPressed: (){
+            Navigator.push(context,
+                CupertinoPageRoute(builder: (_) => const ArticleScreen()));
+          }, icon: const Icon(Icons.navigate_next_sharp))
+        ],
       ),
       body: Center(
           child: ListView.builder(
