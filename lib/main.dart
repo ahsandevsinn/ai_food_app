@@ -1,6 +1,7 @@
 import 'package:ai_food/Constants/app_logger.dart';
 import 'package:ai_food/Controller/provider/login_provider.dart';
 import 'package:ai_food/Practice/article_provider.dart';
+import 'package:ai_food/Practice/books_provider.dart';
 import 'package:ai_food/Practice/list_management_provider.dart';
 import 'package:ai_food/Practice/practice_ui.dart';
 import 'package:ai_food/Practice/provider_practice.dart';
@@ -25,6 +26,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<PracticeProvider>(create: (_) => PracticeProvider()),
         ChangeNotifierProvider<ListManagementProvider>(create: (_) => ListManagementProvider()),
         ChangeNotifierProvider<ArticleProvider>(create: (_) => ArticleProvider()),
+        ChangeNotifierProvider<Books>(create: (_) => Books()),
       ],
       child: MaterialApp(
         title: 'AIFood',

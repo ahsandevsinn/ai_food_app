@@ -61,7 +61,7 @@ class _ListManagementState extends State<ListManagement> {
         children: [
           Container(
             padding: const EdgeInsets.only(left: 30),
-            width: 350,
+            width: 310,
             child: TextFormField(
               controller: _controller,
               decoration: const InputDecoration(
@@ -71,10 +71,15 @@ class _ListManagementState extends State<ListManagement> {
           IconButton(
               onPressed: () {
                 practiceProvider.namesListManagement(_controller.text.trim());
-                // practiceProvider.searchName(_controller.text.trim());
                 _controller.clear();
               },
               icon: const Icon(Icons.send)),
+          IconButton(
+              onPressed: () {
+                practiceProvider.searchName(_controller.text.trim());
+                _controller.clear();
+              },
+              icon: const Icon(Icons.search)),
         ],
       ),
     );
