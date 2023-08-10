@@ -6,6 +6,8 @@ import 'package:ai_food/Practice/list_management_provider.dart';
 import 'package:ai_food/Practice/practice_ui.dart';
 import 'package:ai_food/Practice/provider_practice.dart';
 import 'package:ai_food/Utils/widgets/others/app_text.dart';
+import 'package:ai_food/spoonacular/providers/RecipiesParameterProvider.dart';
+import 'package:ai_food/spoonacular/recipies.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -27,6 +29,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<ListManagementProvider>(create: (_) => ListManagementProvider()),
         ChangeNotifierProvider<ArticleProvider>(create: (_) => ArticleProvider()),
         ChangeNotifierProvider<Books>(create: (_) => Books()),
+        ChangeNotifierProvider<RecipesParameterProvider>(create: (_) => RecipesParameterProvider()),
       ],
       child: MaterialApp(
         title: 'AIFood',
@@ -63,6 +66,12 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
+        actions: [
+          IconButton(onPressed: (){
+            Navigator.push(context,
+                CupertinoPageRoute(builder: (_) => const Recipies()));
+          }, icon: const Icon(Icons.navigate_next_sharp))
+        ],
       ),
       body: Builder(builder: (context) {
         var myLoginProvider = context.watch<LoginProvider>();
