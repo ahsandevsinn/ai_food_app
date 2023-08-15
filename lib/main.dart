@@ -8,11 +8,14 @@ import 'package:ai_food/Practice/provider_practice.dart';
 import 'package:ai_food/Utils/widgets/others/app_text.dart';
 import 'package:ai_food/spoonacular/providers/RecipiesParameterProvider.dart';
 import 'package:ai_food/spoonacular/recipies.dart';
+import 'package:ai_food/spoonacular/screens/bottom_nav_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 void main() {
+  AppLogger logger = AppLogger();
+  logger.init();
   runApp(const MyApp());
 }
 
@@ -36,7 +39,8 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: const MyHomePage(title: 'AIFood'),
+        // home: const MyHomePage(title: 'AIFood'),
+        home: BottomNavView(),
       ),
     );
   }

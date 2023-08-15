@@ -14,7 +14,6 @@ class SearchedRecipes extends StatefulWidget {
 class _SearchedRecipesState extends State<SearchedRecipes> {
   @override
   Widget build(BuildContext context) {
-    print("getting_api ${widget.showRecipes}");
     return Scaffold(
       appBar: AppBar(
         title: const Text("Searched recipes"),
@@ -34,6 +33,7 @@ class _SearchedRecipesState extends State<SearchedRecipes> {
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) => InfoRecipie(
                 infoData: gettingRecipes,
+                id: gettingRecipes['extendedIngredients'][index]['id'],
               ),));
             },
             child: ClipRRect(

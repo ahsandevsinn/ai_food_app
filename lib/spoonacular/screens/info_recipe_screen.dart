@@ -1,20 +1,88 @@
+import 'dart:convert';
+
+import 'package:ai_food/spoonacular/providers/RecipiesParameterProvider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 class InfoRecipie extends StatefulWidget {
   final infoData;
-  const InfoRecipie({Key? key, required this.infoData}) : super(key: key);
+  final id;
+  const InfoRecipie({Key? key, required this.infoData, this.id}) : super(key: key);
   @override
   State<InfoRecipie> createState() => _InfoRecipieState();
 }
+
 class _InfoRecipieState extends State<InfoRecipie> {
+  var favouriteRecipes;
+  var favouriteRecipesShow;
+  var classIds;
+  var sharedId;
+
+  @override
+  void initState() {
+    print("initstae_calls${widget.id}");
+    getFavouriteRecipes();
+    super.initState();
+  }
+
+  void getFavouriteRecipes() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    favouriteRecipes = prefs.getString('favouriteRecipes');
+    favouriteRecipesShow = jsonDecode(favouriteRecipes);
+    // print("favod_iid${widget.infoData["extendedIngredients"][0]['id']}");
+    // print("remove_data $favouriteRecipesShow");
+    for(var ids3 in widget.infoData["extendedIngredients"]){
+      print("lehgi_id ${ids3['id']}");
+      classIds = ids3['id'];
+    }
+    print("----------------------------------------");
+    for (var ids in favouriteRecipesShow) {
+      for(var ids2 in ids['extendedIngredients']){
+        print("lehgi_id ${ids2['id']}");
+        sharedId = ids2['id'];
+      }
+      if(classIds == sharedId){
+        print("class_id ${classIds}");
+      }
+      // print("getiting_data ${ids['extendedIngredients']["id"]}");
+      // for (int i = 0; i < ids.length; i++) {
+      //   for (int j = 0; j < ids.length; j++) {
+      //     if(favouriteRecipesShow[i]["extendedIngredients"][j]["id"] == widget.infoData["extendedIngredients"][0]['id']){
+      //       print("geti_receint_id ${widget.infoData["extendedIngredients"][i]['id']}");
+      //     }
+      //     print("data_is ${favouriteRecipesShow[i]["extendedIngredients"][j]["id"]}");
+      //   }
+      // }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final favouriteProvider =
+        Provider.of<RecipesParameterProvider>(context, listen: true);
     var ingredient = widget.infoData["extendedIngredients"];
     return Scaffold(
       appBar: AppBar(
         title: Text("${widget.infoData["title"]}"),
         centerTitle: true,
+        actions: [
+          IconButton(
+            onPressed: () {
+              favouriteProvider.favouriteRecipesAdded(favouriteRecipes: widget.infoData);
+              favouriteProvider.changeIconType();
+              // favouriteProvider.setFavouriteRecipes();
+            },
+            // icon: classIds == sharedId
+            icon:
+            // favouriteProvider.changeIcon
+            //     ?
+            const Icon(Icons.favorite)
+                // : const Icon(Icons.favorite_outline),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -36,7 +104,7 @@ class _InfoRecipieState extends State<InfoRecipie> {
                     title: const Text(
                       "Ingredients",
                       style:
-                      TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                     ),
                     children: [
                       Column(
@@ -69,14 +137,14 @@ class _InfoRecipieState extends State<InfoRecipie> {
                     title: const Text(
                       "Preparation Steps",
                       style:
-                      TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                     ),
                     children: [
                       Column(
                         children: List.generate(
                           widget.infoData["analyzedInstructions"][0]["steps"]
                               .length,
-                              (index) {
+                          (index) {
                             return Padding(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 15, vertical: 5),
@@ -90,7 +158,7 @@ class _InfoRecipieState extends State<InfoRecipie> {
                                         fontSize: 14,
                                         fontWeight: FontWeight.w700),
                                   ),
-                                  SizedBox(width: 5),
+                                  const SizedBox(width: 5),
                                   Expanded(
                                     child: Container(
                                       child: Text(
@@ -112,25 +180,25 @@ class _InfoRecipieState extends State<InfoRecipie> {
                     title: const Text(
                       "Website Link",
                       style:
-                      TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                     ),
                     children: [
                       Center(
                         child: GestureDetector(
                           onTap: () async {
-                            const youtubeUrl =
-                                'https://spoonacular.com/chicken-adobo-coconut-ginger-rice-637883';
-                            if (await canLaunch(youtubeUrl)) {
-                              await launch(youtubeUrl);
+                            final websiteUrl =
+                                '${widget.infoData["spoonacularSourceUrl"]}';
+                            if (await canLaunch(websiteUrl)) {
+                              await launch(websiteUrl);
                             } else {
-                              throw 'Could not launch $youtubeUrl';
+                              throw 'Could not launch $websiteUrl';
                             }
                           },
-                              child: Padding(
-                                padding: const EdgeInsets.only(bottom: 8.0),
-                                child: Text(
-                                    "${widget.infoData["spoonacularSourceUrl"]}"),
-                              ),
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 8.0),
+                            child: Text(
+                                "${widget.infoData["spoonacularSourceUrl"]}"),
+                          ),
                         ),
                       ),
                     ],

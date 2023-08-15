@@ -1,20 +1,25 @@
+import 'dart:convert';
+
 import 'package:ai_food/spoonacular/models/recipes_parameter_class.dart';
 import 'package:ai_food/spoonacular/recipe_parameter_selection.dart';
+import 'package:ai_food/spoonacular/screens/favourite_screen.dart';
 import 'package:ai_food/spoonacular/screens/searched_recipes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RecipesParameterProvider extends ChangeNotifier {
   bool _isLoading = false;
 
   bool get isLoading => _isLoading;
 
-  bool loading(){
+  bool loading() {
     _isLoading = !_isLoading;
     notifyListeners();
     return isLoading;
   }
+
   //for protein
   final List<String> _addProtein = [];
 
@@ -411,8 +416,7 @@ class RecipesParameterProvider extends ChangeNotifier {
   //       : Icons.check_box_outline_blank;
   // }
 
-  void showSearchedRecipes(context,
-      {required List<dynamic> showRecipes}) {
+  void showSearchedRecipes(context, {required List<dynamic> showRecipes}) {
     Navigator.push(
       context,
       CupertinoPageRoute(
@@ -464,6 +468,34 @@ class RecipesParameterProvider extends ChangeNotifier {
     }
 
     notifyListeners();
+  }
+
+  final List<Map<String, dynamic>> _addFavouriteRecipes = [];
+  List<Map<String, dynamic>> get addFavouriteRecipes => _addFavouriteRecipes;
+
+  Future<void> favouriteRecipesAdded(
+      {required Map<String, dynamic> favouriteRecipes}) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    _addFavouriteRecipes.add(favouriteRecipes);
+    var encodedData = jsonEncode(_addFavouriteRecipes);
+    await prefs.setString('favouriteRecipes', encodedData);
+    print("getting_provider_pres $encodedData");
+    notifyListeners();
+  }
+
+  // void setFavouriteRecipes () async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   // await prefs.setString('favouriteRecipes', jsonEncode(_addFavouriteRecipes));
+  //   await prefs.setString('favouriteRecipes', jsonEncode(_addFavouriteRecipes));
+  // }
+
+  bool _changeIcon = false;
+  bool get changeIcon => _changeIcon;
+
+  bool changeIconType(){
+    _changeIcon = !_changeIcon;
+    notifyListeners();
+    return changeIcon;
   }
 
 }

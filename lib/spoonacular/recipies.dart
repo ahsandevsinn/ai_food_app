@@ -20,7 +20,6 @@ class _RecipiesState extends State<Recipies> {
   Widget build(BuildContext context) {
     final recipesParameterProvider =
         Provider.of<RecipesParameterProvider>(context, listen: true);
-    print("addstyle ${recipesParameterProvider.addStyle}");
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -197,58 +196,44 @@ class _RecipiesState extends State<Recipies> {
                         alignment: WrapAlignment.start,
                         children: [
                           recipesParameterProvider.addProtein.isEmpty
-                              ? ChipWidget(
-                                  text: "Preferred Protein",
-                                  color: Theme.of(context).primaryColor)
+                              ? const SizedBox.shrink()
                               : ChipWidget(
                                   text:
                                       "Preferred Protein: ${recipesParameterProvider.addProtein[0]}",
                                   color: Theme.of(context).primaryColor),
                           recipesParameterProvider.addStyle.isEmpty
-                              ? ChipWidget(
-                                  text: "Style",
-                                  color: Theme.of(context).primaryColor)
+                              ? const SizedBox.shrink()
                               : ChipWidget(
                                   text:
                                       "Style: ${recipesParameterProvider.addStyle[0]}",
                                   color: Theme.of(context).primaryColor),
                           recipesParameterProvider.addServiceSize.isEmpty
-                              ? ChipWidget(
-                                  text: "Service Size",
-                                  color: Theme.of(context).primaryColor)
+                              ? const SizedBox.shrink()
                               : ChipWidget(
                                   text:
                                       "Service Size: ${recipesParameterProvider.addServiceSize[0]}",
                                   color: Theme.of(context).primaryColor),
                           recipesParameterProvider.addKitchenResources.isEmpty
-                              ? ChipWidget(
-                                  text: "Kitchen Resources",
-                                  color: Theme.of(context).primaryColor)
+                              ? const SizedBox.shrink()
                               : ChipWidget(
                                   text:
                                       "Kitchen Resources: ${recipesParameterProvider.addKitchenResources[0]}",
                                   color: Theme.of(context).primaryColor),
                           recipesParameterProvider.addAllergies.isEmpty
-                              ? ChipWidget(
-                                  text: "Allergies",
-                                  color: Theme.of(context).primaryColor)
+                              ? const SizedBox.shrink()
                               : ChipWidget(
                                   text:
                                       "Allergies: ${recipesParameterProvider.addAllergies[0]}",
                                   color: Theme.of(context).primaryColor),
                           recipesParameterProvider
                                   .addDietaryRestrictions.isEmpty
-                              ? ChipWidget(
-                                  text: "Dietary Restrictions",
-                                  color: Theme.of(context).primaryColor)
+                              ? const SizedBox.shrink()
                               : ChipWidget(
                                   text:
                                       "Dietary Restrictions: ${recipesParameterProvider.addDietaryRestrictions[0]}",
                                   color: Theme.of(context).primaryColor),
                           recipesParameterProvider.addRegionalDelicacy.isEmpty
-                              ? ChipWidget(
-                                  text: "Regional Delicacy",
-                                  color: Theme.of(context).primaryColor)
+                              ? const SizedBox.shrink()
                               : ChipWidget(
                                   text:
                                       "Regional Delicacy: ${recipesParameterProvider.addRegionalDelicacy[0]}",
@@ -269,7 +254,7 @@ class _RecipiesState extends State<Recipies> {
               recipesParameterProvider.addAllergies.isEmpty &&
               recipesParameterProvider.addDietaryRestrictions.isEmpty &&
               recipesParameterProvider.addRegionalDelicacy.isEmpty) {
-            showSnackBar(context, "Please select any recipes parameters>");
+            showSnackBar(context, "Please select any recipes parameters.");
           } else {
             recipesParameterProvider.removeParams();
             fetchRandomRecipesWithParameters();
@@ -284,9 +269,10 @@ class _RecipiesState extends State<Recipies> {
     final recipesParameterProvider =
         Provider.of<RecipesParameterProvider>(context, listen: false);
     recipesParameterProvider.loading();
-    final apiKey = 'c8006bcb5d99435bada05e67f3db55cc';
+    // final apiKey = 'c8006bcb5d99435bada05e67f3db55cc';
+    final apiKey = '50c97694758d413ba8021361c1a6aff8';
     final apiUrl =
-        'https://api.spoonacular.com/recipes/random?number=5&tags=dinner&apiKey=$apiKey';
+        'https://api.spoonacular.com/recipes/random?number=10&tags=dinner&apiKey=$apiKey';
     // Additional parameters
     final style = recipesParameterProvider.addStyle.isEmpty
         ? ""
@@ -328,7 +314,7 @@ class _RecipiesState extends State<Recipies> {
       'intolerances': allergies,
       'diet': dietaryRestrictions,
       'locale': regionalDelicacy,
-      'number': '5', // Number of recipes
+      'number': '10', // Number of recipes
       'apiKey': apiKey,
     };
     final response =
