@@ -1,17 +1,18 @@
+import 'package:ai_food/config/dio/app_dio.dart';
 import 'package:ai_food/spoonacular/screens/info_recipe_screen.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-class SearchedRecipes extends StatefulWidget {
+class ComplexSearchedRecipes extends StatefulWidget {
   final List<dynamic> showRecipes;
-  const SearchedRecipes({Key? key, required this.showRecipes})
+  const ComplexSearchedRecipes({Key? key, required this.showRecipes})
       : super(key: key);
 
   @override
-  State<SearchedRecipes> createState() => _SearchedRecipesState();
+  State<ComplexSearchedRecipes> createState() => _ComplexSearchedRecipesState();
 }
 
-class _SearchedRecipesState extends State<SearchedRecipes> {
+class _ComplexSearchedRecipesState extends State<ComplexSearchedRecipes> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,8 +21,7 @@ class _SearchedRecipesState extends State<SearchedRecipes> {
       ),
       body: GridView.builder(
         shrinkWrap: true,
-        gridDelegate:
-        const SliverGridDelegateWithFixedCrossAxisCount(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2, // Number of columns in the grid
           crossAxisSpacing: 16.0, // Spacing between columns
           mainAxisSpacing: 16.0,
@@ -31,10 +31,16 @@ class _SearchedRecipesState extends State<SearchedRecipes> {
           final gettingRecipes = widget.showRecipes[index];
           return InkWell(
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => InfoRecipie(
-                infoData: gettingRecipes,
-                id: gettingRecipes['extendedIngredients'][index]['id'],
-              ),));
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(
+              //     builder: (context) => InfoRecipie(
+              //       infoData: gettingRecipes,
+              //       id: gettingRecipes['id'],
+              //     ),
+              //   ),
+              // );
+              getFood(gettingRecipes['id']);
             },
             child: ClipRRect(
               borderRadius: BorderRadius.circular(10),
@@ -65,8 +71,7 @@ class _SearchedRecipesState extends State<SearchedRecipes> {
                           topRight: Radius.circular(10)),
                       child: Container(
                         height: 120,
-                        foregroundDecoration:
-                        const BoxDecoration(
+                        foregroundDecoration: const BoxDecoration(
                           borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(10),
                             topRight: Radius.circular(10),
@@ -89,8 +94,7 @@ class _SearchedRecipesState extends State<SearchedRecipes> {
                         gettingRecipes["title"],
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                            fontWeight: FontWeight.bold),
+                        style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ),
                   ],
@@ -101,5 +105,19 @@ class _SearchedRecipesState extends State<SearchedRecipes> {
         },
       ),
     );
+  }
+  getFood(id) async {
+    const apiKey = 'd9186e5f351240e094658382be62d948';
+    final apiUrl =
+        'https://api.spoonacular.com/recipes/$id/information?apiKey=$apiKey';
+    final response = await AppDio(context).get(path:apiUrl);
+    if (response.statusCode == 200) {
+      var data = response.data;
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => InfoRecipie(infoData: data)));
+      setState(() {});
+    } else {
+      print('API request failed with status code: ${response.statusCode}');
+    }
   }
 }
