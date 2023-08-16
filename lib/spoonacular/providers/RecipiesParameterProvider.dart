@@ -27,10 +27,17 @@ class RecipesParameterProvider extends ChangeNotifier {
   List<String> get addProtein => _addProtein;
 
   List<String> addProteinValue(String protein, int index) {
-    if (_addProtein.isNotEmpty) {
-      _addProtein.removeAt(0);
-    }
-    _addProtein.insert(0, protein);
+    // if (_addProtein.isNotEmpty) {
+    //   _addProtein.removeAt(0);
+    // }
+    // _addProtein.insert(0, protein);
+    _addProtein.add(protein);
+    notifyListeners();
+    return addProtein;
+  }
+
+  List<String> removeProteinValue(String protein, int index) {
+    _addProtein.remove(protein);
     notifyListeners();
     return addProtein;
   }
@@ -42,10 +49,17 @@ class RecipesParameterProvider extends ChangeNotifier {
   List<String> get addStyle => _addStyle;
 
   List<String> addStyleValue(String style, int index) {
-    if (_addStyle.isNotEmpty) {
-      _addStyle.removeAt(0);
-    }
-    _addStyle.insert(0, style);
+    // if (_addStyle.isNotEmpty) {
+    //   _addStyle.removeAt(0);
+    // }
+    // _addStyle.insert(0, style);
+    _addStyle.add(style);
+    notifyListeners();
+    return addStyle;
+  }
+
+  List<String> removeStyleValue(String style, int index) {
+    _addStyle.remove(style);
     notifyListeners();
     return addStyle;
   }
@@ -87,10 +101,17 @@ class RecipesParameterProvider extends ChangeNotifier {
   List<String> get addAllergies => _addAllergies;
 
   List<String> addAllergiesValue(String allergies, int index) {
-    if (_addAllergies.isNotEmpty) {
-      _addAllergies.removeAt(0);
-    }
-    _addAllergies.insert(0, allergies);
+    // if (_addAllergies.isNotEmpty) {
+    //   _addAllergies.removeAt(0);
+    // }
+    // _addAllergies.insert(0, allergies);
+    _addAllergies.add(allergies);
+    notifyListeners();
+    return addAllergies;
+  }
+
+  List<String> removeAllergiesValue(String allergies, int index) {
+    _addAllergies.remove(allergies);
     notifyListeners();
     return addAllergies;
   }
@@ -131,407 +152,254 @@ class RecipesParameterProvider extends ChangeNotifier {
   List<RecipesParameterClass> get recipesParameters => _recipesParameters;
 
   List<RecipesParameterClass> preferredProtein = [
-    const RecipesParameterClass(
-        parameter: 'Salt', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Olive oil', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Butter', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Sugar', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Water', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Flour', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Garlic', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Eggs', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Onion', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Vanilla extract',
-        icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Milk', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Kosher salt', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Lemon juice', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Unsalted butter',
-        icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Black pepper', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Baking powder', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Pepper', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Salt and pepper',
-        icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Egg', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Brown sugar', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Baking soda', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Garlic cloves', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Vegetable oil', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Granulated sugar',
-        icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Honey', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Ground cinnamon',
-        icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Ground pepper', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Cream cheese', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Parmesan cheese',
-        icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Garlic powder', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Carrots', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Cinnamon', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Oregano', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Red onion', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Heavy cream', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Celery', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Chicken', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Sour cream', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Vanilla', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Sea salt', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Green onions', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Lime juice', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Soy sauce', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Powdered sugar', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Fresh parsley', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Bacon', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Cornstarch', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Ground cumin', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Tomatoes', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Canola oil', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Oil', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Chicken broth', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Maple syrup', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Red bell pepper',
-        icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Canned tomatoes',
-        icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Lemon zest', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Paprika', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Dijon mustard', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Chili powder', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Chocolate', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Mayonnaise', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'White sugar', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Onions', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Fresh cilantro', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Parsley', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Cilantro', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Pecans', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Beef', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Ginger', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Garlic clove', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Red pepper flakes',
-        icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Walnuts', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Cayenne pepper', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Extra virgin olive oil',
-        icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Carrot', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Coconut oil', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Zucchini', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Strawberries', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Worcestershire sauce',
-        icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Sesame oil', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Food dye', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Orange juice', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Potatoes', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Fish', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Tomato', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Juice of lemon', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Avocado', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Buttermilk', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Light brown sugar',
-        icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Nutmeg', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Balsamic vinegar',
-        icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Ground ginger', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Yellow onion', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Fresh ginger', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Egg whites', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Ground nutmeg', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Shredded cheddar cheese',
-        icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Green bell pepper',
-        icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Almonds', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Whole milk', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Lemon', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Shrimp', icon: Icon(Icons.check_box_outline_blank)),
+    RecipesParameterClass(parameter: 'Salt'),
+    RecipesParameterClass(parameter: 'Olive oil'),
+    RecipesParameterClass(parameter: 'Butter'),
+    RecipesParameterClass(parameter: 'Sugar'),
+    RecipesParameterClass(parameter: 'Water'),
+    RecipesParameterClass(parameter: 'Flour'),
+    RecipesParameterClass(parameter: 'Garlic'),
+    RecipesParameterClass(parameter: 'Eggs'),
+    RecipesParameterClass(parameter: 'Onion'),
+    RecipesParameterClass(
+      parameter: 'Vanilla extract',
+    ),
+    RecipesParameterClass(parameter: 'Milk'),
+    RecipesParameterClass(parameter: 'Kosher salt'),
+    RecipesParameterClass(parameter: 'Lemon juice'),
+    RecipesParameterClass(
+      parameter: 'Unsalted butter',
+    ),
+    RecipesParameterClass(parameter: 'Black pepper'),
+    RecipesParameterClass(parameter: 'Baking powder'),
+    RecipesParameterClass(parameter: 'Pepper'),
+    RecipesParameterClass(
+      parameter: 'Salt and pepper',
+    ),
+    RecipesParameterClass(parameter: 'Egg'),
+    RecipesParameterClass(parameter: 'Brown sugar'),
+    RecipesParameterClass(parameter: 'Baking soda'),
+    RecipesParameterClass(parameter: 'Garlic cloves'),
+    RecipesParameterClass(parameter: 'Vegetable oil'),
+    RecipesParameterClass(
+      parameter: 'Granulated sugar',
+    ),
+    RecipesParameterClass(parameter: 'Honey'),
+    RecipesParameterClass(
+      parameter: 'Ground cinnamon',
+    ),
+    RecipesParameterClass(parameter: 'Ground pepper'),
+    RecipesParameterClass(parameter: 'Cream cheese'),
+    RecipesParameterClass(
+      parameter: 'Parmesan cheese',
+    ),
+    RecipesParameterClass(parameter: 'Garlic powder'),
+    RecipesParameterClass(parameter: 'Carrots'),
+    RecipesParameterClass(parameter: 'Cinnamon'),
+    RecipesParameterClass(parameter: 'Oregano'),
+    RecipesParameterClass(parameter: 'Red onion'),
+    RecipesParameterClass(parameter: 'Heavy cream'),
+    RecipesParameterClass(parameter: 'Celery'),
+    RecipesParameterClass(parameter: 'Chicken'),
+    RecipesParameterClass(parameter: 'Sour cream'),
+    RecipesParameterClass(parameter: 'Vanilla'),
+    RecipesParameterClass(parameter: 'Sea salt'),
+    RecipesParameterClass(parameter: 'Green onions'),
+    RecipesParameterClass(parameter: 'Lime juice'),
+    RecipesParameterClass(parameter: 'Soy sauce'),
+    RecipesParameterClass(parameter: 'Powdered sugar'),
+    RecipesParameterClass(parameter: 'Fresh parsley'),
+    RecipesParameterClass(parameter: 'Bacon'),
+    RecipesParameterClass(parameter: 'Cornstarch'),
+    RecipesParameterClass(parameter: 'Ground cumin'),
+    RecipesParameterClass(parameter: 'Tomatoes'),
+    RecipesParameterClass(parameter: 'Canola oil'),
+    RecipesParameterClass(parameter: 'Oil'),
+    RecipesParameterClass(parameter: 'Chicken broth'),
+    RecipesParameterClass(parameter: 'Maple syrup'),
+    RecipesParameterClass(
+      parameter: 'Red bell pepper',
+    ),
+    RecipesParameterClass(
+      parameter: 'Canned tomatoes',
+    ),
+    RecipesParameterClass(parameter: 'Lemon zest'),
+    RecipesParameterClass(parameter: 'Paprika'),
+    RecipesParameterClass(parameter: 'Dijon mustard'),
+    RecipesParameterClass(parameter: 'Chili powder'),
+    RecipesParameterClass(parameter: 'Chocolate'),
+    RecipesParameterClass(parameter: 'Mayonnaise'),
+    RecipesParameterClass(parameter: 'White sugar'),
+    RecipesParameterClass(parameter: 'Onions'),
+    RecipesParameterClass(parameter: 'Fresh cilantro'),
+    RecipesParameterClass(parameter: 'Parsley'),
+    RecipesParameterClass(parameter: 'Cilantro'),
+    RecipesParameterClass(parameter: 'Pecans'),
+    RecipesParameterClass(parameter: 'Beef'),
+    RecipesParameterClass(parameter: 'Ginger'),
+    RecipesParameterClass(parameter: 'Garlic clove'),
+    RecipesParameterClass(
+      parameter: 'Red pepper flakes',
+    ),
+    RecipesParameterClass(parameter: 'Walnuts'),
+    RecipesParameterClass(parameter: 'Cayenne pepper'),
+    RecipesParameterClass(
+      parameter: 'Extra virgin olive oil',
+    ),
+    RecipesParameterClass(parameter: 'Carrot'),
+    RecipesParameterClass(parameter: 'Coconut oil'),
+    RecipesParameterClass(parameter: 'Zucchini'),
+    RecipesParameterClass(parameter: 'Strawberries'),
+    RecipesParameterClass(
+      parameter: 'Worcestershire sauce',
+    ),
+    RecipesParameterClass(parameter: 'Sesame oil'),
+    RecipesParameterClass(parameter: 'Food dye'),
+    RecipesParameterClass(parameter: 'Orange juice'),
+    RecipesParameterClass(parameter: 'Potatoes'),
+    RecipesParameterClass(parameter: 'Fish'),
+    RecipesParameterClass(parameter: 'Tomato'),
+    RecipesParameterClass(parameter: 'Juice of lemon'),
+    RecipesParameterClass(parameter: 'Avocado'),
+    RecipesParameterClass(parameter: 'Buttermilk'),
+    RecipesParameterClass(
+      parameter: 'Light brown sugar',
+    ),
+    RecipesParameterClass(parameter: 'Nutmeg'),
+    RecipesParameterClass(
+      parameter: 'Balsamic vinegar',
+    ),
+    RecipesParameterClass(parameter: 'Ground ginger'),
+    RecipesParameterClass(parameter: 'Yellow onion'),
+    RecipesParameterClass(parameter: 'Fresh ginger'),
+    RecipesParameterClass(parameter: 'Egg whites'),
+    RecipesParameterClass(parameter: 'Ground nutmeg'),
+    RecipesParameterClass(
+      parameter: 'Shredded cheddar cheese',
+    ),
+    RecipesParameterClass(
+      parameter: 'Green bell pepper',
+    ),
+    RecipesParameterClass(parameter: 'Almonds'),
+    RecipesParameterClass(parameter: 'Whole milk'),
+    RecipesParameterClass(parameter: 'Lemon'),
+    RecipesParameterClass(parameter: 'Shrimp'),
   ];
 
   List<RecipesParameterClass> styles = [
-    const RecipesParameterClass(
-        parameter: 'African', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Asian', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'American', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'British', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Cajun', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Caribbean', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Chinese', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Eastern European',
-        icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'European', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'French', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'German', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Greek', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Indian', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Irish', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Italian', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Japanese', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Jewish', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Korean', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Latin American', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Mediterranean', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Mexican', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Middle Eastern', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Nordic', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Southern', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Spanish', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Thai', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Vietnamese', icon: Icon(Icons.check_box_outline_blank)),
+    RecipesParameterClass(parameter: 'African'),
+    RecipesParameterClass(parameter: 'Asian'),
+    RecipesParameterClass(parameter: 'American'),
+    RecipesParameterClass(parameter: 'British'),
+    RecipesParameterClass(parameter: 'Cajun'),
+    RecipesParameterClass(parameter: 'Caribbean'),
+    RecipesParameterClass(parameter: 'Chinese'),
+    RecipesParameterClass(
+      parameter: 'Eastern European',
+    ),
+    RecipesParameterClass(parameter: 'European'),
+    RecipesParameterClass(parameter: 'French'),
+    RecipesParameterClass(parameter: 'German'),
+    RecipesParameterClass(parameter: 'Greek'),
+    RecipesParameterClass(parameter: 'Indian'),
+    RecipesParameterClass(parameter: 'Irish'),
+    RecipesParameterClass(parameter: 'Italian'),
+    RecipesParameterClass(parameter: 'Japanese'),
+    RecipesParameterClass(parameter: 'Jewish'),
+    RecipesParameterClass(parameter: 'Korean'),
+    RecipesParameterClass(parameter: 'Latin American'),
+    RecipesParameterClass(parameter: 'Mediterranean'),
+    RecipesParameterClass(parameter: 'Mexican'),
+    RecipesParameterClass(parameter: 'Middle Eastern'),
+    RecipesParameterClass(parameter: 'Nordic'),
+    RecipesParameterClass(parameter: 'Southern'),
+    RecipesParameterClass(parameter: 'Spanish'),
+    RecipesParameterClass(parameter: 'Thai'),
+    RecipesParameterClass(parameter: 'Vietnamese'),
   ];
 
   List<RecipesParameterClass> serviceSize = [
-    // const RecipesParameterClass(parameter: 'One Person', icon: Icon(Icons.check_box_outline_blank)),
-    // const RecipesParameterClass(parameter: 'Small Family', icon: Icon(Icons.check_box_outline_blank)),
-    // const RecipesParameterClass(parameter: 'Large Gathering', icon: Icon(Icons.check_box_outline_blank)),
+    //  RecipesParameterClass(parameter: 'One Person'),
+    //  RecipesParameterClass(parameter: 'Small Family'),
+    //  RecipesParameterClass(parameter: 'Large Gathering'),
 
-    const RecipesParameterClass(
-        parameter: '1', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: '2', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: '3', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: '4', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: '5', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: '7', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: '8', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: '9', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: '10', icon: Icon(Icons.check_box_outline_blank)),
+    RecipesParameterClass(parameter: '1'),
+    RecipesParameterClass(parameter: '2'),
+    RecipesParameterClass(parameter: '3'),
+    RecipesParameterClass(parameter: '4'),
+    RecipesParameterClass(parameter: '5'),
+    RecipesParameterClass(parameter: '7'),
+    RecipesParameterClass(parameter: '8'),
+    RecipesParameterClass(parameter: '9'),
+    RecipesParameterClass(parameter: '10'),
   ];
 
   List<RecipesParameterClass> kitchenResources = [
-    const RecipesParameterClass(
-        parameter: 'Frying Pan', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Bowl', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Blender', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Oven', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Slow Cooker', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Microwave', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Food Processor', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Grill', icon: Icon(Icons.check_box_outline_blank)),
+    RecipesParameterClass(parameter: 'Frying Pan'),
+    RecipesParameterClass(parameter: 'Bowl'),
+    RecipesParameterClass(parameter: 'Blender'),
+    RecipesParameterClass(parameter: 'Oven'),
+    RecipesParameterClass(parameter: 'Slow Cooker'),
+    RecipesParameterClass(parameter: 'Microwave'),
+    RecipesParameterClass(parameter: 'Food Processor'),
+    RecipesParameterClass(parameter: 'Grill'),
   ];
 
   List<RecipesParameterClass> allergies = [
-    const RecipesParameterClass(
-        parameter: 'Dairy', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Egg', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Gluten', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Grain', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Peanut', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Seafood', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Sesame', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Shellfish', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Soy', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Sulfite', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Tree Nut', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Wheat', icon: Icon(Icons.check_box_outline_blank)),
+    RecipesParameterClass(parameter: 'Dairy'),
+    RecipesParameterClass(parameter: 'Egg'),
+    RecipesParameterClass(parameter: 'Gluten'),
+    RecipesParameterClass(parameter: 'Grain'),
+    RecipesParameterClass(parameter: 'Peanut'),
+    RecipesParameterClass(parameter: 'Seafood'),
+    RecipesParameterClass(parameter: 'Sesame'),
+    RecipesParameterClass(parameter: 'Shellfish'),
+    RecipesParameterClass(parameter: 'Soy'),
+    RecipesParameterClass(parameter: 'Sulfite'),
+    RecipesParameterClass(parameter: 'Tree Nut'),
+    RecipesParameterClass(parameter: 'Wheat'),
   ];
 
   List<RecipesParameterClass> dietaryRestrictions = [
-    const RecipesParameterClass(
-        parameter: 'Gluten Free', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Ketogenic', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Vegetarian', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Lacto-Vegetarian',
-        icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Ovo-Vegetarian', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Vegan', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Pescetarian', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Paleo', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Primal', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Low FODMAP', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Whole30', icon: Icon(Icons.check_box_outline_blank)),
+    RecipesParameterClass(parameter: 'Gluten Free'),
+    RecipesParameterClass(parameter: 'Ketogenic'),
+    RecipesParameterClass(parameter: 'Vegetarian'),
+    RecipesParameterClass(
+      parameter: 'Lacto-Vegetarian',
+    ),
+    RecipesParameterClass(parameter: 'Ovo-Vegetarian'),
+    RecipesParameterClass(parameter: 'Vegan'),
+    RecipesParameterClass(parameter: 'Pescetarian'),
+    RecipesParameterClass(parameter: 'Paleo'),
+    RecipesParameterClass(parameter: 'Primal'),
+    RecipesParameterClass(parameter: 'Low FODMAP'),
+    RecipesParameterClass(parameter: 'Whole30'),
   ];
 
   List<RecipesParameterClass> regionalDelicacy = [
-    const RecipesParameterClass(
-        parameter: 'Italian Pizza', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Mexican Tacos', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Japanese Sushi', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Chinese Dumplings',
-        icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Indian Curry', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'French Baguette',
-        icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Italian Pasta', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Thai Pad Thai', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'Greek Souvlaki', icon: Icon(Icons.check_box_outline_blank)),
-    const RecipesParameterClass(
-        parameter: 'American Burger',
-        icon: Icon(Icons.check_box_outline_blank)),
+    RecipesParameterClass(parameter: 'Italian Pizza'),
+    RecipesParameterClass(parameter: 'Mexican Tacos'),
+    RecipesParameterClass(parameter: 'Japanese Sushi'),
+    RecipesParameterClass(
+      parameter: 'Chinese Dumplings',
+    ),
+    RecipesParameterClass(parameter: 'Indian Curry'),
+    RecipesParameterClass(
+      parameter: 'French Baguette',
+    ),
+    RecipesParameterClass(parameter: 'Italian Pasta'),
+    RecipesParameterClass(parameter: 'Thai Pad Thai'),
+    RecipesParameterClass(parameter: 'Greek Souvlaki'),
+    RecipesParameterClass(
+      parameter: 'American Burger',
+    ),
   ];
+
+
+  void toggleRecipeState(int index){
+    _recipesParameters[index].isChecked = !_recipesParameters[index].isChecked;
+    notifyListeners();
+  }
 
   void showParameterDetails(context, String parameter) {
     String selectedParameter = parameter;
@@ -657,25 +525,25 @@ class RecipesParameterProvider extends ChangeNotifier {
 
   void removeParams() {
     if (_addProtein.isNotEmpty) {
-      _addProtein.removeAt(0);
+      _addProtein.clear();
     }
     if (_addStyle.isNotEmpty) {
-      _addStyle.removeAt(0);
+      _addStyle.clear();
     }
     if (_addServiceSize.isNotEmpty) {
-      _addServiceSize.removeAt(0);
+      _addServiceSize.clear();
     }
     if (_addKitchenResources.isNotEmpty) {
-      _addKitchenResources.removeAt(0);
+      _addKitchenResources.clear();
     }
     if (_addAllergies.isNotEmpty) {
-      _addAllergies.removeAt(0);
+      _addAllergies.clear();
     }
     if (_addDietaryRestrictions.isNotEmpty) {
-      _addDietaryRestrictions.removeAt(0);
+      _addDietaryRestrictions.clear();
     }
     if (_addRegionalDelicacy.isNotEmpty) {
-      _addRegionalDelicacy.removeAt(0);
+      _addRegionalDelicacy.clear();
     }
 
     notifyListeners();
@@ -717,5 +585,289 @@ class RecipesParameterProvider extends ChangeNotifier {
     _addNumber.insert(0, value);
     notifyListeners();
     return addNumber;
+  }
+}
+
+
+class ProteinProvider extends ChangeNotifier {
+  final List<RecipesParameterClass> _proteinRecipesParameters = [];
+
+  List<RecipesParameterClass> get proteinRecipesParameters => _proteinRecipesParameters;
+
+  List<RecipesParameterClass> preferredProteinRecipe = [
+    RecipesParameterClass(parameter: 'Salt'),
+    RecipesParameterClass(parameter: 'Olive oil'),
+    RecipesParameterClass(parameter: 'Butter'),
+    RecipesParameterClass(parameter: 'Sugar'),
+    RecipesParameterClass(parameter: 'Water'),
+    RecipesParameterClass(parameter: 'Flour'),
+    RecipesParameterClass(parameter: 'Garlic'),
+    RecipesParameterClass(parameter: 'Eggs'),
+    RecipesParameterClass(parameter: 'Onion'),
+    RecipesParameterClass(
+      parameter: 'Vanilla extract',
+    ),
+    RecipesParameterClass(parameter: 'Milk'),
+    RecipesParameterClass(parameter: 'Kosher salt'),
+    RecipesParameterClass(parameter: 'Lemon juice'),
+    RecipesParameterClass(
+      parameter: 'Unsalted butter',
+    ),
+    RecipesParameterClass(parameter: 'Black pepper'),
+    RecipesParameterClass(parameter: 'Baking powder'),
+    RecipesParameterClass(parameter: 'Pepper'),
+    RecipesParameterClass(
+      parameter: 'Salt and pepper',
+    ),
+    RecipesParameterClass(parameter: 'Egg'),
+    RecipesParameterClass(parameter: 'Brown sugar'),
+    RecipesParameterClass(parameter: 'Baking soda'),
+    RecipesParameterClass(parameter: 'Garlic cloves'),
+    RecipesParameterClass(parameter: 'Vegetable oil'),
+    RecipesParameterClass(
+      parameter: 'Granulated sugar',
+    ),
+    RecipesParameterClass(parameter: 'Honey'),
+    RecipesParameterClass(
+      parameter: 'Ground cinnamon',
+    ),
+    RecipesParameterClass(parameter: 'Ground pepper'),
+    RecipesParameterClass(parameter: 'Cream cheese'),
+    RecipesParameterClass(
+      parameter: 'Parmesan cheese',
+    ),
+    RecipesParameterClass(parameter: 'Garlic powder'),
+    RecipesParameterClass(parameter: 'Carrots'),
+    RecipesParameterClass(parameter: 'Cinnamon'),
+    RecipesParameterClass(parameter: 'Oregano'),
+    RecipesParameterClass(parameter: 'Red onion'),
+    RecipesParameterClass(parameter: 'Heavy cream'),
+    RecipesParameterClass(parameter: 'Celery'),
+    RecipesParameterClass(parameter: 'Chicken'),
+    RecipesParameterClass(parameter: 'Sour cream'),
+    RecipesParameterClass(parameter: 'Vanilla'),
+    RecipesParameterClass(parameter: 'Sea salt'),
+    RecipesParameterClass(parameter: 'Green onions'),
+    RecipesParameterClass(parameter: 'Lime juice'),
+    RecipesParameterClass(parameter: 'Soy sauce'),
+    RecipesParameterClass(parameter: 'Powdered sugar'),
+    RecipesParameterClass(parameter: 'Fresh parsley'),
+    RecipesParameterClass(parameter: 'Bacon'),
+    RecipesParameterClass(parameter: 'Cornstarch'),
+    RecipesParameterClass(parameter: 'Ground cumin'),
+    RecipesParameterClass(parameter: 'Tomatoes'),
+    RecipesParameterClass(parameter: 'Canola oil'),
+    RecipesParameterClass(parameter: 'Oil'),
+    RecipesParameterClass(parameter: 'Chicken broth'),
+    RecipesParameterClass(parameter: 'Maple syrup'),
+    RecipesParameterClass(
+      parameter: 'Red bell pepper',
+    ),
+    RecipesParameterClass(
+      parameter: 'Canned tomatoes',
+    ),
+    RecipesParameterClass(parameter: 'Lemon zest'),
+    RecipesParameterClass(parameter: 'Paprika'),
+    RecipesParameterClass(parameter: 'Dijon mustard'),
+    RecipesParameterClass(parameter: 'Chili powder'),
+    RecipesParameterClass(parameter: 'Chocolate'),
+    RecipesParameterClass(parameter: 'Mayonnaise'),
+    RecipesParameterClass(parameter: 'White sugar'),
+    RecipesParameterClass(parameter: 'Onions'),
+    RecipesParameterClass(parameter: 'Fresh cilantro'),
+    RecipesParameterClass(parameter: 'Parsley'),
+    RecipesParameterClass(parameter: 'Cilantro'),
+    RecipesParameterClass(parameter: 'Pecans'),
+    RecipesParameterClass(parameter: 'Beef'),
+    RecipesParameterClass(parameter: 'Ginger'),
+    RecipesParameterClass(parameter: 'Garlic clove'),
+    RecipesParameterClass(
+      parameter: 'Red pepper flakes',
+    ),
+    RecipesParameterClass(parameter: 'Walnuts'),
+    RecipesParameterClass(parameter: 'Cayenne pepper'),
+    RecipesParameterClass(
+      parameter: 'Extra virgin olive oil',
+    ),
+    RecipesParameterClass(parameter: 'Carrot'),
+    RecipesParameterClass(parameter: 'Coconut oil'),
+    RecipesParameterClass(parameter: 'Zucchini'),
+    RecipesParameterClass(parameter: 'Strawberries'),
+    RecipesParameterClass(
+      parameter: 'Worcestershire sauce',
+    ),
+    RecipesParameterClass(parameter: 'Sesame oil'),
+    RecipesParameterClass(parameter: 'Food dye'),
+    RecipesParameterClass(parameter: 'Orange juice'),
+    RecipesParameterClass(parameter: 'Potatoes'),
+    RecipesParameterClass(parameter: 'Fish'),
+    RecipesParameterClass(parameter: 'Tomato'),
+    RecipesParameterClass(parameter: 'Juice of lemon'),
+    RecipesParameterClass(parameter: 'Avocado'),
+    RecipesParameterClass(parameter: 'Buttermilk'),
+    RecipesParameterClass(
+      parameter: 'Light brown sugar',
+    ),
+    RecipesParameterClass(parameter: 'Nutmeg'),
+    RecipesParameterClass(
+      parameter: 'Balsamic vinegar',
+    ),
+    RecipesParameterClass(parameter: 'Ground ginger'),
+    RecipesParameterClass(parameter: 'Yellow onion'),
+    RecipesParameterClass(parameter: 'Fresh ginger'),
+    RecipesParameterClass(parameter: 'Egg whites'),
+    RecipesParameterClass(parameter: 'Ground nutmeg'),
+    RecipesParameterClass(
+      parameter: 'Shredded cheddar cheese',
+    ),
+    RecipesParameterClass(
+      parameter: 'Green bell pepper',
+    ),
+    RecipesParameterClass(parameter: 'Almonds'),
+    RecipesParameterClass(parameter: 'Whole milk'),
+    RecipesParameterClass(parameter: 'Lemon'),
+    RecipesParameterClass(parameter: 'Shrimp'),
+  ];
+
+  void showProteinParameterDetails(context, String parameter) {
+    if (parameter == "Preferred Protein") {
+      _proteinRecipesParameters.addAll(preferredProteinRecipe);
+      Navigator.push(
+        context,
+        CupertinoPageRoute(
+          builder: (_) =>
+              RecipesSelection(
+                  parameter: parameter,
+                  recipesParameters: preferredProteinRecipe),
+        ),
+      );
+      notifyListeners();
+    }
+  }
+
+  void toggleProteinRecipeState(int index){
+    _proteinRecipesParameters[index].isChecked = !_proteinRecipesParameters[index].isChecked;
+    notifyListeners();
+  }
+  void clearProteinAllCheckboxStates() {
+    for (var parameter in _proteinRecipesParameters) {
+      parameter.isChecked = false;
+    }
+    notifyListeners();
+  }
+}
+
+class StyleProvider extends ChangeNotifier {
+  final List<RecipesParameterClass> _styleRecipesParameters = [];
+
+  List<RecipesParameterClass> get styleRecipesParameters => _styleRecipesParameters;
+
+  List<RecipesParameterClass> preferredStyleRecipe = [
+    RecipesParameterClass(parameter: 'African'),
+    RecipesParameterClass(parameter: 'Asian'),
+    RecipesParameterClass(parameter: 'American'),
+    RecipesParameterClass(parameter: 'British'),
+    RecipesParameterClass(parameter: 'Cajun'),
+    RecipesParameterClass(parameter: 'Caribbean'),
+    RecipesParameterClass(parameter: 'Chinese'),
+    RecipesParameterClass(
+      parameter: 'Eastern European',
+    ),
+    RecipesParameterClass(parameter: 'European'),
+    RecipesParameterClass(parameter: 'French'),
+    RecipesParameterClass(parameter: 'German'),
+    RecipesParameterClass(parameter: 'Greek'),
+    RecipesParameterClass(parameter: 'Indian'),
+    RecipesParameterClass(parameter: 'Irish'),
+    RecipesParameterClass(parameter: 'Italian'),
+    RecipesParameterClass(parameter: 'Japanese'),
+    RecipesParameterClass(parameter: 'Jewish'),
+    RecipesParameterClass(parameter: 'Korean'),
+    RecipesParameterClass(parameter: 'Latin American'),
+    RecipesParameterClass(parameter: 'Mediterranean'),
+    RecipesParameterClass(parameter: 'Mexican'),
+    RecipesParameterClass(parameter: 'Middle Eastern'),
+    RecipesParameterClass(parameter: 'Nordic'),
+    RecipesParameterClass(parameter: 'Southern'),
+    RecipesParameterClass(parameter: 'Spanish'),
+    RecipesParameterClass(parameter: 'Thai'),
+    RecipesParameterClass(parameter: 'Vietnamese'),
+  ];
+
+  void showStyleParameterDetails(context, String parameter) {
+    if (parameter == "Style") {
+      _styleRecipesParameters.addAll(preferredStyleRecipe);
+      Navigator.push(
+        context,
+        CupertinoPageRoute(
+          builder: (_) =>
+              RecipesSelection(
+                  parameter: parameter,
+                  recipesParameters: preferredStyleRecipe),
+        ),
+      );
+      notifyListeners();
+    }
+  }
+
+  void toggleStyleRecipeState(int index){
+    _styleRecipesParameters[index].isChecked = !_styleRecipesParameters[index].isChecked;
+    notifyListeners();
+  }
+
+  void clearStyleAllCheckboxStates() {
+    for (var parameter in _styleRecipesParameters) {
+      parameter.isChecked = false;
+    }
+    notifyListeners();
+  }
+}
+
+class AllergiesProvider extends ChangeNotifier {
+  final List<RecipesParameterClass> _allergiesRecipesParameters = [];
+
+  List<RecipesParameterClass> get allergiesRecipesParameters => _allergiesRecipesParameters;
+
+  List<RecipesParameterClass> preferredAllergiesRecipe = [
+    RecipesParameterClass(parameter: 'Dairy'),
+    RecipesParameterClass(parameter: 'Egg'),
+    RecipesParameterClass(parameter: 'Gluten'),
+    RecipesParameterClass(parameter: 'Grain'),
+    RecipesParameterClass(parameter: 'Peanut'),
+    RecipesParameterClass(parameter: 'Seafood'),
+    RecipesParameterClass(parameter: 'Sesame'),
+    RecipesParameterClass(parameter: 'Shellfish'),
+    RecipesParameterClass(parameter: 'Soy'),
+    RecipesParameterClass(parameter: 'Sulfite'),
+    RecipesParameterClass(parameter: 'Tree Nut'),
+    RecipesParameterClass(parameter: 'Wheat'),
+  ];
+
+  void showAllergiesParameterDetails(context, String parameter) {
+    if (parameter == "Allergies") {
+      _allergiesRecipesParameters.addAll(preferredAllergiesRecipe);
+      Navigator.push(
+        context,
+        CupertinoPageRoute(
+          builder: (_) =>
+              RecipesSelection(
+                  parameter: parameter,
+                  recipesParameters: preferredAllergiesRecipe),
+        ),
+      );
+      notifyListeners();
+    }
+  }
+
+  void toggleAllergiesRecipeState(int index){
+    _allergiesRecipesParameters[index].isChecked = !_allergiesRecipesParameters[index].isChecked;
+    notifyListeners();
+  }
+
+  void clearAllergiesAllCheckboxStates() {
+    for (var parameter in _allergiesRecipesParameters) {
+      parameter.isChecked = false;
+    }
+    notifyListeners();
   }
 }

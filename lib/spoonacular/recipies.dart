@@ -54,6 +54,9 @@ class _RecipiesState extends State<Recipies> {
                         searchRecipe(_searchController.text);
                         _searchController.clear();
                         recipesParameterProvider.removeParams();
+                        Provider.of<ProteinProvider>(context, listen: false).clearProteinAllCheckboxStates();
+                        Provider.of<StyleProvider>(context, listen: false).clearStyleAllCheckboxStates();
+                        Provider.of<AllergiesProvider>(context, listen: false).clearAllergiesAllCheckboxStates();
                       }
                     },
                   ),
@@ -151,7 +154,7 @@ class _RecipiesState extends State<Recipies> {
                                     : Theme.of(context).primaryColor,
                             text: "Preferred Protein",
                             onPressed: () {
-                              recipesParameterProvider.showParameterDetails(
+                              Provider.of<ProteinProvider>(context, listen: false).showProteinParameterDetails(
                                   context, "Preferred Protein");
                             },
                           ),
@@ -161,7 +164,7 @@ class _RecipiesState extends State<Recipies> {
                                 : Theme.of(context).primaryColor,
                             text: "Style",
                             onPressed: () {
-                              recipesParameterProvider.showParameterDetails(
+                              Provider.of<StyleProvider>(context, listen: false).showStyleParameterDetails(
                                   context, "Style");
                             },
                           ),
@@ -194,7 +197,7 @@ class _RecipiesState extends State<Recipies> {
                                     : Theme.of(context).primaryColor,
                             text: "Allergies",
                             onPressed: () {
-                              recipesParameterProvider.showParameterDetails(
+                              Provider.of<AllergiesProvider>(context, listen: false).showAllergiesParameterDetails(
                                   context, "Allergies");
                             },
                           ),
@@ -243,13 +246,13 @@ class _RecipiesState extends State<Recipies> {
                               ? const SizedBox.shrink()
                               : ChipWidget(
                                   text:
-                                      "Preferred Protein: ${recipesParameterProvider.addProtein[0]}",
+                                      "Preferred Protein: ${recipesParameterProvider.addProtein.toString().substring(1, recipesParameterProvider.addProtein.toString().length - 1)}",
                                   color: Theme.of(context).primaryColor),
                           recipesParameterProvider.addStyle.isEmpty
                               ? const SizedBox.shrink()
                               : ChipWidget(
                                   text:
-                                      "Style: ${recipesParameterProvider.addStyle[0]}",
+                                      "Style: ${recipesParameterProvider.addStyle.toString().substring(1, recipesParameterProvider.addStyle.toString().length - 1)}",
                                   color: Theme.of(context).primaryColor),
                           recipesParameterProvider.addServiceSize.isEmpty
                               ? const SizedBox.shrink()
@@ -267,7 +270,7 @@ class _RecipiesState extends State<Recipies> {
                               ? const SizedBox.shrink()
                               : ChipWidget(
                                   text:
-                                      "Allergies: ${recipesParameterProvider.addAllergies[0]}",
+                                      "Allergies: ${recipesParameterProvider.addAllergies.toString().substring(1, recipesParameterProvider.addAllergies.toString().length - 1)}",
                                   color: Theme.of(context).primaryColor),
                           recipesParameterProvider
                                   .addDietaryRestrictions.isEmpty
@@ -462,11 +465,11 @@ class _RecipiesState extends State<Recipies> {
     final recipesParameterProvider = Provider.of<RecipesParameterProvider>(context, listen: false);
     recipesParameterProvider.loading();
 
-    final style = recipesParameterProvider.addStyle.isNotEmpty ? "&cuisine=${recipesParameterProvider.addStyle[0]}" : "";
+    final style = recipesParameterProvider.addStyle.isNotEmpty ? "&cuisine=${recipesParameterProvider.addStyle.toString().substring(1, recipesParameterProvider.addStyle.toString().length - 1)}" : "";
     final serviceSize = recipesParameterProvider.addServiceSize.isNotEmpty ? "&servings=${recipesParameterProvider.addServiceSize[0]}" : "";
     final kitchenResources = recipesParameterProvider.addKitchenResources.isNotEmpty ? "&equipment=${recipesParameterProvider.addKitchenResources[0]}" : "";
-    final preferredProtein = recipesParameterProvider.addProtein.isNotEmpty ? "&includeIngredients=${recipesParameterProvider.addProtein[0]}" : "";
-    final allergies = recipesParameterProvider.addAllergies.isNotEmpty ? "&intolerances=${recipesParameterProvider.addAllergies[0]}" : "";
+    final preferredProtein = recipesParameterProvider.addProtein.isNotEmpty ? "&includeIngredients=${recipesParameterProvider.addProtein.toString().substring(1, recipesParameterProvider.addProtein.toString().length - 1)}" : "";
+    final allergies = recipesParameterProvider.addAllergies.isNotEmpty ? "&intolerances=${recipesParameterProvider.addAllergies.toString().substring(1, recipesParameterProvider.addAllergies.toString().length - 1)}" : "";
     final dietaryRestrictions = recipesParameterProvider.addDietaryRestrictions.isNotEmpty ? "&diet=${recipesParameterProvider.addDietaryRestrictions[0]}" : "";
     // final regionalDelicacy = recipesParameterProvider.addRegionalDelicacy.isNotEmpty ? "&cuisine=${recipesParameterProvider.addRegionalDelicacy[0]}" : "";
     final regionalDelicacy = recipesParameterProvider.addRegionalDelicacy.isNotEmpty ? "" : "";

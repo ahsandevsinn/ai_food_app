@@ -19,8 +19,7 @@ class RecipesSelection extends StatefulWidget {
 }
 
 class _RecipesSelectionState extends State<RecipesSelection> {
-  int _selectedIndex = -1; // Track the selected index
-
+  int _selectedIndex = -1;
   @override
   Widget build(BuildContext context) {
     final selectedValue =
@@ -30,7 +29,95 @@ class _RecipesSelectionState extends State<RecipesSelection> {
       appBar: AppBar(
         title: AppText(widget.parameter, color: Colors.white),
       ),
-      body: ListView.builder(
+      body: allListsProviders(selectedValue),
+    );
+  }
+
+  Widget allListsProviders(selectedValue) {
+    if (widget.parameter == "Preferred Protein") {
+      return Consumer<ProteinProvider>(
+        builder: (context, recipeProvider, _) {
+          return ListView.builder(
+            itemCount: widget.recipesParameters.length,
+            itemBuilder: (context, index) {
+              final recipesParams = widget.recipesParameters[index];
+              return ListTile(
+                title: AppText(
+                    recipeProvider.preferredProteinRecipe[index].parameter),
+                trailing: Checkbox(
+                  value: recipeProvider.preferredProteinRecipe[index].isChecked,
+                  onChanged: (newValue) {
+                    if (recipeProvider.preferredProteinRecipe[index].isChecked == false) {
+                      recipeProvider.toggleProteinRecipeState(index);
+                      selectedValue.addProteinValue(recipesParams.parameter, index);
+                    } else {
+                      recipeProvider.toggleProteinRecipeState(index);
+                      selectedValue.removeProteinValue(recipesParams.parameter, index);
+                    }
+                  },
+                ),
+              );
+            },
+          );
+        },
+      );
+    } else if (widget.parameter == "Style") {
+      return Consumer<StyleProvider>(
+        builder: (context, recipeProvider, _) {
+          return ListView.builder(
+            itemCount: widget.recipesParameters.length,
+            itemBuilder: (context, index) {
+              final recipesParams = widget.recipesParameters[index];
+              return ListTile(
+                title: AppText(
+                    recipeProvider.preferredStyleRecipe[index].parameter),
+                trailing: Checkbox(
+                  value: recipeProvider.preferredStyleRecipe[index].isChecked,
+                  onChanged: (newValue) {
+                    if(recipeProvider.preferredStyleRecipe[index].isChecked == false){
+                      recipeProvider.toggleStyleRecipeState(index);
+                      selectedValue.addStyleValue(recipesParams.parameter, index);
+                    } else {
+                      recipeProvider.toggleStyleRecipeState(index);
+                      selectedValue.removeStyleValue(recipesParams.parameter, index);
+                    }
+                  },
+                ),
+              );
+            },
+          );
+        },
+      );
+    } else if (widget.parameter == "Allergies") {
+      return Consumer<AllergiesProvider>(
+        builder: (context, recipeProvider, _) {
+          return ListView.builder(
+            itemCount: widget.recipesParameters.length,
+            itemBuilder: (context, index) {
+              final recipesParams = widget.recipesParameters[index];
+              return ListTile(
+                title: AppText(
+                    recipeProvider.preferredAllergiesRecipe[index].parameter),
+                trailing: Checkbox(
+                  value:
+                      recipeProvider.preferredAllergiesRecipe[index].isChecked,
+                  onChanged: (newValue) {
+                    if(recipeProvider.preferredAllergiesRecipe[index].isChecked == false){
+                      recipeProvider.toggleAllergiesRecipeState(index);
+                      selectedValue.addAllergiesValue(recipesParams.parameter, index);
+                    } else {
+                      recipeProvider.toggleAllergiesRecipeState(index);
+                      selectedValue.removeAllergiesValue(recipesParams.parameter, index);
+                    }
+                  },
+                ),
+              );
+            },
+          );
+        },
+      );
+    } else {
+      return ListView.builder(
         itemCount: widget.recipesParameters.length,
         shrinkWrap: true,
         scrollDirection: Axis.vertical,
@@ -39,22 +126,20 @@ class _RecipesSelectionState extends State<RecipesSelection> {
           return GestureDetector(
             onTap: () {
               setState(() {
-                _selectedIndex = index; // Update the selected index
+                _selectedIndex = index;
               });
-              if (widget.parameter == "Preferred Protein") {
-                selectedValue.addProteinValue(recipesParams.parameter, index);
-              } else if (widget.parameter == "Style") {
-                selectedValue.addStyleValue(recipesParams.parameter, index);
-              } else if (widget.parameter == "Service Size") {
-                selectedValue.addServiceSizeValue(recipesParams.parameter, index);
+              if (widget.parameter == "Service Size") {
+                selectedValue.addServiceSizeValue(
+                    recipesParams.parameter, index);
               } else if (widget.parameter == "Kitchen Resources") {
-                selectedValue.addKitchenResourcesValue(recipesParams.parameter, index);
-              } else if (widget.parameter == "Allergies") {
-                selectedValue.addAllergiesValue(recipesParams.parameter, index);
+                selectedValue.addKitchenResourcesValue(
+                    recipesParams.parameter, index);
               } else if (widget.parameter == "Dietary Restrictions") {
-                selectedValue.addDietaryRestrictionsValue(recipesParams.parameter, index);
+                selectedValue.addDietaryRestrictionsValue(
+                    recipesParams.parameter, index);
               } else if (widget.parameter == "Regional Delicacy") {
-                selectedValue.addRegionalDelicacyValue(recipesParams.parameter, index);
+                selectedValue.addRegionalDelicacyValue(
+                    recipesParams.parameter, index);
               }
             },
             child: ListTile(
@@ -67,7 +152,7 @@ class _RecipesSelectionState extends State<RecipesSelection> {
             ),
           );
         },
-      ),
-    );
+      );
+    }
   }
 }

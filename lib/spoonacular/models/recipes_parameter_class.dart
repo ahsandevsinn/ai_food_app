@@ -1,8 +1,7 @@
-import 'package:flutter/cupertino.dart';
-enum IconDataSelect { selected, unselected }
+
 class RecipesParameterClass{
   final String parameter;
-  final Icon icon;
+  bool isChecked;
 
-  const RecipesParameterClass({required this.parameter, required this.icon});
+  RecipesParameterClass({required this.parameter, this.isChecked = false});
 }
