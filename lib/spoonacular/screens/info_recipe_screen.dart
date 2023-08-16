@@ -7,10 +7,13 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+enum Units { cm, inches }
+
 class InfoRecipie extends StatefulWidget {
   final infoData;
   final id;
-  const InfoRecipie({Key? key, required this.infoData, this.id}) : super(key: key);
+  const InfoRecipie({Key? key, required this.infoData, this.id})
+      : super(key: key);
   @override
   State<InfoRecipie> createState() => _InfoRecipieState();
 }
@@ -20,6 +23,13 @@ class _InfoRecipieState extends State<InfoRecipie> {
   var favouriteRecipesShow;
   var classIds;
   var sharedId;
+
+  String selectedUnit = 'US';
+  void _toggleUnit() {
+    setState(() {
+      selectedUnit = (selectedUnit == 'US') ? 'Metric' : 'US';
+    });
+  }
 
   @override
   void initState() {
@@ -68,21 +78,6 @@ class _InfoRecipieState extends State<InfoRecipie> {
       appBar: AppBar(
         title: Text("${widget.infoData["title"]}"),
         centerTitle: true,
-        actions: [
-          IconButton(
-            onPressed: () {
-              favouriteProvider.favouriteRecipesAdded(favouriteRecipes: widget.infoData);
-              favouriteProvider.changeIconType();
-              // favouriteProvider.setFavouriteRecipes();
-            },
-            // icon: classIds == sharedId
-            icon:
-            // favouriteProvider.changeIcon
-            //     ?
-            const Icon(Icons.favorite)
-                // : const Icon(Icons.favorite_outline),
-          ),
-        ],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -107,6 +102,34 @@ class _InfoRecipieState extends State<InfoRecipie> {
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                     ),
                     children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          const Text(
+                            "Change unit:",
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.w700),
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Container(
+                            height: 25,
+                            child: ElevatedButton(
+                              onPressed: _toggleUnit,
+                              style: ElevatedButton.styleFrom(
+                                primary: (selectedUnit == 'US')
+                                    ? Colors.blue
+                                    : Colors.grey,
+                              ),
+                              child: Text(
+                                selectedUnit,
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                       Column(
                         children: ingredient.map<Widget>((ingredientData) {
                           return Padding(
@@ -124,8 +147,36 @@ class _InfoRecipieState extends State<InfoRecipie> {
                                 const SizedBox(width: 5),
                                 Padding(
                                   padding: const EdgeInsets.all(4.0),
-                                  child: Text("${ingredientData["name"]}"),
+                                  child: Container(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.4,
+                                      child: Text("${ingredientData["name"]}",
+                                          maxLines: 2)),
                                 ),
+                                const Spacer(),
+                                selectedUnit == "US"
+                                    ? Row(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.all(4.0),
+                                            child: Text(
+                                                "${ingredientData["measures"]["us"]["amount"]}"),
+                                          ),
+                                          Text(
+                                              "${ingredientData["measures"]["us"]["unitLong"]}")
+                                        ],
+                                      )
+                                    : Row(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.all(4.0),
+                                            child: Text(
+                                                "${ingredientData["measures"]["metric"]["amount"]}"),
+                                          ),
+                                          Text(
+                                              "${ingredientData["measures"]["metric"]["unitLong"]}")
+                                        ],
+                                      )
                               ],
                             ),
                           );
@@ -186,12 +237,12 @@ class _InfoRecipieState extends State<InfoRecipie> {
                       Center(
                         child: GestureDetector(
                           onTap: () async {
-                            final websiteUrl =
-                                '${widget.infoData["spoonacularSourceUrl"]}';
-                            if (await canLaunch(websiteUrl)) {
-                              await launch(websiteUrl);
+                            final youtubeUrl =
+                                "${widget.infoData["spoonacularSourceUrl"]}";
+                            if (await canLaunch(youtubeUrl)) {
+                              await launch(youtubeUrl);
                             } else {
-                              throw 'Could not launch $websiteUrl';
+                              throw 'Could not launch $youtubeUrl';
                             }
                           },
                           child: Padding(

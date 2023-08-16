@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:ai_food/Utils/utils.dart';
 import 'package:ai_food/Utils/widgets/others/app_text.dart';
@@ -18,9 +19,6 @@ class Recipies extends StatefulWidget {
 
 class _RecipiesState extends State<Recipies> {
   final _searchController = TextEditingController();
-
-  List<int> numberList = [1, 2, 3, 4, 5, 6, 7, 8, 9 ,10];
-  int selectedNumber = 1;
 
   @override
   void dispose() {
@@ -115,31 +113,6 @@ class _RecipiesState extends State<Recipies> {
                           fontWeight: FontWeight.bold,
                           fontSize: 20,
                         ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const AppText("Generate recipes"),
-                          const SizedBox(width: 10),
-                          DropdownButton<int>(
-                            value: selectedNumber,
-                            onChanged: (newValue) {
-                              setState(() {
-                                selectedNumber = newValue!;
-                              });
-                              print("selected_numve ${selectedNumber}");
-                            },
-                            items: numberList.map<DropdownMenuItem<int>>((int value) {
-                              return DropdownMenuItem<int>(
-                                value: value,
-                                child: Text(value.toString()),
-                              );
-                            }).toList(),
-                          ),
-                        ],
                       ),
                     ),
                     Padding(
@@ -462,6 +435,10 @@ class _RecipiesState extends State<Recipies> {
   // }
 
   void searchRecipe(String searchControllerText) async {
+
+    Random random = Random();
+    int randomNumber = random.nextInt(10);
+
     final recipesParameterProvider = Provider.of<RecipesParameterProvider>(context, listen: false);
     recipesParameterProvider.loading();
 
@@ -475,7 +452,7 @@ class _RecipiesState extends State<Recipies> {
     final regionalDelicacy = recipesParameterProvider.addRegionalDelicacy.isNotEmpty ? "" : "";
 
     final apiKey = '50c97694758d413ba8021361c1a6aff8';
-    final apiUrl = 'https://api.spoonacular.com/recipes/complexSearch?query=$searchControllerText$style$serviceSize$kitchenResources$preferredProtein$allergies$dietaryRestrictions$regionalDelicacy&number=$selectedNumber&apiKey=$apiKey';
+    final apiUrl = 'https://api.spoonacular.com/recipes/complexSearch?query=$searchControllerText$style$serviceSize$kitchenResources$preferredProtein$allergies$dietaryRestrictions$regionalDelicacy&number=$randomNumber&apiKey=$apiKey';
 
     final response = await AppDio(context).get(path: apiUrl);
     if (response.statusCode == 200) {
