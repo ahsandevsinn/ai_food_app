@@ -4,18 +4,18 @@ import 'package:ai_food/config/keys/headers.dart';
 import 'package:ai_food/config/keys/pref_keys.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:req_fun/req_fun.dart';
+// import 'package:req_fun/req_fun.dart';
 
 class AppDioInterceptor extends Interceptor {
-  final BuildContext context;
+  // final BuildContext context;
   String token = "";
   final AppLogger _logger = AppLogger();
 
-  AppDioInterceptor(this.context) {
-    Prefs.getPrefs().then((prefs) {
-      token = prefs.getString(PrefKey.authorization) ?? "";
-    });
-  }
+  // AppDioInterceptor(this.context) {
+  //   Prefs.getPrefs().then((prefs) {
+  //     token = prefs.getString(PrefKey.authorization) ?? "";
+  //   });
+  // }
 
   @override
   void onError(DioError err, ErrorInterceptorHandler handler) {

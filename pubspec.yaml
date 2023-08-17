@@ -40,7 +40,7 @@ dependencies:
   logger: ^2.0.1
   dio: ^5.3.2
   shared_preferences: ^2.2.0
-  req_fun: ^1.0.5
+#  req_fun: ^1.0.5
   connectivity: ^3.0.6
   cached_network_image: ^3.2.3
   url_launcher: ^6.1.11
@@ -70,9 +70,8 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
+  assets:
+    - assets/images/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

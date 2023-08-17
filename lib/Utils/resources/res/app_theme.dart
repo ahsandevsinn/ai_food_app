@@ -4,7 +4,7 @@ class AppTheme {
   AppTheme._();
 
   static Color error = Colors.red[700]!;
-  static Color appColor = const Color(0xffff70000);
+  static Color appColor = const Color(0xFFE2CFEB);
   static const Color primaryColor = Color(0xff36F12C);
   static const Color primaryColorLite = Color(0xff65FF8F);
   static const Color primarySwatchColor = Color(0xff36F12C);
