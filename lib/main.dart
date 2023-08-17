@@ -3,11 +3,14 @@ import 'package:ai_food/Controller/provider/login_provider.dart';
 import 'package:ai_food/View/splash_screen.dart';
 import 'package:ai_food/spoonacular/providers/RecipiesParameterProvider.dart';
 import 'package:ai_food/spoonacular/screens/bottom_nav_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   AppLogger logger = AppLogger();
   logger.init();
   runApp(const MyApp());
@@ -33,8 +36,10 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'AIFood',
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          primarySwatch: Colors.blue,
+          primarySwatch: Colors.indigo,
+          brightness: Brightness.dark,
         ),
         // home: BottomNavView(),
         home: SplashScreen(),

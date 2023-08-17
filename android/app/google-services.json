@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "422916102456",
+    "project_id": "aifood-666be",
+    "storage_bucket": "aifood-666be.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:422916102456:android:54d974a32a72f2b8d809cd",
+        "android_client_info": {
+          "package_name": "com.example.ai_food"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "422916102456-6cibhj06ur44sevdq9nmkthvngsh5t19.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAWWKJSPJfE2mUB2K6BsdfliPQFz4LEPqk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "422916102456-6cibhj06ur44sevdq9nmkthvngsh5t19.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
