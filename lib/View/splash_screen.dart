@@ -11,17 +11,18 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin {
+class _SplashScreenState extends State<SplashScreen>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _curve;
 
   @override
   void initState() {
     _controller = AnimationController(
-      duration: const Duration(milliseconds: 1000),
+      duration: const Duration(milliseconds: 1500),
       vsync: this,
     );
-    _curve = CurvedAnimation(parent: _controller, curve: Curves.easeInOut);
+    _curve = CurvedAnimation(parent: _controller, curve: Curves.ease);
     _controller.forward();
     _controller.addListener(() {
       setState(() {
@@ -46,12 +47,26 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     return Scaffold(
       backgroundColor: AppTheme.appColor,
       body: Center(
-        child: FadeTransition(
-          opacity: _curve,
-          child: Image.asset(AppAssetsImages.appLogo),
+        child: TweenAnimationBuilder(
+          tween: Tween<double>(
+            begin: 50.0,
+            end: 400.0,
+          ),
+          duration: const Duration(seconds: 3),
+          curve: Curves.easeInToLinear,
+          builder: (context, val, child) {
+            return SizedBox(
+              width: val,
+              height: val,
+              child: Image.asset(AppAssetsImages.appLogo),
+            );
+          },
         ),
+        // child: FadeTransition(
+        //   opacity: _curve,
+        //   child: Image.asset(AppAssetsImages.appLogo),
+        // ),
       ),
     );
   }
 }
-
