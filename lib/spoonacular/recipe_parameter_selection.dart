@@ -19,7 +19,6 @@ class RecipesSelection extends StatefulWidget {
 }
 
 class _RecipesSelectionState extends State<RecipesSelection> {
-  int _selectedIndex = -1;
   @override
   Widget build(BuildContext context) {
     final selectedValue =
@@ -116,40 +115,116 @@ class _RecipesSelectionState extends State<RecipesSelection> {
           );
         },
       );
-    } else {
-      return ListView.builder(
-        itemCount: widget.recipesParameters.length,
-        shrinkWrap: true,
-        scrollDirection: Axis.vertical,
-        itemBuilder: (context, index) {
-          final recipesParams = widget.recipesParameters[index];
-          return GestureDetector(
-            onTap: () {
-              setState(() {
-                _selectedIndex = index;
-              });
-              if (widget.parameter == "Service Size") {
-                selectedValue.addServiceSizeValue(
-                    recipesParams.parameter, index);
-              } else if (widget.parameter == "Kitchen Resources") {
-                selectedValue.addKitchenResourcesValue(
-                    recipesParams.parameter, index);
-              } else if (widget.parameter == "Dietary Restrictions") {
-                selectedValue.addDietaryRestrictionsValue(
-                    recipesParams.parameter, index);
-              } else if (widget.parameter == "Regional Delicacy") {
-                selectedValue.addRegionalDelicacyValue(
-                    recipesParams.parameter, index);
-              }
+    } else if(widget.parameter == "Service Size"){
+      return Consumer<ServiceSizeProvider>(
+        builder: (context, recipeProvider, _) {
+          return ListView.builder(
+            itemCount: widget.recipesParameters.length,
+            itemBuilder: (context, index) {
+              final recipesParams = widget.recipesParameters[index];
+              return ListTile(
+                title: AppText(
+                    recipeProvider.preferredServiceSizeParametersRecipe[index].parameter),
+                trailing: Checkbox(
+                  value:
+                  recipeProvider.preferredServiceSizeParametersRecipe[index].isChecked,
+                  onChanged: (newValue) {
+                    print("toggle_value     ${recipeProvider.preferredServiceSizeParametersRecipe[index].isChecked}");
+                    if(recipeProvider.preferredServiceSizeParametersRecipe[index].isChecked == false){
+                      recipeProvider.toggleServiceSizeRecipeState(index);
+                      selectedValue.addServiceSizeValue(recipesParams.parameter, index);
+                    } else {
+                      recipeProvider.toggleServiceSizeRecipeState(index);
+                      selectedValue.removeServiceSizeValue(recipesParams.parameter, index);
+                    }
+                  },
+                ),
+              );
             },
-            child: ListTile(
-              title: AppText(recipesParams.parameter),
-              trailing: Icon(
-                _selectedIndex == index
-                    ? Icons.check_box
-                    : Icons.check_box_outline_blank,
-              ),
-            ),
+          );
+        },
+      );
+    } else if(widget.parameter == "Kitchen Resources"){
+      return Consumer<KitchenResourcesProvider>(
+        builder: (context, recipeProvider, _) {
+          return ListView.builder(
+            itemCount: widget.recipesParameters.length,
+            itemBuilder: (context, index) {
+              final recipesParams = widget.recipesParameters[index];
+              return ListTile(
+                title: AppText(
+                    recipeProvider.preferredKitchenResourcesParametersRecipe[index].parameter),
+                trailing: Checkbox(
+                  value:
+                  recipeProvider.preferredKitchenResourcesParametersRecipe[index].isChecked,
+                  onChanged: (newValue) {
+                    if(recipeProvider.preferredKitchenResourcesParametersRecipe[index].isChecked == false){
+                      recipeProvider.toggleKitchenResourcesRecipeState(index);
+                      selectedValue.addKitchenResourcesValue(recipesParams.parameter, index);
+                    } else {
+                      recipeProvider.toggleKitchenResourcesRecipeState(index);
+                      selectedValue.removeKitchenResourcesValue(recipesParams.parameter, index);
+                    }
+                  },
+                ),
+              );
+            },
+          );
+        },
+      );
+    } else if(widget.parameter == "Dietary Restrictions"){
+      return Consumer<DietaryRestrictionsProvider>(
+        builder: (context, recipeProvider, _) {
+          return ListView.builder(
+            itemCount: widget.recipesParameters.length,
+            itemBuilder: (context, index) {
+              final recipesParams = widget.recipesParameters[index];
+              return ListTile(
+                title: AppText(
+                    recipeProvider.preferredDietaryRestrictionsParametersRecipe[index].parameter),
+                trailing: Checkbox(
+                  value:
+                  recipeProvider.preferredDietaryRestrictionsParametersRecipe[index].isChecked,
+                  onChanged: (newValue) {
+                    if(recipeProvider.preferredDietaryRestrictionsParametersRecipe[index].isChecked == false){
+                      recipeProvider.toggleDietaryRestrictionsRecipeState(index);
+                      selectedValue.addDietaryRestrictionsValue(recipesParams.parameter, index);
+                    } else {
+                      recipeProvider.toggleDietaryRestrictionsRecipeState(index);
+                      selectedValue.removeDietaryRestrictionsValue(recipesParams.parameter, index);
+                    }
+                  },
+                ),
+              );
+            },
+          );
+        },
+      );
+    } else {
+      return Consumer<RegionalDelicacyProvider>(
+        builder: (context, recipeProvider, _) {
+          return ListView.builder(
+            itemCount: widget.recipesParameters.length,
+            itemBuilder: (context, index) {
+              final recipesParams = widget.recipesParameters[index];
+              return ListTile(
+                title: AppText(
+                    recipeProvider.preferredRegionalDelicacyParametersRecipe[index].parameter),
+                trailing: Checkbox(
+                  value:
+                  recipeProvider.preferredRegionalDelicacyParametersRecipe[index].isChecked,
+                  onChanged: (newValue) {
+                    if(recipeProvider.preferredRegionalDelicacyParametersRecipe[index].isChecked == false){
+                      recipeProvider.toggleRegionalDelicacyRecipeState(index);
+                      selectedValue.addRegionalDelicacyValue(recipesParams.parameter, index);
+                    } else {
+                      recipeProvider.toggleRegionalDelicacyRecipeState(index);
+                      selectedValue.removeRegionalDelicacyValue(recipesParams.parameter, index);
+                    }
+                  },
+                ),
+              );
+            },
           );
         },
       );

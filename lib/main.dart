@@ -37,6 +37,10 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<StyleProvider>(create: (_) => StyleProvider()),
         ChangeNotifierProvider<AllergiesProvider>(create: (_) => AllergiesProvider()),
         ChangeNotifierProvider<ChatBotProvider>(create: (_) => ChatBotProvider()),
+        ChangeNotifierProvider<ServiceSizeProvider>(create: (_) => ServiceSizeProvider()),
+        ChangeNotifierProvider<KitchenResourcesProvider>(create: (_) => KitchenResourcesProvider()),
+        ChangeNotifierProvider<DietaryRestrictionsProvider>(create: (_) => DietaryRestrictionsProvider()),
+        ChangeNotifierProvider<RegionalDelicacyProvider>(create: (_) => RegionalDelicacyProvider()),
       ],
       child: MaterialApp(
         title: 'AIFood',

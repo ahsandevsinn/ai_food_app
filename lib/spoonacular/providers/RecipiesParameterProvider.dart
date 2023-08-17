@@ -78,6 +78,11 @@ class RecipesParameterProvider extends ChangeNotifier {
     notifyListeners();
     return addServiceSize;
   }
+  List<String> removeServiceSizeValue(String serviceSize, int index) {
+    _addServiceSize.remove(serviceSize);
+    notifyListeners();
+    return addServiceSize;
+  }
   //ends service size
 
   //for kitchen resources
@@ -86,10 +91,16 @@ class RecipesParameterProvider extends ChangeNotifier {
   List<String> get addKitchenResources => _addKitchenResources;
 
   List<String> addKitchenResourcesValue(String kitchenResources, int index) {
-    if (_addKitchenResources.isNotEmpty) {
-      _addKitchenResources.removeAt(0);
-    }
-    _addKitchenResources.insert(0, kitchenResources);
+    // if (_addKitchenResources.isNotEmpty) {
+    //   _addKitchenResources.removeAt(0);
+    // }
+    // _addKitchenResources.insert(0, kitchenResources);
+    _addKitchenResources.add(kitchenResources);
+    notifyListeners();
+    return addKitchenResources;
+  }
+  List<String> removeKitchenResourcesValue(String kitchenResources, int index) {
+    _addKitchenResources.remove(kitchenResources);
     notifyListeners();
     return addKitchenResources;
   }
@@ -123,10 +134,16 @@ class RecipesParameterProvider extends ChangeNotifier {
   List<String> get addDietaryRestrictions => _addDietaryRestrictions;
 
   List<String> addDietaryRestrictionsValue(String restrictions, int index) {
-    if (_addDietaryRestrictions.isNotEmpty) {
-      _addDietaryRestrictions.removeAt(0);
-    }
-    _addDietaryRestrictions.insert(0, restrictions);
+    // if (_addDietaryRestrictions.isNotEmpty) {
+    //   _addDietaryRestrictions.removeAt(0);
+    // }
+    // _addDietaryRestrictions.insert(0, restrictions);
+    _addDietaryRestrictions.add(restrictions);
+    notifyListeners();
+    return addDietaryRestrictions;
+  }
+  List<String> removeDietaryRestrictionsValue(String restrictions, int index) {
+    _addDietaryRestrictions.remove(restrictions);
     notifyListeners();
     return addDietaryRestrictions;
   }
@@ -138,10 +155,16 @@ class RecipesParameterProvider extends ChangeNotifier {
   List<String> get addRegionalDelicacy => _addRegionalDelicacy;
 
   List<String> addRegionalDelicacyValue(String delicacy, int index) {
-    if (_addRegionalDelicacy.isNotEmpty) {
-      _addRegionalDelicacy.removeAt(0);
-    }
-    _addRegionalDelicacy.insert(0, delicacy);
+    // if (_addRegionalDelicacy.isNotEmpty) {
+    //   _addRegionalDelicacy.removeAt(0);
+    // }
+    // _addRegionalDelicacy.insert(0, delicacy);
+    _addRegionalDelicacy.add(delicacy);
+    notifyListeners();
+    return addRegionalDelicacy;
+  }
+  List<String> removeRegionalDelicacyValue(String delicacy, int index) {
+    _addRegionalDelicacy.remove(delicacy);
     notifyListeners();
     return addRegionalDelicacy;
   }
@@ -588,7 +611,7 @@ class RecipesParameterProvider extends ChangeNotifier {
   }
 }
 
-
+//This is the protein provider class
 class ProteinProvider extends ChangeNotifier {
   final List<RecipesParameterClass> _proteinRecipesParameters = [];
 
@@ -757,6 +780,7 @@ class ProteinProvider extends ChangeNotifier {
   }
 }
 
+//This is the style provider class
 class StyleProvider extends ChangeNotifier {
   final List<RecipesParameterClass> _styleRecipesParameters = [];
 
@@ -823,6 +847,7 @@ class StyleProvider extends ChangeNotifier {
   }
 }
 
+//This is the allergies provider class
 class AllergiesProvider extends ChangeNotifier {
   final List<RecipesParameterClass> _allergiesRecipesParameters = [];
 
@@ -872,8 +897,217 @@ class AllergiesProvider extends ChangeNotifier {
   }
 }
 
+// This is the service size provider class
+class ServiceSizeProvider extends ChangeNotifier {
+  final List<RecipesParameterClass> _serviceSizeRecipesParameters = [];
+
+  List<RecipesParameterClass> get serviceSizeRecipesParameters => _serviceSizeRecipesParameters;
+
+  List<RecipesParameterClass> preferredServiceSizeParametersRecipe = [
+    RecipesParameterClass(parameter: '1'),
+    RecipesParameterClass(parameter: '2'),
+    RecipesParameterClass(parameter: '3'),
+    RecipesParameterClass(parameter: '4'),
+    RecipesParameterClass(parameter: '5'),
+    RecipesParameterClass(parameter: '7'),
+    RecipesParameterClass(parameter: '8'),
+    RecipesParameterClass(parameter: '9'),
+    RecipesParameterClass(parameter: '10'),
+  ];
+
+  void showServiceSizeRecipesParameterDetails(context, String parameter) {
+    if (parameter == "Service Size") {
+      _serviceSizeRecipesParameters.addAll(preferredServiceSizeParametersRecipe);
+      Navigator.push(
+        context,
+        CupertinoPageRoute(
+          builder: (_) =>
+              RecipesSelection(
+                  parameter: parameter,
+                  recipesParameters: preferredServiceSizeParametersRecipe),
+        ),
+      );
+      notifyListeners();
+    }
+  }
+
+  // void toggleServiceSizeRecipeState(int index){
+  //   _serviceSizeRecipesParameters[index].isChecked = !_serviceSizeRecipesParameters[index].isChecked;
+  //   notifyListeners();
+  // }
+
+  void toggleServiceSizeRecipeState(int index) {
+    for (int i = 0; i < _serviceSizeRecipesParameters.length; i++) {
+      if (i == index) {
+        _serviceSizeRecipesParameters[i].isChecked = !_serviceSizeRecipesParameters[i].isChecked;
+      } else {
+        _serviceSizeRecipesParameters[i].isChecked = false;
+      }
+    }
+    notifyListeners();
+  }
 
 
+  void clearServiceSizeAllCheckboxStates() {
+    for (var parameter in _serviceSizeRecipesParameters) {
+      parameter.isChecked = false;
+    }
+    notifyListeners();
+  }
+}
+
+//This is the kitchen resources provider class
+class KitchenResourcesProvider extends ChangeNotifier {
+  final List<RecipesParameterClass> _kitchenResourcesRecipesParameters = [];
+
+  List<RecipesParameterClass> get kitchenResourcesRecipesParameters => _kitchenResourcesRecipesParameters;
+
+  List<RecipesParameterClass> preferredKitchenResourcesParametersRecipe = [
+    RecipesParameterClass(parameter: 'Frying Pan'),
+    RecipesParameterClass(parameter: 'Bowl'),
+    RecipesParameterClass(parameter: 'Blender'),
+    RecipesParameterClass(parameter: 'Oven'),
+    RecipesParameterClass(parameter: 'Slow Cooker'),
+    RecipesParameterClass(parameter: 'Microwave'),
+    RecipesParameterClass(parameter: 'Food Processor'),
+    RecipesParameterClass(parameter: 'Grill'),
+  ];
+
+  void showKitchenResourcesParameterDetails(context, String parameter) {
+    if (parameter == "Kitchen Resources") {
+      _kitchenResourcesRecipesParameters.addAll(preferredKitchenResourcesParametersRecipe);
+      Navigator.push(
+        context,
+        CupertinoPageRoute(
+          builder: (_) =>
+              RecipesSelection(
+                  parameter: parameter,
+                  recipesParameters: preferredKitchenResourcesParametersRecipe),
+        ),
+      );
+      notifyListeners();
+    }
+  }
+
+  void toggleKitchenResourcesRecipeState(int index){
+    _kitchenResourcesRecipesParameters[index].isChecked = !_kitchenResourcesRecipesParameters[index].isChecked;
+    notifyListeners();
+  }
+
+  void clearKitchenResourcesAllCheckboxStates() {
+    for (var parameter in _kitchenResourcesRecipesParameters) {
+      parameter.isChecked = false;
+    }
+    notifyListeners();
+  }
+}
+
+//This is the Dietary Restrictions provider class
+class DietaryRestrictionsProvider extends ChangeNotifier {
+  final List<RecipesParameterClass> _dietaryRestrictionsRecipesParameters = [];
+
+  List<RecipesParameterClass> get dietaryRestrictionsRecipesParameters => _dietaryRestrictionsRecipesParameters;
+
+  List<RecipesParameterClass> preferredDietaryRestrictionsParametersRecipe = [
+    RecipesParameterClass(parameter: 'Gluten Free'),
+    RecipesParameterClass(parameter: 'Ketogenic'),
+    RecipesParameterClass(parameter: 'Vegetarian'),
+    RecipesParameterClass(
+      parameter: 'Lacto-Vegetarian',
+    ),
+    RecipesParameterClass(parameter: 'Ovo-Vegetarian'),
+    RecipesParameterClass(parameter: 'Vegan'),
+    RecipesParameterClass(parameter: 'Pescetarian'),
+    RecipesParameterClass(parameter: 'Paleo'),
+    RecipesParameterClass(parameter: 'Primal'),
+    RecipesParameterClass(parameter: 'Low FODMAP'),
+    RecipesParameterClass(parameter: 'Whole30'),
+  ];
+
+  void showDietaryRestrictionsParameterDetails(context, String parameter) {
+    if (parameter == "Dietary Restrictions") {
+      _dietaryRestrictionsRecipesParameters.addAll(preferredDietaryRestrictionsParametersRecipe);
+      Navigator.push(
+        context,
+        CupertinoPageRoute(
+          builder: (_) =>
+              RecipesSelection(
+                  parameter: parameter,
+                  recipesParameters: preferredDietaryRestrictionsParametersRecipe),
+        ),
+      );
+      notifyListeners();
+    }
+  }
+
+  void toggleDietaryRestrictionsRecipeState(int index){
+    _dietaryRestrictionsRecipesParameters[index].isChecked = !_dietaryRestrictionsRecipesParameters[index].isChecked;
+    notifyListeners();
+  }
+
+  void clearDietaryRestrictionsAllCheckboxStates() {
+    for (var parameter in _dietaryRestrictionsRecipesParameters) {
+      parameter.isChecked = false;
+    }
+    notifyListeners();
+  }
+}
+
+//This is the Regional Delicacy provider class
+class RegionalDelicacyProvider extends ChangeNotifier {
+  final List<RecipesParameterClass> _regionalDelicacyRecipesParameters = [];
+
+  List<RecipesParameterClass> get regionalDelicacyRecipesParameters => _regionalDelicacyRecipesParameters;
+
+  List<RecipesParameterClass> preferredRegionalDelicacyParametersRecipe = [
+    RecipesParameterClass(parameter: 'Italian Pizza'),
+    RecipesParameterClass(parameter: 'Mexican Tacos'),
+    RecipesParameterClass(parameter: 'Japanese Sushi'),
+    RecipesParameterClass(
+      parameter: 'Chinese Dumplings',
+    ),
+    RecipesParameterClass(parameter: 'Indian Curry'),
+    RecipesParameterClass(
+      parameter: 'French Baguette',
+    ),
+    RecipesParameterClass(parameter: 'Italian Pasta'),
+    RecipesParameterClass(parameter: 'Thai Pad Thai'),
+    RecipesParameterClass(parameter: 'Greek Souvlaki'),
+    RecipesParameterClass(
+      parameter: 'American Burger',
+    ),
+  ];
+
+  void showRegionalDelicacyParameterDetails(context, String parameter) {
+    if (parameter == "Regional Delicacy") {
+      _regionalDelicacyRecipesParameters.addAll(preferredRegionalDelicacyParametersRecipe);
+      Navigator.push(
+        context,
+        CupertinoPageRoute(
+          builder: (_) =>
+              RecipesSelection(
+                  parameter: parameter,
+                  recipesParameters: preferredRegionalDelicacyParametersRecipe),
+        ),
+      );
+      notifyListeners();
+    }
+  }
+
+  void toggleRegionalDelicacyRecipeState(int index){
+    _regionalDelicacyRecipesParameters[index].isChecked = !_regionalDelicacyRecipesParameters[index].isChecked;
+    notifyListeners();
+  }
+
+  void clearRegionalDelicacyAllCheckboxStates() {
+    for (var parameter in _regionalDelicacyRecipesParameters) {
+      parameter.isChecked = false;
+    }
+    notifyListeners();
+  }
+}
+
+// This is the Chat bot provider class
 class ChatBotProvider extends ChangeNotifier {
   final List<String> _addChat = [];
 

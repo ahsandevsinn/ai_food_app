@@ -55,6 +55,10 @@ class _RecipiesState extends State<Recipies> {
                         Provider.of<ProteinProvider>(context, listen: false).clearProteinAllCheckboxStates();
                         Provider.of<StyleProvider>(context, listen: false).clearStyleAllCheckboxStates();
                         Provider.of<AllergiesProvider>(context, listen: false).clearAllergiesAllCheckboxStates();
+                        Provider.of<ServiceSizeProvider>(context, listen: false).clearServiceSizeAllCheckboxStates();
+                        Provider.of<KitchenResourcesProvider>(context, listen: false).clearKitchenResourcesAllCheckboxStates();
+                        Provider.of<DietaryRestrictionsProvider>(context, listen: false).clearDietaryRestrictionsAllCheckboxStates();
+                        Provider.of<RegionalDelicacyProvider>(context, listen: false).clearRegionalDelicacyAllCheckboxStates();
                       }
                     },
                   ),
@@ -142,14 +146,12 @@ class _RecipiesState extends State<Recipies> {
                             },
                           ),
                           ChipWidget(
-                            color: recipesParameterProvider
-                                    .addServiceSize.isNotEmpty
+                            color: recipesParameterProvider.addServiceSize.isNotEmpty
                                 ? Colors.black
                                 : Theme.of(context).primaryColor,
                             text: "Service Size",
                             onPressed: () {
-                              recipesParameterProvider.showParameterDetails(
-                                  context, "Service Size");
+                              Provider.of<ServiceSizeProvider>(context, listen: false).showServiceSizeRecipesParameterDetails(context, "Service Size");
                             },
                           ),
                           ChipWidget(
@@ -159,7 +161,7 @@ class _RecipiesState extends State<Recipies> {
                                 : Theme.of(context).primaryColor,
                             text: "Kitchen Resources",
                             onPressed: () {
-                              recipesParameterProvider.showParameterDetails(
+                              Provider.of<KitchenResourcesProvider>(context, listen: false).showKitchenResourcesParameterDetails(
                                   context, "Kitchen Resources");
                             },
                           ),
@@ -181,7 +183,7 @@ class _RecipiesState extends State<Recipies> {
                                 : Theme.of(context).primaryColor,
                             text: "Dietary Restrictions",
                             onPressed: () {
-                              recipesParameterProvider.showParameterDetails(
+                              Provider.of<DietaryRestrictionsProvider>(context, listen: false).showDietaryRestrictionsParameterDetails(
                                   context, "Dietary Restrictions");
                             },
                           ),
@@ -192,7 +194,7 @@ class _RecipiesState extends State<Recipies> {
                                 : Theme.of(context).primaryColor,
                             text: "Regional Delicacy",
                             onPressed: () {
-                              recipesParameterProvider.showParameterDetails(
+                              Provider.of<RegionalDelicacyProvider>(context, listen: false).showRegionalDelicacyParameterDetails(
                                   context, "Regional Delicacy");
                             },
                           ),
@@ -237,7 +239,7 @@ class _RecipiesState extends State<Recipies> {
                               ? const SizedBox.shrink()
                               : ChipWidget(
                                   text:
-                                      "Kitchen Resources: ${recipesParameterProvider.addKitchenResources[0]}",
+                                      "Kitchen Resources: ${recipesParameterProvider.addKitchenResources.toString().substring(1, recipesParameterProvider.addKitchenResources.toString().length - 1)}",
                                   color: Theme.of(context).primaryColor),
                           recipesParameterProvider.addAllergies.isEmpty
                               ? const SizedBox.shrink()
@@ -250,13 +252,13 @@ class _RecipiesState extends State<Recipies> {
                               ? const SizedBox.shrink()
                               : ChipWidget(
                                   text:
-                                      "Dietary Restrictions: ${recipesParameterProvider.addDietaryRestrictions[0]}",
+                                      "Dietary Restrictions: ${recipesParameterProvider.addDietaryRestrictions.toString().substring(1, recipesParameterProvider.addDietaryRestrictions.toString().length - 1)}",
                                   color: Theme.of(context).primaryColor),
                           recipesParameterProvider.addRegionalDelicacy.isEmpty
                               ? const SizedBox.shrink()
                               : ChipWidget(
                                   text:
-                                      "Regional Delicacy: ${recipesParameterProvider.addRegionalDelicacy[0]}",
+                                      "Regional Delicacy: ${recipesParameterProvider.addRegionalDelicacy.toString().substring(1, recipesParameterProvider.addRegionalDelicacy.toString().length - 1)}",
                                   color: Theme.of(context).primaryColor),
                         ],
                       ),
@@ -444,11 +446,11 @@ class _RecipiesState extends State<Recipies> {
 
     final style = recipesParameterProvider.addStyle.isNotEmpty ? "&cuisine=${recipesParameterProvider.addStyle.toString().substring(1, recipesParameterProvider.addStyle.toString().length - 1)}" : "";
     final serviceSize = recipesParameterProvider.addServiceSize.isNotEmpty ? "&servings=${recipesParameterProvider.addServiceSize[0]}" : "";
-    final kitchenResources = recipesParameterProvider.addKitchenResources.isNotEmpty ? "&equipment=${recipesParameterProvider.addKitchenResources[0]}" : "";
+    final kitchenResources = recipesParameterProvider.addKitchenResources.isNotEmpty ? "&equipment=${recipesParameterProvider.addKitchenResources.toString().substring(1, recipesParameterProvider.addKitchenResources.toString().length - 1)}" : "";
     final preferredProtein = recipesParameterProvider.addProtein.isNotEmpty ? "&includeIngredients=${recipesParameterProvider.addProtein.toString().substring(1, recipesParameterProvider.addProtein.toString().length - 1)}" : "";
     final allergies = recipesParameterProvider.addAllergies.isNotEmpty ? "&intolerances=${recipesParameterProvider.addAllergies.toString().substring(1, recipesParameterProvider.addAllergies.toString().length - 1)}" : "";
-    final dietaryRestrictions = recipesParameterProvider.addDietaryRestrictions.isNotEmpty ? "&diet=${recipesParameterProvider.addDietaryRestrictions[0]}" : "";
-    // final regionalDelicacy = recipesParameterProvider.addRegionalDelicacy.isNotEmpty ? "&cuisine=${recipesParameterProvider.addRegionalDelicacy[0]}" : "";
+    final dietaryRestrictions = recipesParameterProvider.addDietaryRestrictions.isNotEmpty ? "&diet=${recipesParameterProvider.addDietaryRestrictions.toString().substring(1, recipesParameterProvider.addDietaryRestrictions.toString().length - 1)}" : "";
+    // final regionalDelicacy = recipesParameterProvider.addRegionalDelicacy.isNotEmpty ? "&cuisine=${recipesParameterProvider.addRegionalDelicacy.toString().substring(1, recipesParameterProvider.addRegionalDelicacy.toString().length - 1)}" : "";
     final regionalDelicacy = recipesParameterProvider.addRegionalDelicacy.isNotEmpty ? "" : "";
 
     final apiKey = '50c97694758d413ba8021361c1a6aff8';
