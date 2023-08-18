@@ -75,7 +75,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 children: <Widget>[
                   Image.asset(AppAssetsImage.profile_text_background),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: CustomAppFormField(
                       texthint: "User name",
                       controller: _userNameController,
@@ -83,137 +83,134 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   ),
                   const SizedBox(height: 10),
                   Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Stack(
-                            children: [
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  GestureDetector(
-                                    onTap: (){
-                                      showMenu = !showMenu;
-                                      setState(() {});
-                                    },
-                                    child: Container(
-                                      width: 110,
-                                      color: Colors.transparent,
-                                      child: Row(
-                                        children: [
-                                          Padding(
-                                            padding:
-                                            const EdgeInsets.only(left: 8.0, bottom: 3),
-                                            child: AppText.appText(
-                                                numberListShow.isEmpty
-                                                    ? "Age"
-                                                    : numberListShow[0].toString(),
-                                                fontSize: 18,
-                                                textColor: AppTheme.appColor),
-                                          ),
-                                          const SizedBox(width: 45),
-                                          !showMenu
-                                              ? Transform.rotate(
-                                            angle: 360 * math.pi / 245,
-                                            child: Icon(
-                                              Icons.arrow_back_ios_outlined,
-                                              color: AppTheme.appColor,
-                                              size: 20,
-                                            ),
-                                          )
-                                              : Transform.rotate(
-                                            angle: 360 * math.pi / 145,
-                                            child: Icon(
-                                              Icons.arrow_back_ios_outlined,
-                                              color: AppTheme.appColor,
-                                              size: 20,
-                                            ),
-                                          ),
-                                          // Icon(Icons.arrow_back_ios_outlined, color: AppTheme.appColor),
-                                          // DropdownButton<int>(
-                                          //   underline: Container(),
-                                          //   elevation: 0,
-                                          //   iconEnabledColor: AppTheme.appColor,
-                                          //   value: selectedNumber,
-                                          //   onChanged: (newValue) {
-                                          //     setState(() {
-                                          //       selectedNumber = newValue!;
-                                          //     });
-                                          //     print("selected_numve ${selectedNumber}");
-                                          //   },
-                                          //   items:
-                                          //       numberList.map<DropdownMenuItem<int>>((int value) {
-                                          //     return DropdownMenuItem<int>(
-                                          //       value: value,
-                                          //       child: AppText.appText(
-                                          //         value.toString(),
-                                          //         textColor: AppTheme.appColor,
-                                          //       ),
-                                          //     );
-                                          //   }).toList(),
-                                          // ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  Container(
+                    padding: const EdgeInsets.all(6.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Stack(
+                          children: [
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                GestureDetector(
+                                  onTap: (){
+                                    showMenu = !showMenu;
+                                    setState(() {});
+                                  },
+                                  child: Container(
                                     width: 110,
-                                    decoration: BoxDecoration(
-                                      border: Border(
-                                        bottom: BorderSide(
-                                            width: 1.0, color: AppTheme.appColor),
-                                      ),
+                                    color: Colors.transparent,
+                                    child: Row(
+                                      children: [
+                                        Padding(
+                                          padding:
+                                          const EdgeInsets.only(left: 8.0, bottom: 3),
+                                          child: AppText.appText(
+                                              numberListShow.isEmpty
+                                                  ? "Age"
+                                                  : numberListShow[0].toString(),
+                                              fontSize: 18,
+                                              textColor: AppTheme.appColor),
+                                        ),
+                                        const SizedBox(width: 45),
+                                        !showMenu
+                                            ? Transform.rotate(
+                                          angle: 360 * math.pi / 245,
+                                          child: Icon(
+                                            Icons.arrow_back_ios_outlined,
+                                            color: AppTheme.appColor,
+                                            size: 20,
+                                          ),
+                                        )
+                                            : Transform.rotate(
+                                          angle: 360 * math.pi / 145,
+                                          child: Icon(
+                                            Icons.arrow_back_ios_outlined,
+                                            color: AppTheme.appColor,
+                                            size: 20,
+                                          ),
+                                        ),
+                                        // Icon(Icons.arrow_back_ios_outlined, color: AppTheme.appColor),
+                                        // DropdownButton<int>(
+                                        //   underline: Container(),
+                                        //   elevation: 0,
+                                        //   iconEnabledColor: AppTheme.appColor,
+                                        //   value: selectedNumber,
+                                        //   onChanged: (newValue) {
+                                        //     setState(() {
+                                        //       selectedNumber = newValue!;
+                                        //     });
+                                        //     print("selected_numve ${selectedNumber}");
+                                        //   },
+                                        //   items:
+                                        //       numberList.map<DropdownMenuItem<int>>((int value) {
+                                        //     return DropdownMenuItem<int>(
+                                        //       value: value,
+                                        //       child: AppText.appText(
+                                        //         value.toString(),
+                                        //         textColor: AppTheme.appColor,
+                                        //       ),
+                                        //     );
+                                        //   }).toList(),
+                                        // ),
+                                      ],
                                     ),
                                   ),
-                                  const SizedBox(height: 10),
-                                ],
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const SizedBox(height: 40),
-                                  AppText.appText(
-                                    "Allergies:",
-                                    fontSize: 22,
-                                    fontWeight: FontWeight.w800,
-                                    textColor: AppTheme.appColor,
+                                ),
+                                Container(
+                                  width: 110,
+                                  decoration: BoxDecoration(
+                                    border: Border(
+                                      bottom: BorderSide(
+                                          width: 1.0, color: AppTheme.appColor),
+                                    ),
                                   ),
-                                  const SizedBox(height: 10),
-                                  Wrap(
-                                    runSpacing: 10,
-                                    spacing: 10,
-                                    children: allergies.map((allergy) {
-                                      return CustomContainer(text: allergy);
-                                    }).toList(),
-                                  ),
-                                  const SizedBox(height: 10),
-                                  AppText.appText(
-                                    "Dietary restrictions:",
-                                    fontSize: 22,
-                                    fontWeight: FontWeight.w800,
-                                    textColor: AppTheme.appColor,
-                                  ),
-                                  const SizedBox(height: 10),
-                                  Wrap(
-                                    spacing: 10,
-                                    runSpacing: 10,
-                                    children: dietaryRestrictions.map((restriction) {
-                                      return CustomContainer(text: restriction);
-                                    }).toList(),
-                                  ),
-                                ],
-                              ),
-                              showMenu ? Padding(
-                                padding: const EdgeInsets.only(top: 28.0),
-                                child: customMenu(),
-                              ) : const SizedBox.shrink(),
-                            ],
-                          ),
-                        ],
-                      ),
+                                ),
+                                const SizedBox(height: 10),
+                              ],
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const SizedBox(height: 40),
+                                AppText.appText(
+                                  "Allergies:",
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.w800,
+                                  textColor: AppTheme.appColor,
+                                ),
+                                const SizedBox(height: 10),
+                                Wrap(
+                                  runSpacing: 10,
+                                  spacing: 10,
+                                  children: allergies.map((allergy) {
+                                    return CustomContainer(text: allergy);
+                                  }).toList(),
+                                ),
+                                const SizedBox(height: 10),
+                                AppText.appText(
+                                  "Dietary restrictions:",
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.w800,
+                                  textColor: AppTheme.appColor,
+                                ),
+                                const SizedBox(height: 10),
+                                Wrap(
+                                  spacing: 10,
+                                  runSpacing: 10,
+                                  children: dietaryRestrictions.map((restriction) {
+                                    return CustomContainer(text: restriction);
+                                  }).toList(),
+                                ),
+                              ],
+                            ),
+                            showMenu ? Padding(
+                              padding: const EdgeInsets.only(top: 28.0),
+                              child: customMenu(),
+                            ) : const SizedBox.shrink(),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
                   Center(
