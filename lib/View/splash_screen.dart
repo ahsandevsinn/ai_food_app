@@ -2,7 +2,9 @@ import 'package:ai_food/Utils/resources/res/app_assets.dart';
 import 'package:ai_food/Utils/resources/res/app_theme.dart';
 import 'package:ai_food/Utils/utils.dart';
 import 'package:ai_food/View/auth/GoogleSignIn/sign_in_screen.dart';
-import 'package:ai_food/View/auth/login_screen.dart';
+import 'package:ai_food/View/auth/auth_screen.dart';
+import 'package:ai_food/View/auth/profile/user_profile_screen.dart';
+import 'package:ai_food/View/auth/sign_in.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -13,11 +15,13 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-
   @override
   void initState() {
     Future.delayed(const Duration(seconds: 5), () {
-      pushReplacement(context, SignInScreen());
+      // pushReplacement(context, const SignInScreenDuplicate());
+      // pushReplacement(context, const SignInScreen());
+      // pushReplacement(context, const AuthScreen());
+      pushReplacement(context, const UserProfileScreen());
     });
     super.initState();
   }
