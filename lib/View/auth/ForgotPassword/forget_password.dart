@@ -1,8 +1,11 @@
+import 'package:ai_food/Model/auth_methods.dart';
 import 'package:ai_food/Utils/resources/res/AppAssetsImage.dart';
 import 'package:ai_food/Utils/resources/res/app_theme.dart';
+import 'package:ai_food/Utils/utils.dart';
 import 'package:ai_food/Utils/widgets/others/app_field.dart';
 import 'package:ai_food/Utils/widgets/others/app_text.dart';
 import 'package:ai_food/Utils/widgets/others/custom_button.dart';
+import 'package:ai_food/View/auth/ForgotPassword/new_password.dart';
 import 'package:ai_food/View/auth/ForgotPassword/otp_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +18,7 @@ class ForgetPassword extends StatefulWidget {
 }
 
 class _ForgetPasswordState extends State<ForgetPassword> {
-  final _phoneNumberController = TextEditingController();
+  final _textController = TextEditingController();
   bool _verificationInProgress = false;
   String? verificationIdCheck;
 
@@ -44,45 +47,41 @@ class _ForgetPasswordState extends State<ForgetPassword> {
       });
       print("exception_code ${authException.code}");
       print("exception_message ${authException.message}");
-      if(authException.code == 'invalid-phone-number' && authException.message!.contains('TOO_SHORT')){
+      if (authException.code == 'invalid-phone-number' &&
+          authException.message!.contains('TOO_SHORT')) {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text(
-              'Phone number is Invalid. It is TOO SHORT'),
+          content: Text('Phone number is Invalid. It is TOO SHORT'),
         ));
-      } else if(authException.code == 'invalid-phone-number' && authException.message!.contains('TOO_LONG')){
+      } else if (authException.code == 'invalid-phone-number' &&
+          authException.message!.contains('TOO_LONG')) {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text(
-              'Phone number is Invalid. It is TOO LONG'),
+          content: Text('Phone number is Invalid. It is TOO LONG'),
         ));
-      }else if (authException.code == 'missing-client-identifier'){
+      } else if (authException.code == 'missing-client-identifier') {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text(
-              'Invalid captcha. Try again.'),
+          content: Text('Invalid captcha. Try again.'),
         ));
-      } else if(authException.code == 'too-many-requests'){
+      } else if (authException.code == 'too-many-requests') {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text(
               'You have been blocked due to unusual activity. Try again later.'),
         ));
-      } else if (authException.code == 'quota-exceeded'){
+      } else if (authException.code == 'quota-exceeded') {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text(
-              'The SMS quota for the project has been exceeded.'),
+          content: Text('The SMS quota for the project has been exceeded.'),
         ));
-      } else if(authException.code == 'user-disabled'){
+      } else if (authException.code == 'user-disabled') {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text(
-              'The user account has been disabled by an administrator.'),
+          content:
+              Text('The user account has been disabled by an administrator.'),
         ));
-      }  else if (authException.code == 'invalid-phone-number'){
+      } else if (authException.code == 'invalid-phone-number') {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text(
-              'Please enter the phone number in correct format.'),
+          content: Text('Please enter the phone number in correct format.'),
         ));
       } else {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(
-              '${authException.message}'),
+          content: Text('${authException.message}'),
         ));
       }
     }
@@ -91,23 +90,23 @@ class _ForgetPasswordState extends State<ForgetPassword> {
       setState(() {
         verificationIdCheck = verificationId;
         _verificationInProgress = false;
-        print("Check_phone $phoneNumber and verification id $verificationIdCheck");
+        print(
+            "Check_phone $phoneNumber and verification id $verificationIdCheck");
       });
 
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text('Verification code sent to $phoneNumber'),
       ));
-      Navigator.of(context)
-          .pushReplacement(MaterialPageRoute(builder: (_) =>OTPScreen(verificationId: verificationId, mobileNumber: phoneNumber)));
-      // {
-      //   return OtpScreen(verificationId: verificationIdCheck!, mobileNumber: phoneNumber);}));
-        // return const OtpScreen();}));
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (_) => OTPScreen(
+              verificationId: verificationId, mobileNumber: phoneNumber)));
     }
 
     codeAutoRetrievalTimeout(String verificationId) {
       setState(() {
         verificationIdCheck = verificationId;
-        print("Check_phone $phoneNumber and verification id $verificationIdCheck");
+        print(
+            "Check_phone $phoneNumber and verification id $verificationIdCheck");
       });
     }
 
@@ -129,7 +128,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
 
   @override
   void dispose() {
-    _phoneNumberController.dispose();
+    _textController.dispose();
     super.dispose();
   }
 
@@ -234,29 +233,55 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                                   sizedBox(height * .1, width),
                                   CustomAppFormField(
                                     texthint: "Email or Mobile number",
-                                    controller: _phoneNumberController,
+                                    controller: _textController,
+                                    validator: (value) {
+                                      if (value!.isEmpty) {
+                                        return "Please enter your email or mobile number";
+                                      }
+                                      final isEmailValid = RegExp(r'^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+\.[a-z]').hasMatch(value);
+                                      final isMobileValid = RegExp(r'^\d{10}$').hasMatch(value);
+
+                                      if (!isEmailValid && !isMobileValid) {
+                                        return "Please enter a valid email or mobile number";
+                                      }
+
+                                      return null;
+                                    },
+                                    onChanged: (value) {
+                                      _textController.text = value;
+                                    },
                                   ),
+
                                   sizedBox(height * 0.32, width),
                                   _verificationInProgress
                                       ? Center(
-                                    child: CircularProgressIndicator(
-                                      color: AppTheme.appColor,
-                                      strokeWidth: 4,
-                                    ),
-                                  )
+                                          child: CircularProgressIndicator(
+                                            color: AppTheme.appColor,
+                                            strokeWidth: 4,
+                                          ),
+                                        )
                                       : CustomButton(
-                                    text: "Send OTP",
-                                    onTap: () {
-                                      // push(context, const OtpScreen());
-                                      if (!_verificationInProgress) {
-                                        String phoneNumber = _phoneNumberController.text.trim();
-                                        if (phoneNumber.isNotEmpty) {
-                                          print("Check_phone ${phoneNumber} and verification id $verificationIdCheck");
-                                          _verifyPhoneNumber(phoneNumber);
-                                        }
-                                      }
-                                    },
-                                  )
+                                          text: "Send OTP",
+                                          onTap: () {
+                                            String inputText =
+                                                _textController.text
+                                                    .trim();
+                                            final emailRegExp = RegExp(
+                                                r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$');
+
+                                            if (emailRegExp
+                                                .hasMatch(inputText)) {
+                                              resetYourPassword(inputText);
+                                            } else {
+                                              if (!_verificationInProgress) {
+                                                if (inputText.isNotEmpty) {
+                                                  _verifyPhoneNumber(inputText);
+                                                  print("Check_phone ${inputText} and verification id $verificationIdCheck");
+                                                }
+                                              }
+                                            }
+                                          },
+                                        ),
                                 ],
                               ),
                             ),
@@ -271,8 +296,62 @@ class _ForgetPasswordState extends State<ForgetPassword> {
       ),
     );
   }
-}
+  // email forgot password
 
+  void resetYourPassword(String controller) async {
+    setState(() {
+      _verificationInProgress = true;
+    });
+    String res = await AuthMethods().forgotPassword(
+      sendEmail: controller,
+    );
+
+    if (res == 'success') {
+      showSnackBar(context, res);
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Reset Password'),
+            content:
+                const Text('Kindly check your email to reset your password!'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => NewPassword())),
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+      setState(() {
+        _verificationInProgress = false;
+      });
+    } else {
+      if (controller.isEmpty) {
+        showSnackBar(context, "Email Address cannot be Empty!");
+        setState(() {
+          _verificationInProgress = false;
+        });
+      }
+      // reg expression for email validation
+      else if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
+          .hasMatch(controller)) {
+        showSnackBar(context, "Please Enter a valid Email");
+        setState(() {
+          _verificationInProgress = false;
+        });
+      } else if (controller != FirebaseAuth.instance) {
+        showSnackBar(context, "Email doesn't exist!");
+        setState(() {
+          _verificationInProgress = false;
+        });
+      }
+      print('Error!');
+    }
+  }
+}
 
 sizedBox(double height, double width) {
   return SizedBox(
