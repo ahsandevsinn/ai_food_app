@@ -49,6 +49,8 @@ dependencies:
   firebase_auth: ^4.7.3
   google_sign_in: ^6.1.4
   sizer: ^2.0.15
+  country_code_picker: ^3.0.0
+  flutter_otp_text_field: ^1.1.1
 #  flutter_html: ^2.1.2
 
 dev_dependencies:

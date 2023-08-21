@@ -1,8 +1,10 @@
 import 'package:ai_food/Utils/resources/res/AppAssetsImage.dart';
 import 'package:ai_food/Utils/resources/res/app_theme.dart';
+import 'package:ai_food/Utils/utils.dart';
 import 'package:ai_food/Utils/widgets/others/app_button.dart';
 import 'package:ai_food/Utils/widgets/others/app_field.dart';
 import 'package:ai_food/Utils/widgets/others/app_text.dart';
+import 'package:ai_food/View/auth/ForgotPassword/forget_password.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
@@ -281,6 +283,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       height: 50,
                       width: 180,
                       backgroundColor: AppTheme.appColor,
+                      onTap: (){
+                        push(context, const ForgetPassword());
+                        // push(context, const ForgotPasswordPage());
+                      }
                     ),
                   ),
                   const SizedBox(height: 30),
