@@ -11,7 +11,8 @@ push(context, screen) {
 }
 
 pushReplacement(context, screen) {
-  Navigator.pushReplacement(context, CupertinoPageRoute(builder: (_) => screen));
+  Navigator.pushReplacement(
+      context, CupertinoPageRoute(builder: (_) => screen));
 }
 
 pushUntil(context, screen) {

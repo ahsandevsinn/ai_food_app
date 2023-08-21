@@ -1,9 +1,7 @@
 import 'package:ai_food/Constants/app_logger.dart';
 import 'package:ai_food/config/app_urls.dart';
 import 'package:ai_food/config/keys/headers.dart';
-import 'package:ai_food/config/keys/pref_keys.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
 // import 'package:req_fun/req_fun.dart';
 
 class AppDioInterceptor extends Interceptor {

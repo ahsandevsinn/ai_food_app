@@ -1,31 +1,34 @@
 import 'package:ai_food/Utils/resources/res/app_theme.dart';
 import 'package:flutter/material.dart';
+
 class Customcard extends StatefulWidget {
-  final List<Widget> children;
-  const Customcard({super.key, required this.children});
+  final childWidget;
+  const Customcard({super.key, required this.childWidget});
+
   @override
   State<Customcard> createState() => _CustomcardState();
 }
+
 class _CustomcardState extends State<Customcard> {
   @override
   Widget build(BuildContext context) {
     return Opacity(
-      opacity: 0.70,
+      opacity: 0.90,
       child: Container(
         // width: 320,
         height: 425,
         decoration: ShapeDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/images/splash_image.png'),
+            image: AssetImage('assets/images/logo.png'),
             fit: BoxFit.contain,
             colorFilter: ColorFilter.mode(
-              Colors.white.withOpacity(0.9), // Adjust the opacity as needed
+              Colors.white.withOpacity(0.78), // Adjust the opacity as needed
               BlendMode.lighten,
             ),
           ),
           color: Colors.white,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-          shadows: [
+          shadows: const [
             BoxShadow(
               color: Color(0x7FB38ADE),
               blurRadius: 4,
@@ -36,37 +39,9 @@ class _CustomcardState extends State<Customcard> {
         ),
         child: Padding(
           padding: EdgeInsets.all(20.0),
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: widget.children),
+          child: widget.childWidget,
         ),
       ),
     );
-    // Card(
-    //   // shadowColor: AppTheme.appColor,
-    //   shape: RoundedRectangleBorder(
-    //     borderRadius: BorderRadius.circular(12),
-    //   ),
-    //   elevation: 5.0,
-    //   child: Container(
-    //     height: 500,
-    //     decoration: BoxDecoration(
-    //       image: DecorationImage(
-    //         image: AssetImage('assets/images/splash_image.png'),
-    //         fit: BoxFit.contain,
-    //         colorFilter: ColorFilter.mode(
-    //           Colors.white.withOpacity(0.9), // Adjust the opacity as needed
-    //           BlendMode.lighten,
-    //         ),
-    //       ),
-    //     ),
-    //     child: Padding(
-    //       padding: EdgeInsets.all(20.0),
-    //       child: Column(
-    //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    //           children: widget.children),
-    //     ),
-    //   ),
-    // );
   }
 }
