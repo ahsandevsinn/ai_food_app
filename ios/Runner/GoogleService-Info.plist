@@ -3,9 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>422916102456-prb4kg0j7f0qqff16v7a4n7cit7dkdib.apps.googleusercontent.com</string>
+	<string>422916102456-un9r3vvbh9bon1sdjoujveqn5ughvj5b.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.422916102456-prb4kg0j7f0qqff16v7a4n7cit7dkdib</string>
+	<string>com.googleusercontent.apps.422916102456-un9r3vvbh9bon1sdjoujveqn5ughvj5b</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>422916102456-83sg3tl2l1lal2opjmde9leseh24hdgk.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
 	<string>AIzaSyBNuwMTJIcYPt9puMTjncD9Ux4iTs4vrZM</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +15,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.example.aifood</string>
+	<string>com.aifoodapp.aifood</string>
 	<key>PROJECT_ID</key>
 	<string>aifood-666be</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:422916102456:ios:280ac1567a23a35ad809cd</string>
+	<string>1:422916102456:ios:a6465c585463d4ffd809cd</string>
 </dict>
 </plist>
