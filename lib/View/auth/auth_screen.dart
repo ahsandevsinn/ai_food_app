@@ -54,7 +54,6 @@ class _AuthScreenState extends State<AuthScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print("object$_autoValidateMode");
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).requestFocus(FocusNode());
@@ -330,16 +329,6 @@ class _AuthScreenState extends State<AuthScreen> {
                       GestureDetector(
                         onTap: () {
                           handleAppleSignIn();
-
-                          // final credential = await SignInWithApple.getAppleIDCredential(
-                          //   scopes: [
-                          //     AppleIDAuthorizationScopes.email,
-                          //     AppleIDAuthorizationScopes.fullName,
-                          //   ],
-                          // );
-
-                          // print("getting_credentials email: ${credential.email},givenName: ${credential.givenName},userIdentifier: ${credential.userIdentifier}");
-                          // print("getting_credentials identityToken: ${credential.identityToken}");
                         },
                         child: Center(
                           child: AppButton.appButtonWithLeadingIcon(
@@ -463,14 +452,9 @@ class _AuthScreenState extends State<AuthScreen> {
   // Function to handle Apple Sign-In and Firebase sign-in
   Future<void> handleAppleSignIn() async {
     try {
-      // To prevent replay attacks with the credential returned from Apple, we
-      // include a nonce in the credential request. When signing in with
-      // Firebase, the nonce in the id token returned by Apple, is expected to
-      // match the sha256 hash of `rawNonce`.
       final rawNonce = generateNonce();
       final nonce = sha256ofString(rawNonce);
 
-      // Request credential for the currently signed in Apple account.
       final appleCredential = await SignInWithApple.getAppleIDCredential(
         scopes: [
           AppleIDAuthorizationScopes.email,
@@ -479,17 +463,13 @@ class _AuthScreenState extends State<AuthScreen> {
         nonce: nonce,
       );
 
-      // Create an `OAuthCredential` from the credential returned by Apple.
       final oauthCredential = OAuthProvider("apple.com").credential(
         idToken: appleCredential.identityToken,
         rawNonce: rawNonce,
       );
 
-      // Sign in the user with Firebase. If the nonce we generated earlier does
-      // not match the nonce in `appleCredential.identityToken`, sign in will fail.
       final result = await FirebaseAuth.instance.signInWithCredential(oauthCredential);
 
-      // You can add code here to handle a successful sign-in.
       print(result.user!.displayName.toString());
       print(result.user!.email.toString());
       print(result.user!.uid.toString());
