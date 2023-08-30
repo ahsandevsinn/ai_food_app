@@ -1,10 +1,15 @@
 import 'package:ai_food/Utils/resources/res/app_assets.dart';
 import 'package:ai_food/Utils/resources/res/app_theme.dart';
 import 'package:ai_food/Utils/utils.dart';
+import 'package:ai_food/View/HomeScreen/new_home_screen.dart';
+import 'package:ai_food/View/NavigationBar/bottom_navigation.dart';
 import 'package:ai_food/View/auth/auth_screen.dart';
-import 'package:ai_food/View/chat_screen.dart';
-import 'package:ai_food/View/home_screen.dart';
+import 'package:ai_food/View/profile/user_profile_screen.dart';
+import 'package:ai_food/View/recipe_info/recipe_info.dart';
+import 'package:ai_food/View/recipe_info/shopping_list.dart';
 import 'package:flutter/material.dart';
+
+import 'HomeScreen/home_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -14,12 +19,10 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-
   @override
   void initState() {
-    Future.delayed(const Duration(seconds: 5), () {
-      // pushReplacement(context, const AuthScreen());
-      pushReplacement(context, const ChatScreen());
+    Future.delayed(const Duration(seconds: 4), () {
+      pushReplacement(context, NewHomeScreen());
     });
     super.initState();
   }
@@ -32,7 +35,7 @@ class _SplashScreenState extends State<SplashScreen> {
         child: TweenAnimationBuilder(
           tween: Tween<double>(
             begin: 50.0,
-            end: 400.0,
+            end: 500.0,
           ),
           duration: const Duration(seconds: 3),
           curve: Curves.easeInToLinear,
@@ -40,7 +43,7 @@ class _SplashScreenState extends State<SplashScreen> {
             return SizedBox(
               width: val,
               height: val,
-              child: Image.asset(AppAssetsImages.splashImage),
+              child: Image.asset(AppAssetsImages.appLogo),
             );
           },
         ),

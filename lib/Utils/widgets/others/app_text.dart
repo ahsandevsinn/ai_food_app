@@ -8,13 +8,15 @@ class AppText {
       FontWeight? fontWeight,
       FontStyle? fontStyle,
       TextBaseline? textBaseline,
-        TextOverflow? overflow,
+      TextOverflow? overflow,
+      int? maxlines,
       double? letterSpacing,
-      bool underLine=false,
+      bool underLine = false,
       bool fontFamily = false}) {
     return Text(
       text,
-      textAlign: TextAlign.center,
+      textAlign: textAlign,
+      maxLines: maxlines,
       style: TextStyle(
           color: textColor,
           fontSize: fontSize,

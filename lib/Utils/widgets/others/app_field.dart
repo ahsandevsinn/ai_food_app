@@ -162,7 +162,6 @@ class _CustomAppPasswordfieldState extends State<CustomAppPasswordfield> {
           height: 37,
           width: widget.width,
           child: TextFormField(
-            
             textAlignVertical: TextAlignVertical.center,
             onChanged: widget.onChanged,
             onTap: widget.onTap,
