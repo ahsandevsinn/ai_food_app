@@ -482,7 +482,3 @@ class _AuthScreenState extends State<AuthScreen> {
   }
 
 }
-
-
-//signout code for apple firebase signout
-//await FirebaseAuth.instance.signOut();

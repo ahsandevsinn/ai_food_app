@@ -148,6 +148,8 @@ class _SearchRecipesScreenState extends State<SearchRecipesScreen> {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
+    print("getting_data ${addFoodStyle}");
+    print("getting_data ${addServingSize}");
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -237,36 +239,34 @@ class _SearchRecipesScreenState extends State<SearchRecipesScreen> {
                           height: 48,
                           width: 227,
                           decoration: BoxDecoration(
-                            // color: Colors.redAccent,
+                              // color: Colors.redAccent,
                               borderRadius: BorderRadius.circular(5),
-                              border: Border.all(color: AppTheme.appColor,width: 2)
-                          ),
+                              border: Border.all(
+                                  color: AppTheme.appColor, width: 2)),
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 8.0),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 AppText.appText(
                                     addFoodStyle.isEmpty
                                         ? "Food Style"
-                                        : addFoodStyle[0]
-                                        .toString(),
+                                        : addFoodStyle[0].toString(),
                                     fontSize: 18,
                                     fontWeight: FontWeight.w500,
                                     textColor: AppTheme.appColor),
                                 !showFoodStyle
                                     ? Icon(
-                                  Icons
-                                      .keyboard_arrow_down_outlined,
-                                  color: AppTheme.appColor,
-                                  size: 30,
-                                )
+                                        Icons.keyboard_arrow_down_outlined,
+                                        color: AppTheme.appColor,
+                                        size: 30,
+                                      )
                                     : Icon(
-                                  Icons
-                                      .keyboard_arrow_up_outlined,
-                                  color: AppTheme.appColor,
-                                  size: 30,
-                                ),
+                                        Icons.keyboard_arrow_up_outlined,
+                                        color: AppTheme.appColor,
+                                        size: 30,
+                                      ),
                               ],
                             ),
                           ),
@@ -283,36 +283,34 @@ class _SearchRecipesScreenState extends State<SearchRecipesScreen> {
                           height: 48,
                           width: 227,
                           decoration: BoxDecoration(
-                            // color: Colors.redAccent,
+                              // color: Colors.redAccent,
                               borderRadius: BorderRadius.circular(5),
-                              border: Border.all(color: AppTheme.appColor,width: 2)
-                          ),
+                              border: Border.all(
+                                  color: AppTheme.appColor, width: 2)),
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 8.0),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 AppText.appText(
                                     addServingSize.isEmpty
                                         ? "Serving Size"
-                                        : addServingSize[0]
-                                        .toString(),
+                                        : addServingSize[0].toString(),
                                     fontSize: 18,
                                     fontWeight: FontWeight.w500,
                                     textColor: AppTheme.appColor),
                                 !showServingSize
                                     ? Icon(
-                                  Icons
-                                      .keyboard_arrow_down_outlined,
-                                  color: AppTheme.appColor,
-                                  size: 30,
-                                )
+                                        Icons.keyboard_arrow_down_outlined,
+                                        color: AppTheme.appColor,
+                                        size: 30,
+                                      )
                                     : Icon(
-                                  Icons
-                                      .keyboard_arrow_up_outlined,
-                                  color: AppTheme.appColor,
-                                  size: 30,
-                                ),
+                                        Icons.keyboard_arrow_up_outlined,
+                                        color: AppTheme.appColor,
+                                        size: 30,
+                                      ),
                               ],
                             ),
                           ),
@@ -331,19 +329,16 @@ class _SearchRecipesScreenState extends State<SearchRecipesScreen> {
                         spacing: 10,
                         children: allergies.map((allergy) {
                           return CustomContainer(
-                            containerColor:
-                            addAllergies.contains(allergy)
+                            containerColor: addAllergies.contains(allergy)
                                 ? AppTheme.appColor
                                 : Colors.white,
                             text: allergy,
-                            textColor:
-                            addAllergies.contains(allergy)
+                            textColor: addAllergies.contains(allergy)
                                 ? Colors.white
                                 : AppTheme.appColor,
                             onTap: () {
                               setState(() {
-                                if (addAllergies
-                                    .contains(allergy)) {
+                                if (addAllergies.contains(allergy)) {
                                   addAllergies.remove(allergy);
                                   print(
                                       "allergy_is ${allergy} an list ${addAllergies.toString().substring(1, addAllergies.toString().length - 1)}");
@@ -369,29 +364,26 @@ class _SearchRecipesScreenState extends State<SearchRecipesScreen> {
                       Wrap(
                         spacing: 10,
                         runSpacing: 10,
-                        children:
-                        dietaryRestrictions.map((restriction) {
+                        children: dietaryRestrictions.map((restriction) {
                           return CustomContainer(
-                            containerColor: addDietaryRestrictions
-                                .contains(restriction)
-                                ? AppTheme.appColor
-                                : Colors.white,
-                            textColor: addDietaryRestrictions
-                                .contains(restriction)
-                                ? Colors.white
-                                : AppTheme.appColor,
+                            containerColor:
+                                addDietaryRestrictions.contains(restriction)
+                                    ? AppTheme.appColor
+                                    : Colors.white,
+                            textColor:
+                                addDietaryRestrictions.contains(restriction)
+                                    ? Colors.white
+                                    : AppTheme.appColor,
                             text: restriction,
                             onTap: () {
                               setState(() {
                                 if (addDietaryRestrictions
                                     .contains(restriction)) {
-                                  addDietaryRestrictions
-                                      .remove(restriction);
+                                  addDietaryRestrictions.remove(restriction);
                                   print(
                                       "restriction_is ${restriction} an list ${addDietaryRestrictions.toString().substring(1, addDietaryRestrictions.toString().length - 1)}");
                                 } else {
-                                  addDietaryRestrictions
-                                      .add(restriction);
+                                  addDietaryRestrictions.add(restriction);
                                   print(
                                       "restriction_is ${restriction} an list ${addDietaryRestrictions.toString().substring(1, addDietaryRestrictions.toString().length - 1)}");
                                 }
@@ -405,15 +397,15 @@ class _SearchRecipesScreenState extends State<SearchRecipesScreen> {
                   ),
                   showServingSize
                       ? Padding(
-                    padding: const EdgeInsets.only(top: 123.0),
-                    child: customServingSize(),
-                  )
+                          padding: const EdgeInsets.only(top: 123.0),
+                          child: customServingSize(),
+                        )
                       : const SizedBox.shrink(),
                   showFoodStyle
                       ? Padding(
-                    padding: const EdgeInsets.only(top: 55.0),
-                    child: customFoodStyle(),
-                  )
+                          padding: const EdgeInsets.only(top: 55.0),
+                          child: customFoodStyle(),
+                        )
                       : const SizedBox.shrink(),
                 ],
               ),
@@ -428,29 +420,23 @@ class _SearchRecipesScreenState extends State<SearchRecipesScreen> {
               Wrap(
                 spacing: 10,
                 runSpacing: 10,
-                children:
-                preferredProtein.map((protein) {
+                children: preferredProtein.map((protein) {
                   return CustomContainer(
-                    containerColor: addPreferredProtein
-                        .contains(protein)
+                    containerColor: addPreferredProtein.contains(protein)
                         ? AppTheme.appColor
                         : Colors.white,
-                    textColor: addPreferredProtein
-                        .contains(protein)
+                    textColor: addPreferredProtein.contains(protein)
                         ? Colors.white
                         : AppTheme.appColor,
                     text: protein,
                     onTap: () {
                       setState(() {
-                        if (addPreferredProtein
-                            .contains(protein)) {
-                          addPreferredProtein
-                              .remove(protein);
+                        if (addPreferredProtein.contains(protein)) {
+                          addPreferredProtein.remove(protein);
                           print(
                               "preferredProtein_is ${protein} an list ${addPreferredProtein.toString().substring(1, addPreferredProtein.toString().length - 1)}");
                         } else {
-                          addPreferredProtein
-                              .add(protein);
+                          addPreferredProtein.add(protein);
                           print(
                               "preferredProtein_is ${protein} an list ${addPreferredProtein.toString().substring(1, addPreferredProtein.toString().length - 1)}");
                         }
@@ -471,29 +457,23 @@ class _SearchRecipesScreenState extends State<SearchRecipesScreen> {
               Wrap(
                 spacing: 10,
                 runSpacing: 10,
-                children:
-                regionalDelicacy.map((delicacy) {
+                children: regionalDelicacy.map((delicacy) {
                   return CustomContainer(
-                    containerColor: addRegionalDelicacy
-                        .contains(delicacy)
+                    containerColor: addRegionalDelicacy.contains(delicacy)
                         ? AppTheme.appColor
                         : Colors.white,
-                    textColor: addRegionalDelicacy
-                        .contains(delicacy)
+                    textColor: addRegionalDelicacy.contains(delicacy)
                         ? Colors.white
                         : AppTheme.appColor,
                     text: delicacy,
                     onTap: () {
                       setState(() {
-                        if (addRegionalDelicacy
-                            .contains(delicacy)) {
-                          addRegionalDelicacy
-                              .remove(delicacy);
+                        if (addRegionalDelicacy.contains(delicacy)) {
+                          addRegionalDelicacy.remove(delicacy);
                           print(
                               "regionalDelicacy_is ${delicacy} an list ${addRegionalDelicacy.toString().substring(1, addRegionalDelicacy.toString().length - 1)}");
                         } else {
-                          addRegionalDelicacy
-                              .add(delicacy);
+                          addRegionalDelicacy.add(delicacy);
                           print(
                               "regionalDelicacy_is ${delicacy} an list ${addRegionalDelicacy.toString().substring(1, addRegionalDelicacy.toString().length - 1)}");
                         }
@@ -514,29 +494,23 @@ class _SearchRecipesScreenState extends State<SearchRecipesScreen> {
               Wrap(
                 spacing: 10,
                 runSpacing: 10,
-                children:
-                kitchenResources.map((resources) {
+                children: kitchenResources.map((resources) {
                   return CustomContainer(
-                    containerColor: addKitchenResources
-                        .contains(resources)
+                    containerColor: addKitchenResources.contains(resources)
                         ? AppTheme.appColor
                         : Colors.white,
-                    textColor: addKitchenResources
-                        .contains(resources)
+                    textColor: addKitchenResources.contains(resources)
                         ? Colors.white
                         : AppTheme.appColor,
                     text: resources,
                     onTap: () {
                       setState(() {
-                        if (addKitchenResources
-                            .contains(resources)) {
-                          addKitchenResources
-                              .remove(resources);
+                        if (addKitchenResources.contains(resources)) {
+                          addKitchenResources.remove(resources);
                           print(
                               "regionalDelicacy_is ${resources} an list ${addKitchenResources.toString().substring(1, addKitchenResources.toString().length - 1)}");
                         } else {
-                          addKitchenResources
-                              .add(resources);
+                          addKitchenResources.add(resources);
                           print(
                               "regionalDelicacy_is ${resources} an list ${addKitchenResources.toString().substring(1, addKitchenResources.toString().length - 1)}");
                         }
@@ -567,6 +541,7 @@ class _SearchRecipesScreenState extends State<SearchRecipesScreen> {
       ),
     );
   }
+
   Widget customFoodStyle() {
     return Card(
       color: AppTheme.appColor,
@@ -594,10 +569,12 @@ class _SearchRecipesScreenState extends State<SearchRecipesScreen> {
               itemBuilder: (context, int index) {
                 return InkWell(
                   onTap: () {
-                    setState(() {
-                      showFoodStyle = false;
-                      addFoodStyle.insert(0, foodStyle[index]);
-                    });
+                    if (addFoodStyle.isNotEmpty) {
+                      addFoodStyle.removeAt(0);
+                    }
+                    showFoodStyle = false;
+                    addFoodStyle.insert(0, foodStyle[index]);
+                    setState(() {});
                   },
                   child: Container(
                     decoration: BoxDecoration(
@@ -653,7 +630,7 @@ class _SearchRecipesScreenState extends State<SearchRecipesScreen> {
             onTap: () {
               // This handles the tap outside the list
               setState(() {
-                showFoodStyle = false;
+                showServingSize = false;
               });
             },
             child: ListView.builder(
@@ -664,8 +641,12 @@ class _SearchRecipesScreenState extends State<SearchRecipesScreen> {
                 return InkWell(
                   onTap: () {
                     setState(() {
-                      showServingSize = false;
-                      addServingSize.insert(0, servingSize[index]);
+                      if (addServingSize.isNotEmpty) {
+                        addServingSize.removeAt(0);
+                      }
+                      showFoodStyle = false;
+                      addServingSize.insert(0, foodStyle[index]);
+                      setState(() {});
                     });
                   },
                   child: Container(
@@ -719,5 +700,4 @@ class _SearchRecipesScreenState extends State<SearchRecipesScreen> {
   //   }
   //   return const BorderRadius.only();
   // }
-
 }

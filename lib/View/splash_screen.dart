@@ -2,6 +2,7 @@ import 'package:ai_food/Utils/resources/res/app_assets.dart';
 import 'package:ai_food/Utils/resources/res/app_theme.dart';
 import 'package:ai_food/Utils/utils.dart';
 import 'package:ai_food/View/auth/auth_screen.dart';
+import 'package:ai_food/View/chat_screen.dart';
 import 'package:ai_food/View/home_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -18,7 +19,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     Future.delayed(const Duration(seconds: 5), () {
       // pushReplacement(context, const AuthScreen());
-      pushReplacement(context, const HomeScreen());
+      pushReplacement(context, const ChatScreen());
     });
     super.initState();
   }
@@ -39,7 +40,7 @@ class _SplashScreenState extends State<SplashScreen> {
             return SizedBox(
               width: val,
               height: val,
-              child: Image.asset(AppAssetsImages.appLogo),
+              child: Image.asset(AppAssetsImages.splashImage),
             );
           },
         ),
