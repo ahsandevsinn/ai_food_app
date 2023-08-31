@@ -76,4 +76,16 @@ class DietaryRestrictionsProvider extends ChangeNotifier {
       _addDietaryRestrictions.clear();
     }
   }
+
+  void addNextPage(BuildContext context) {
+    _dietaryRestrictionsRecipesParameters.addAll(preferredDietaryRestrictionsParametersRecipe);
+    var newScreen = RecipesSelection(
+      parameter: "Dietary Restrictions",
+      recipesParameters: preferredDietaryRestrictionsParametersRecipe,
+    );
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (_) => newScreen),
+    );
+    notifyListeners();
+  }
 }

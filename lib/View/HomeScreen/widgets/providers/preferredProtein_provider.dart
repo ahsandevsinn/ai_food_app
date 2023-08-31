@@ -72,4 +72,16 @@ class PreferredProteinProvider extends ChangeNotifier {
       _addProtein.clear();
     }
   }
+
+  void addNextPage(BuildContext context) {
+    _proteinRecipesParameters.addAll(preferredProteinRecipe);
+    var newScreen = RecipesSelection(
+      parameter: "Preferred Protein",
+      recipesParameters: preferredProteinRecipe,
+    );
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (_) => newScreen),
+    );
+    notifyListeners();
+  }
 }

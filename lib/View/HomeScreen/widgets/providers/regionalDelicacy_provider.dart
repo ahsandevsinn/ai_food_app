@@ -74,4 +74,16 @@ class RegionalDelicacyProvider extends ChangeNotifier {
       _addRegionalDelicacy.clear();
     }
   }
+
+  void addNextPage(BuildContext context) {
+    _regionalDelicacyRecipesParameters.addAll(preferredRegionalDelicacyParametersRecipe);
+    var newScreen = RecipesSelection(
+      parameter: "Regional Delicacy",
+      recipesParameters: preferredRegionalDelicacyParametersRecipe,
+    );
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (_) => newScreen),
+    );
+    notifyListeners();
+  }
 }

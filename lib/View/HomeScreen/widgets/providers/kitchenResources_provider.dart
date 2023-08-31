@@ -69,4 +69,16 @@ class KitchenResourcesProvider extends ChangeNotifier {
       _addKitchenResources.clear();
     }
   }
+
+  void addNextPage(BuildContext context) {
+    _kitchenResourcesRecipesParameters.addAll(preferredKitchenResourcesParametersRecipe);
+    var newScreen = RecipesSelection(
+      parameter: "Kitchen Resources",
+      recipesParameters: preferredKitchenResourcesParametersRecipe,
+    );
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (_) => newScreen),
+    );
+    notifyListeners();
+  }
 }

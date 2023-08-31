@@ -36,7 +36,6 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider<AllergiesProvider>(create: (_) => AllergiesProvider()),
           ChangeNotifierProvider<DietaryRestrictionsProvider>(create: (_) => DietaryRestrictionsProvider()),
           ChangeNotifierProvider<PreferredProteinProvider>(create: (_) => PreferredProteinProvider()),
-          ChangeNotifierProvider<PreferredProteinProvider>(create: (_) => PreferredProteinProvider()),
           ChangeNotifierProvider<RegionalDelicacyProvider>(create: (_) => RegionalDelicacyProvider()),
           ChangeNotifierProvider<KitchenResourcesProvider>(create: (_) => KitchenResourcesProvider()),
         ],

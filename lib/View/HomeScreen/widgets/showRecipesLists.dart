@@ -74,11 +74,20 @@ class _RecipesSelectionState extends State<RecipesSelection> {
                   child: Center(
                     child: IconButton(
                       icon: Icon(Icons.arrow_forward, size: 30,color: AppTheme.appColor,),
-                      onPressed: (){
-                        if(widget.parameter == 'Allergies'){
-
+                      onPressed: () {
+                        if (widget.parameter == "Allergies") {
+                          Provider.of<DietaryRestrictionsProvider>(context, listen: false).addNextPage(context);
+                        } else if(widget.parameter == "Dietary Restrictions"){
+                          Provider.of<PreferredProteinProvider>(context, listen: false).addNextPage(context);
+                        } else if(widget.parameter == "Preferred Protein"){
+                          Provider.of<RegionalDelicacyProvider>(context, listen: false).addNextPage(context);
+                        } else if(widget.parameter == "Regional Delicacy"){
+                          Provider.of<KitchenResourcesProvider>(context, listen: false).addNextPage(context);
+                        } else if(widget.parameter == "Kitchen Resources"){
+                          Navigator.of(context).pop();
                         }
                       },
+
                     ),
                   ),
                 ),

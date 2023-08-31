@@ -40,7 +40,6 @@ class Authentication {
   }
 
   static Future<User?> signInWithGoogle({required BuildContext context}) async {
-    final googleSignInProvider = Provider.of<GoogleSignInProvider>(context, listen: false);
     FirebaseAuth auth = FirebaseAuth.instance;
     User? user;
 
@@ -78,10 +77,8 @@ class Authentication {
 
           // Check if the user already exists
           if (userCredential.additionalUserInfo!.isNewUser) {
-            final googleSignInProvider = Provider.of<GoogleSignInProvider>(context).isSigningIn == false;
             Navigator.push(context, MaterialPageRoute(builder: (context) => UserProfileScreen()));
           } else {
-            final googleSignInProvider = Provider.of<GoogleSignInProvider>(context).isSigningIn == false;
             Navigator.push(context, MaterialPageRoute(builder: (context) => AskMaidaScreen()));
           }
 
