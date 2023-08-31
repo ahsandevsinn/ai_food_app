@@ -1,5 +1,6 @@
 import 'package:ai_food/Constants/app_logger.dart';
 import 'package:ai_food/View/HomeScreen/widgets/providers/allergies_provider.dart';
+import 'package:ai_food/View/HomeScreen/widgets/providers/chat_bot.dart';
 import 'package:ai_food/View/HomeScreen/widgets/providers/dietary_restrictions_provider.dart';
 import 'package:ai_food/View/HomeScreen/widgets/providers/kitchenResources_provider.dart';
 import 'package:ai_food/View/HomeScreen/widgets/providers/preferredProtein_provider.dart';
@@ -38,6 +39,7 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider<PreferredProteinProvider>(create: (_) => PreferredProteinProvider()),
           ChangeNotifierProvider<RegionalDelicacyProvider>(create: (_) => RegionalDelicacyProvider()),
           ChangeNotifierProvider<KitchenResourcesProvider>(create: (_) => KitchenResourcesProvider()),
+          ChangeNotifierProvider<ChatBotProvider>(create: (_) => ChatBotProvider()),
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,

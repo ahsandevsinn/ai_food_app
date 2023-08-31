@@ -22,7 +22,7 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
 
   @override
   Widget build(BuildContext context) {
-    final googleSignInProvider = Provider.of<GoogleSignInProvider>(context);
+    final googleSignInProvider = Provider.of<GoogleSignInProvider>(context, listen: true);
     return Padding(
       padding: const EdgeInsets.only(bottom: 16.0),
       child: googleSignInProvider.isSigningIn
@@ -33,6 +33,7 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
               child: AppButton.appButtonWithLeadingImage(
                 "Continue with Google",
                 onTap: () async {
+                  googleSignInProvider.setSigningIn(true);
                   // setState(() {
                   //   _isSigningIn = true;
                   // });
@@ -41,7 +42,7 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
                     await Authentication.initializeFirebase(context: context);
                     // User? user =
                         await Authentication.signInWithGoogle(context: context);
-
+                    googleSignInProvider.setSigningIn(false);
                     // setState(() {
                     //   _isSigningIn = false;
                     // });
@@ -56,6 +57,7 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
                     //   );
                     // }
                   } catch (e) {
+                    googleSignInProvider.setSigningIn(false);
                     print("fbjkbfjeblfbekb$e");
                   }
                 },

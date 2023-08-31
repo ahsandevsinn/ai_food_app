@@ -1,6 +1,7 @@
 import 'package:ai_food/Utils/resources/res/app_assets.dart';
 import 'package:ai_food/Utils/resources/res/app_theme.dart';
 import 'package:ai_food/Utils/utils.dart';
+import 'package:ai_food/View/AskMaida/ask_maida_screen.dart';
 import 'package:ai_food/View/HomeScreen/new_home_screen.dart';
 import 'package:ai_food/View/NavigationBar/bottom_navigation.dart';
 import 'package:ai_food/View/auth/auth_screen.dart';
@@ -22,7 +23,9 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     Future.delayed(const Duration(seconds: 4), () {
-      pushReplacement(context, NewHomeScreen());
+      // pushReplacement(context, NewHomeScreen());
+      // pushReplacement(context, const AuthScreen());
+      pushReplacement(context, const AskMaidaScreen());
     });
     super.initState();
   }
