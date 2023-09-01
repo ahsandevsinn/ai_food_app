@@ -1,4 +1,7 @@
+import 'package:ai_food/Utils/utils.dart';
 import 'package:ai_food/View/AskMaida/ask_maida_screen.dart';
+import 'package:ai_food/View/NavigationBar/bottom_navigation.dart';
+import 'package:ai_food/View/auth/auth_screen.dart';
 import 'package:ai_food/View/profile/user_profile_screen.dart';
 import 'package:ai_food/providers/google_signin_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -76,11 +79,11 @@ class Authentication {
           user = userCredential.user;
 
           // Check if the user already exists
-          if (userCredential.additionalUserInfo!.isNewUser) {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => UserProfileScreen()));
-          } else {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => AskMaidaScreen()));
-          }
+          // if (userCredential.additionalUserInfo!.isNewUser) {
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => UserProfileScreen()));
+          // } else {
+          //   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => BottomNavView()));
+          // }
 
         } on FirebaseAuthException catch (e) {
           if (e.code == 'account-exists-with-different-credential') {
@@ -119,6 +122,7 @@ class Authentication {
         await googleSignIn.signOut();
       }
       await FirebaseAuth.instance.signOut();
+      push(context, const AuthScreen());
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         Authentication.customSnackBar(

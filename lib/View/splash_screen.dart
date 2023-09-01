@@ -24,8 +24,9 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     Future.delayed(const Duration(seconds: 4), () {
       // pushReplacement(context, NewHomeScreen());
-      // pushReplacement(context, const AuthScreen());
-      pushReplacement(context, const AskMaidaScreen());
+      pushReplacement(context, const AuthScreen());
+      // pushReplacement(context, BottomNavView());
+      // pushReplacement(context, const AskMaidaScreen());
     });
     super.initState();
   }

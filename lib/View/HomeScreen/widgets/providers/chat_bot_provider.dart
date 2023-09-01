@@ -41,4 +41,13 @@ class ChatBotProvider extends ChangeNotifier {
     notifyListeners();
     return _displayChatsWidget;
   }
+
+  //  control loading in message
+  bool _isLoading = false;
+  bool get isLoading => _isLoading;
+
+  void messageLoading(value){
+    _isLoading = value;
+    notifyListeners();
+  }
 }

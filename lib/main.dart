@@ -1,6 +1,6 @@
 import 'package:ai_food/Constants/app_logger.dart';
 import 'package:ai_food/View/HomeScreen/widgets/providers/allergies_provider.dart';
-import 'package:ai_food/View/HomeScreen/widgets/providers/chat_bot.dart';
+import 'package:ai_food/View/HomeScreen/widgets/providers/chat_bot_provider.dart';
 import 'package:ai_food/View/HomeScreen/widgets/providers/dietary_restrictions_provider.dart';
 import 'package:ai_food/View/HomeScreen/widgets/providers/kitchenResources_provider.dart';
 import 'package:ai_food/View/HomeScreen/widgets/providers/preferredProtein_provider.dart';

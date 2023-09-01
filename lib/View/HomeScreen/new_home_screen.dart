@@ -94,7 +94,7 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
                   width: width * 0.65,
                   child: TextFormField(
                     controller: _searchController,
-                    // autofocus: true,
+                    autofocus: true,
                     cursorColor: AppTheme.appColor,
                     style: TextStyle(color: AppTheme.appColor),
                     decoration: InputDecoration.collapsed(
@@ -302,13 +302,13 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
                   ),
                   showServingSize
                       ? Padding(
-                          padding: const EdgeInsets.only(top: 123.0),
+                          padding: const EdgeInsets.only(top: 127.0),
                           child: customServingSize(),
                         )
                       : const SizedBox.shrink(),
                   showFoodStyle
                       ? Padding(
-                          padding: const EdgeInsets.only(top: 55.0),
+                          padding: const EdgeInsets.only(top: 59.0),
                           child: customFoodStyle(),
                         )
                       : const SizedBox.shrink(),
@@ -356,8 +356,11 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
   }
 
   Widget customFoodStyle() {
-    return Card(
-      color: AppTheme.appColor,
+    return Container(
+      decoration: BoxDecoration(
+        color: AppTheme.appColor,
+        borderRadius: BorderRadius.circular(10),
+      ),
       child: ClipRRect(
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(10),
@@ -425,8 +428,11 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
   }
 
   Widget customServingSize() {
-    return Card(
-      color: AppTheme.appColor,
+    return Container(
+      decoration: BoxDecoration(
+        color: AppTheme.appColor,
+        borderRadius: BorderRadius.circular(10),
+      ),
       child: ClipRRect(
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(10),

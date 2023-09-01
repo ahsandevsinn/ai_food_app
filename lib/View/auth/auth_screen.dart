@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:ai_food/Utils/resources/res/app_theme.dart';
+import 'package:ai_food/Utils/utils.dart';
 import 'package:ai_food/Utils/widgets/others/app_button.dart';
 import 'package:ai_food/Utils/widgets/others/app_field.dart';
 import 'package:ai_food/Utils/widgets/others/app_text.dart';
@@ -312,6 +314,8 @@ class _AuthScreenState extends State<AuthScreen> {
                                       validator: (value) {
                                         if (value == null || value.isEmpty) {
                                           return 'Please enter your confirm Password';
+                                        } else if(_passwordController.text != value){
+                                          return "password does not match";
                                         }
                                         return null; // Validation passed
                                       },
@@ -338,11 +342,12 @@ class _AuthScreenState extends State<AuthScreen> {
                                 _formKeyPassword.currentState!.validate() &&
                                 _formKeyConfirmPassword.currentState!
                                     .validate()) {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => ForgotPasswordScreen(),
-                                ),
-                              );
+                              // Navigator.of(context).push(
+                              //   MaterialPageRoute(
+                              //     builder: (context) => ForgotPasswordScreen(),
+                              //   ),
+                              // );
+                              showSnackBar(context, "User created successfully");
                             }
                           }
                         }, login == true ? "Sign In" : "Sign Up",
@@ -357,7 +362,7 @@ class _AuthScreenState extends State<AuthScreen> {
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Center(
+                      Platform.isIOS ? Center(
                         child: AppButton.appButtonWithLeadingIcon(
                             "Continue with Apple",
                             onTap: () {},
@@ -367,7 +372,7 @@ class _AuthScreenState extends State<AuthScreen> {
                             icons: Icons.apple,
                             height: 48,
                             width: 79.w),
-                      ),
+                      ) : const SizedBox.shrink(),
                       const SizedBox(
                         height: 6,
                       ),
