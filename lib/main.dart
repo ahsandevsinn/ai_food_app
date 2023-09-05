@@ -1,4 +1,5 @@
 import 'package:ai_food/Constants/app_logger.dart';
+import 'package:ai_food/View/AskMaida/ask_maida_screen.dart';
 import 'package:ai_food/View/HomeScreen/widgets/providers/allergies_provider.dart';
 import 'package:ai_food/View/HomeScreen/widgets/providers/chat_bot_provider.dart';
 import 'package:ai_food/View/HomeScreen/widgets/providers/dietary_restrictions_provider.dart';
@@ -48,7 +49,7 @@ class MyApp extends StatelessWidget {
             primarySwatch: Colors.blue,
           ),
           // home: BottomNavView(),
-          home:  SplashScreen(),
+          home:  UserProfileScreen(),
         ),
       );
     });
