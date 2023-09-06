@@ -22,6 +22,7 @@ class CustomAppFormField extends StatefulWidget {
   final Widget? suffixIcon;
   final Color? prefixIconColor;
   final Color? suffixIconColor;
+  final TextStyle? hintStyle;
 
   CustomAppFormField(
       {Key? key,
@@ -44,7 +45,9 @@ class CustomAppFormField extends StatefulWidget {
       this.prefixIcon,
       this.suffixIcon,
       this.prefixIconColor,
-      this.suffixIconColor})
+      this.suffixIconColor,
+      this.hintStyle,
+      })
       : super(key: key);
 
   @override
@@ -91,7 +94,7 @@ class _CustomAppFormFieldState extends State<CustomAppFormField> {
               border: UnderlineInputBorder(
                   borderSide: BorderSide(color: AppTheme.appColor)),
               hintText: "${widget.texthint}",
-              hintStyle: TextStyle(color: AppTheme.appColor)),
+              hintStyle: widget.hintStyle),
         ));
   }
 }

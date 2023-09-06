@@ -74,237 +74,215 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: GestureDetector(
-        onTap: () {
-          Future.delayed(const Duration(milliseconds: 200), () {
-            setState(() {
-              showMenu = false;
-            });
-          });
-        },
-        child: Scaffold(
-          body: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  child: const Image(
-                    image: AssetImage(
-                      AppAssetsImage.profile_text_background,
-                    ),
-                    fit: BoxFit.cover,
-                  ),
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: const EdgeInsets.only(top: 23),
+              width: MediaQuery.of(context).size.width,
+              child: const Image(
+                image: AssetImage(
+                  AppAssetsImage.profile_text_background,
                 ),
-                Padding(
-                  padding:
-                      const EdgeInsets.only(left: 25.0, right: 25, top: 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      CustomAppFormField(
-                        texthint: "User name",
-                        controller: _userNameController,
-                      ),
-                      const SizedBox(height: 10),
-                      GestureDetector(
-                        onTap: () {
-                          showMenu = !showMenu;
-                          setState(() {});
-                        },
-                        child: Container(
-                          width: 120,
-                          color: Colors.transparent,
-                          child: Row(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(left: 5.0),
-                                child: AppText.appText(
-                                    numberListShow.isEmpty
-                                        ? "Age"
-                                        : numberListShow[0].toString(),
-                                    fontSize: 18,
-                                    textColor: AppTheme.appColor),
-                              ),
-                              const SizedBox(width: 45),
-                              !showMenu
-                                  ? Icon(
-                                      Icons.keyboard_arrow_down,
-                                      color: AppTheme.appColor,
-                                      size: 30,
-                                    )
-                                  : Icon(
-                                      Icons.keyboard_arrow_up,
-                                      color: AppTheme.appColor,
-                                      size: 30,
-                                    ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: 110,
-                        decoration: BoxDecoration(
-                          border: Border(
-                            bottom: BorderSide(
-                                width: 1.0, color: AppTheme.appColor),
-                          ),
-                        ),
-                      ),
-                      Stack(
+                fit: BoxFit.cover,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 25.0, right: 25, top: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 12.0),
+                    child: AppText.appText(
+                      "Jassica Hanson",
+                      fontWeight: FontWeight.w500,
+                      textColor: AppTheme.appColor,
+                      fontSize: 16,
+                    ),
+                  ),
+                  Divider(
+                    thickness: 1,
+                    color: AppTheme.appColor,
+                  ),
+                  const SizedBox(height: 10),
+                  GestureDetector(
+                    onTap: () {
+                      showMenu = !showMenu;
+                      setState(() {});
+                    },
+                    child: Container(
+                      width: MediaQuery.of(context).size.width - 90,
+                      child: Row(
                         children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const SizedBox(
-                                height: 30,
-                              ),
-                              AppText.appText(
-                                "Allergies:",
-                                fontSize: 22,
-                                fontWeight: FontWeight.w800,
-                                textColor: AppTheme.appColor,
-                              ),
-                              const SizedBox(height: 10),
-                              Wrap(
-                                runSpacing: 10,
-                                spacing: 10,
-                                children: allergies.map((allergy) {
-                                  return CustomContainer(
-                                    borderColor: addDietaryRestrictions
-                                        .contains(allergy)
-                                        ? AppTheme.whiteColor
-                                        : AppTheme.appColor,
-                                    containerColor:
-                                        addAllergies.contains(allergy)
-                                            ? AppTheme.appColor
-                                            : Colors.white,
-                                    text: allergy,
-                                    textColor: addAllergies.contains(allergy)
-                                        ? Colors.white
-                                        : AppTheme.appColor,
-                                    onTap: () {
-                                      setState(() {
-                                        if (addAllergies.contains(allergy)) {
-                                          addAllergies.remove(allergy);
-                                          print(
-                                              "allergy_is ${allergy} an list ${addAllergies.toString().substring(1, addAllergies.toString().length - 1)}");
-                                        } else {
-                                          addAllergies.add(allergy);
-                                          print(
-                                              "allergy_is ${allergy} an list ${addAllergies.toString().substring(1, addAllergies.toString().length - 1)}");
-                                        }
-                                      });
-                                    },
-                                  );
-                                }).toList(),
-                              ),
-                              const SizedBox(height: 30),
-                              AppText.appText(
-                                "Dietary restrictions:",
-                                fontSize: 22,
-                                fontWeight: FontWeight.w800,
-                                textColor: AppTheme.appColor,
-                              ),
-                              const SizedBox(height: 10),
-                              Wrap(
-                                spacing: 10,
-                                runSpacing: 10,
-                                children:
-                                    dietaryRestrictions.map((restriction) {
-                                  return CustomContainer(
-                                    borderColor: addDietaryRestrictions
-                                        .contains(restriction)
-                                        ? AppTheme.whiteColor
-                                        : AppTheme.appColor,
-                                    containerColor: addDietaryRestrictions
-                                            .contains(restriction)
-                                        ? AppTheme.appColor
-                                        : Colors.white,
-                                    textColor: addDietaryRestrictions
-                                            .contains(restriction)
-                                        ? Colors.white
-                                        : AppTheme.appColor,
-                                    text: restriction,
-                                    onTap: () {
-                                      setState(() {
-                                        if (addDietaryRestrictions
-                                            .contains(restriction)) {
-                                          addDietaryRestrictions
-                                              .remove(restriction);
-                                          print(
-                                              "restriction_is ${restriction} an list ${addDietaryRestrictions.toString().substring(1, addDietaryRestrictions.toString().length - 1)}");
-                                        } else {
-                                          addDietaryRestrictions
-                                              .add(restriction);
-                                          print(
-                                              "restriction_is ${restriction} an list ${addDietaryRestrictions.toString().substring(1, addDietaryRestrictions.toString().length - 1)}");
-                                        }
-                                      });
-                                    },
-                                  );
-                                }).toList(),
-                              ),
-                            ],
+                          Padding(
+                            padding: const EdgeInsets.only(left: 12.0, top: 4),
+                            child: AppText.appText("DOB:YYYY-MM-DD",
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                textColor: AppTheme.appColor),
                           ),
-                          showMenu ? customMenu() : const SizedBox.shrink(),
                         ],
                       ),
+                    ),
+                  ),
+                  Divider(
+                    thickness: 1,
+                    color: AppTheme.appColor,
+                    endIndent: 40,
+                  ),
+                  Stack(
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(
+                            height: 30,
+                          ),
+                          AppText.appText(
+                            "Allergies:",
+                            fontSize: 22,
+                            fontWeight: FontWeight.w800,
+                            textColor: AppTheme.appColor,
+                          ),
+                          const SizedBox(height: 10),
+                          Wrap(
+                            runSpacing: 10,
+                            spacing: 10,
+                            children: allergies.map((allergy) {
+                              return CustomContainer(
+                                borderColor:
+                                    addDietaryRestrictions.contains(allergy)
+                                        ? AppTheme.whiteColor
+                                        : AppTheme.appColor,
+                                containerColor: addAllergies.contains(allergy)
+                                    ? AppTheme.appColor
+                                    : Colors.white,
+                                text: allergy,
+                                textColor: addAllergies.contains(allergy)
+                                    ? Colors.white
+                                    : AppTheme.appColor,
+                                onTap: () {
+                                  setState(() {
+                                    if (addAllergies.contains(allergy)) {
+                                      addAllergies.remove(allergy);
+                                      print(
+                                          "allergy_is ${allergy} an list ${addAllergies.toString().substring(1, addAllergies.toString().length - 1)}");
+                                    } else {
+                                      addAllergies.add(allergy);
+                                      print(
+                                          "allergy_is ${allergy} an list ${addAllergies.toString().substring(1, addAllergies.toString().length - 1)}");
+                                    }
+                                  });
+                                },
+                              );
+                            }).toList(),
+                          ),
+                          const SizedBox(height: 30),
+                          AppText.appText(
+                            "Dietary restrictions:",
+                            fontSize: 22,
+                            fontWeight: FontWeight.w800,
+                            textColor: AppTheme.appColor,
+                          ),
+                          const SizedBox(height: 10),
+                          Wrap(
+                            spacing: 10,
+                            runSpacing: 10,
+                            children: dietaryRestrictions.map((restriction) {
+                              return CustomContainer(
+                                borderColor:
+                                    addDietaryRestrictions.contains(restriction)
+                                        ? AppTheme.whiteColor
+                                        : AppTheme.appColor,
+                                containerColor:
+                                    addDietaryRestrictions.contains(restriction)
+                                        ? AppTheme.appColor
+                                        : Colors.white,
+                                textColor:
+                                    addDietaryRestrictions.contains(restriction)
+                                        ? Colors.white
+                                        : AppTheme.appColor,
+                                text: restriction,
+                                onTap: () {
+                                  setState(() {
+                                    if (addDietaryRestrictions
+                                        .contains(restriction)) {
+                                      addDietaryRestrictions
+                                          .remove(restriction);
+                                      print(
+                                          "restriction_is ${restriction} an list ${addDietaryRestrictions.toString().substring(1, addDietaryRestrictions.toString().length - 1)}");
+                                    } else {
+                                      addDietaryRestrictions.add(restriction);
+                                      print(
+                                          "restriction_is ${restriction} an list ${addDietaryRestrictions.toString().substring(1, addDietaryRestrictions.toString().length - 1)}");
+                                    }
+                                  });
+                                },
+                              );
+                            }).toList(),
+                          ),
+                        ],
+                      ),
+                      showMenu ? customMenu() : const SizedBox.shrink(),
                     ],
                   ),
-                ),
-                const SizedBox(
-                  height: 30,
-                ),
-                Center(
-                  child: AppButton.appButton(
-                    "Save",
-                    onTap: () {
-                      print(
-                          "allergies:$addAllergies  and restrictions: $addDietaryRestrictions");
-                      getSuggestedRecipes(
-                          allergies: addAllergies, dietaryRestrictions: addDietaryRestrictions, context: context);
-                    },
-                    fontSize: 20,
-                    fontWeight: FontWeight.w800,
-                    textColor: Colors.white,
-                    height: 50,
-                    width: 180,
-                    backgroundColor: AppTheme.appColor,
-                  ),
-                ),
-                const SizedBox(height: 30),
-                // Center(
-                //   child: _isSigningOut
-                //       ? const CircularProgressIndicator(
-                //           valueColor:
-                //               AlwaysStoppedAnimation<Color>(Colors.white),
-                //         )
-                //       : AppButton.appButton(
-                //           "SignOut",
-                //           fontSize: 20,
-                //           fontWeight: FontWeight.w800,
-                //           textColor: Colors.white,
-                //           height: 50,
-                //           width: 180,
-                //           backgroundColor: AppTheme.appColor,
-                //           onTap: () async {
-                //             setState(() {
-                //               _isSigningOut = true;
-                //             });
-                //             await Authentication.signOut(context: context);
-                //             setState(() {
-                //               _isSigningOut = false;
-                //             });
-                //
-                //             push(context, const AuthScreen());
-                //           },
-                //         ),
-                // ),
-              ],
+                ],
+              ),
             ),
-          ),
+            const SizedBox(
+              height: 30,
+            ),
+            Center(
+              child: AppButton.appButton(
+                "Save",
+                onTap: () {
+                  print("allergies:$addAllergies  and restrictions: $addDietaryRestrictions");
+                  getSuggestedRecipes(
+                      allergies: addAllergies,
+                      dietaryRestrictions: addDietaryRestrictions,
+                      // context: context
+                      );
+                },
+                fontSize: 20,
+                fontWeight: FontWeight.w800,
+                textColor: Colors.white,
+                height: 50,
+                width: 180,
+                backgroundColor: AppTheme.appColor,
+              ),
+            ),
+            const SizedBox(height: 30),
+            // Center(
+            //   child: _isSigningOut
+            //       ? const CircularProgressIndicator(
+            //           valueColor:
+            //               AlwaysStoppedAnimation<Color>(Colors.white),
+            //         )
+            //       : AppButton.appButton(
+            //           "SignOut",
+            //           fontSize: 20,
+            //           fontWeight: FontWeight.w800,
+            //           textColor: Colors.white,
+            //           height: 50,
+            //           width: 180,
+            //           backgroundColor: AppTheme.appColor,
+            //           onTap: () async {
+            //             setState(() {
+            //               _isSigningOut = true;
+            //             });
+            //             await Authentication.signOut(context: context);
+            //             setState(() {
+            //               _isSigningOut = false;
+            //             });
+            //
+            //             push(context, const AuthScreen());
+            //           },
+            //         ),
+            // ),
+          ],
         ),
       ),
     );
@@ -334,7 +312,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               return InkWell(
                 onTap: () {
                   setState(() {
-                    if(numberListShow.isNotEmpty){
+                    if (numberListShow.isNotEmpty) {
                       numberListShow.removeAt(0);
                     }
                     showMenu = false;
@@ -376,17 +354,40 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     );
   }
 
-  getSuggestedRecipes({allergies, dietaryRestrictions, context}) async {
+  getSuggestedRecipes({allergies, dietaryRestrictions}) async {
     const apiKey = 'd9186e5f351240e094658382be62d948';
-    final apiUrl =
-        'https://api.spoonacular.com/recipes/random?number=8&tags=${allergies.toString().substring(1,allergies.toString().length-1)},${dietaryRestrictions.toString().substring(1,dietaryRestrictions.toString().length-1)}&apiKey=$apiKey';
+    final allergiesAre = allergies.isNotEmpty ? "${allergies.join(',').toLowerCase()}" : "";
+    final dietaryRestrictionsAre = dietaryRestrictions.isNotEmpty ? "${dietaryRestrictions.join(',').toLowerCase()}" : "";
+
+    print("allergies_are $allergiesAre dietary_restrictions $dietaryRestrictionsAre");
+
+    String apiFinalUrl;
+
+    if (allergies.isEmpty && dietaryRestrictions.isNotEmpty) {
+      // Only dietary restrictions are present
+      apiFinalUrl = 'https://api.spoonacular.com/recipes/random?number=8&tags=$dietaryRestrictionsAre&apiKey=$apiKey';
+    } else if (allergies.isNotEmpty && dietaryRestrictions.isEmpty) {
+      // Only allergies are present
+      apiFinalUrl = 'https://api.spoonacular.com/recipes/random?number=8&tags=$allergiesAre&apiKey=$apiKey';
+    } else if (allergies.isNotEmpty && dietaryRestrictions.isNotEmpty) {
+      // Both allergies and dietary restrictions are present
+      apiFinalUrl = 'https://api.spoonacular.com/recipes/random?number=8&tags=$allergiesAre,$dietaryRestrictionsAre&apiKey=$apiKey';
+    } else {
+      // Both are empty
+      apiFinalUrl = 'https://api.spoonacular.com/recipes/random?number=8&apiKey=$apiKey';
+    }
+    // final apiUrl =
+    //     'https://api.spoonacular.com/recipes/random?number=8&tags=${allergies.toString().substring(1, allergies.toString().length - 1)},${dietaryRestrictions.toString().substring(1, dietaryRestrictions.toString().length - 1)}&apiKey=$apiKey';
+        // 'https://api.spoonacular.com/recipes/random?number=8${allergies.toLowerCase()}&apiKey=$apiKey';
+    // 'https://api.spoonacular.com/recipes/random?number=8&apiKey=$apiKey';
 
     try {
       var response;
-      response = await dio.get(path: apiUrl);
+      print(apiFinalUrl);
+      response = await dio.get(path: apiFinalUrl);
       if (response.statusCode == 200) {
         print("jfdjbjeb${responseData}");
-        Navigator.of(context).pushReplacement(MaterialPageRoute(
+        Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => BottomNavView(
             responseData: response.data["recipes"],
           ),
@@ -412,7 +413,8 @@ class CustomContainer extends StatelessWidget {
       this.text,
       required this.onTap,
       required this.textColor,
-      required this.containerColor, this.borderColor});
+      required this.containerColor,
+      this.borderColor});
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
