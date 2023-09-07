@@ -8,7 +8,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'dart:math' as math;
 
 class AskMaidaScreen extends StatefulWidget {
   const AskMaidaScreen({Key? key}) : super(key: key);
@@ -167,7 +166,7 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
   void chatBotTalk() async {
     final chatsProvider = Provider.of<ChatBotProvider>(context, listen: false);
     chatsProvider.messageLoading(true);
-    const apiKey = 'c8006bcb5d99435bada05e67f3db55cc';
+    const apiKey = '50c97694758d413ba8021361c1a6aff8';
     // const apiKey = '56806fa3f874403c8794d4b7e491c937';
     final apiUrl =
         'https://api.spoonacular.com/food/converse?text=${_messageController.text}&apiKey=$apiKey';
@@ -297,45 +296,4 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
       chatsProvider.messageLoading(false);
     }
   }
-
-  // Widget customChat() {
-  //   return Container(
-  //     width: 155,
-  //     height: 100,
-  //     color: const Color(0xFf0000DE),
-  //     child: Stack(
-  //       children: [
-  //         Align(
-  //           alignment: Alignment.bottomRight,
-  //           child: Transform.rotate(
-  //             angle: 50.4,
-  //             child: const Padding(
-  //               padding: EdgeInsets.only(right: 8.0),
-  //               child: Image(
-  //                 width: 45,
-  //                 height: 45,
-  //                 image: AssetImage('assets/images/Vector_chat.png'),
-  //               ),
-  //             ),
-  //           ),
-  //         ),
-  //         Container(
-  //           width: 144,
-  //           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-  //           decoration: BoxDecoration(
-  //             // color: const Color(0xFFB38ADE),
-  //             color: const Color(0xFf7787DE),
-  //             borderRadius: BorderRadius.circular(32),
-  //           ),
-  //           child: const Text(
-  //             "This is message text Ttext This is message text",
-  //             style: TextStyle(color: Colors.white),
-  //           ),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
-
-
 }

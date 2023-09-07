@@ -54,6 +54,7 @@ dependencies:
   sign_in_with_apple: ^5.0.0
   crypto: ^3.0.3
   google_nav_bar: ^5.0.6
+  intl: ^0.18.1
 #  flutter_html: ^2.1.2
 
 dev_dependencies:

@@ -31,13 +31,17 @@ class _SettingScreenState extends State<SettingScreen> {
         centerTitle: true,
         elevation: 5,
         titleText: "Settings",
-        titleTextStyle: TextStyle(fontFamily: "Roboto",color: AppTheme.appColor, fontSize: 24),
+        titleTextStyle: TextStyle(
+            fontFamily: "Roboto", color: AppTheme.appColor, fontSize: 24),
       ),
       body: Padding(
         padding: EdgeInsets.only(left: 5.w, right: 5.w),
         child: Column(children: [
           const SizedBox(height: 30),
-          GestureDetector(onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const ProfileScreen(),)),
+          GestureDetector(
+            onTap: () => Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => const ProfileScreen(),
+            )),
             child: Row(
               children: [
                 Icon(Icons.account_circle_outlined,
@@ -48,8 +52,15 @@ class _SettingScreenState extends State<SettingScreen> {
               ],
             ),
           ),
-          Divider(height: 3.h,color: AppTheme.appColor,thickness: 1.5,),
-          GestureDetector(onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const PrivacyPolicyScreen(),)),
+          Divider(
+            height: 3.h,
+            color: AppTheme.appColor,
+            thickness: 1.5,
+          ),
+          GestureDetector(
+            onTap: () => Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => const PrivacyPolicyScreen(),
+            )),
             child: Row(
               children: [
                 Icon(Icons.privacy_tip_outlined,
@@ -60,32 +71,53 @@ class _SettingScreenState extends State<SettingScreen> {
               ],
             ),
           ),
-          Divider(height: 3.h,color: AppTheme.appColor,thickness: 1.5,),
-          GestureDetector(onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const TermsScreen(),)),
+          Divider(
+            height: 3.h,
+            color: AppTheme.appColor,
+            thickness: 1.5,
+          ),
+          GestureDetector(
+            onTap: () => Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => const TermsScreen(),
+            )),
             child: Row(
               children: [
-                const Image(image: AssetImage("assets/images/Vector.png"),width: 18,height: 18),
+                const Image(
+                    image: AssetImage("assets/images/Vector.png"),
+                    width: 18,
+                    height: 18),
                 SizedBox(width: 2.w),
                 AppText.appText("Terms of Use",
                     fontSize: 20, textColor: AppTheme.appColor),
               ],
             ),
           ),
-          Divider(height: 3.h,color: AppTheme.appColor,thickness: 1.5,),
+          Divider(
+            height: 3.h,
+            color: AppTheme.appColor,
+            thickness: 1.5,
+          ),
           GestureDetector(
-            onTap: (){
+            onTap: () {
               showCustomAlert(context);
             },
             child: Row(
               children: [
-                const Image(image: AssetImage("assets/images/headset.png"),width: 18,height: 18),
+                const Image(
+                    image: AssetImage("assets/images/headset.png"),
+                    width: 18,
+                    height: 18),
                 SizedBox(width: 2.w),
                 AppText.appText("Contact Us",
                     fontSize: 20, textColor: AppTheme.appColor),
               ],
             ),
           ),
-          Divider(height: 3.h,color: AppTheme.appColor,thickness: 1.5,),
+          Divider(
+            height: 3.h,
+            color: AppTheme.appColor,
+            thickness: 1.5,
+          ),
           GestureDetector(
             onTap: () {
               // await Authentication.signOut(context: context);
@@ -93,20 +125,23 @@ class _SettingScreenState extends State<SettingScreen> {
             },
             child: Row(
               children: [
-                Icon(Icons.logout,
-                    size: 20, color: AppTheme.appColor),
+                Icon(Icons.logout, size: 20, color: AppTheme.appColor),
                 SizedBox(width: 2.w),
                 AppText.appText("Log out",
                     fontSize: 20, textColor: AppTheme.appColor),
               ],
             ),
           ),
-          Divider(height: 3.h,color: AppTheme.appColor,thickness: 1.5,),
-
+          Divider(
+            height: 3.h,
+            color: AppTheme.appColor,
+            thickness: 1.5,
+          ),
         ]),
       ),
     );
   }
+
   static Future<void> signOut({required BuildContext context}) async {
     final GoogleSignIn googleSignIn = GoogleSignIn();
 
@@ -123,13 +158,14 @@ class _SettingScreenState extends State<SettingScreen> {
       );
     }
   }
+
   showLogOutALert(BuildContext context, {controller}) {
     return showDialog(
       context: context,
       builder: (BuildContext context) {
         return Dialog(
-            shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8.0)),
             child: SingleChildScrollView(
               child: Container(
                 // width: 100,
@@ -184,7 +220,7 @@ class _SettingScreenState extends State<SettingScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         GestureDetector(
-                          onTap: ()async{
+                          onTap: () async {
                             await Authentication.signOut(context: context);
                           },
                           child: const Text(
@@ -205,7 +241,7 @@ class _SettingScreenState extends State<SettingScreen> {
                           color: AppTheme.whiteColor,
                         ),
                         GestureDetector(
-                          onTap: (){
+                          onTap: () {
                             Navigator.of(context).pop();
                           },
                           child: const Text(
@@ -232,12 +268,14 @@ class _SettingScreenState extends State<SettingScreen> {
       },
     );
   }
+
   showCustomAlert(BuildContext context, {controller}) {
     return showDialog(
       context: context,
       builder: (BuildContext context) {
         return Dialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
           child: SingleChildScrollView(
             child: Container(
               // width: 100,
@@ -253,7 +291,9 @@ class _SettingScreenState extends State<SettingScreen> {
                     decoration: BoxDecoration(
                       color: AppTheme.whiteColor,
                       // color: Color(0xFFB38ADE),
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(8.0),
+                          topRight: Radius.circular(8.0)),
                     ),
                     height: 56,
                     width: 300,
@@ -263,14 +303,11 @@ class _SettingScreenState extends State<SettingScreen> {
                         style: TextStyle(
                           color: AppTheme.appColor,
                           fontSize: 24,
-                          fontWeight: FontWeight.w400,
+                          fontWeight: FontWeight.w600,
                         ),
                         textAlign: TextAlign.center,
                       ),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 30,
                   ),
                   Container(
                     // height: 200,
@@ -282,21 +319,21 @@ class _SettingScreenState extends State<SettingScreen> {
                             style: TextStyle(color: AppTheme.whiteColor),
                             cursorColor: AppTheme.whiteColor,
                             decoration: InputDecoration(
-                                hintStyle: TextStyle(color: AppTheme.whiteColor),
+                                contentPadding:
+                                    EdgeInsets.only(top: 20, left: 10),
+                                hintStyle:
+                                    TextStyle(color: AppTheme.whiteColor),
                                 hintText: "jessica hanson",
                                 focusedBorder: UnderlineInputBorder(
                                     borderSide:
-                                    BorderSide(color: AppTheme.whiteColor)),
+                                        BorderSide(color: AppTheme.whiteColor)),
                                 enabledBorder: UnderlineInputBorder(
-                                    borderSide:
-                                    BorderSide(color: AppTheme.whiteColor))),
+                                    borderSide: BorderSide(
+                                        color: AppTheme.whiteColor))),
                           ),
                         )
                       ],
                     ),
-                  ),
-                  const SizedBox(
-                    height: 20,
                   ),
                   Column(
                     children: [
@@ -306,29 +343,33 @@ class _SettingScreenState extends State<SettingScreen> {
                           style: TextStyle(color: AppTheme.whiteColor),
                           cursorColor: AppTheme.whiteColor,
                           decoration: InputDecoration(
+                              contentPadding:
+                                  EdgeInsets.only(top: 20, left: 10),
                               hintStyle: TextStyle(color: AppTheme.whiteColor),
                               hintText: "jessicahanson@gmail.com",
                               focusedBorder: UnderlineInputBorder(
                                   borderSide:
-                                  BorderSide(color: AppTheme.whiteColor)),
+                                      BorderSide(color: AppTheme.whiteColor)),
                               enabledBorder: UnderlineInputBorder(
                                   borderSide:
-                                  BorderSide(color: AppTheme.whiteColor))),
+                                      BorderSide(color: AppTheme.whiteColor))),
                         ),
                       )
                     ],
                   ),
                   const SizedBox(
-                    height: 30,
+                    height: 20,
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     child: TextFormField(
-                      maxLines: 3,
+                      maxLines: 4,
                       style: TextStyle(color: AppTheme.whiteColor),
                       cursorColor: AppTheme.whiteColor,
                       decoration: InputDecoration(
-                          hintStyle: TextStyle(color: AppTheme.whiteColor),
+                          contentPadding: EdgeInsets.only(top: 20, left: 10),
+                          hintStyle: TextStyle(
+                              color: AppTheme.whiteColor.withOpacity(0.5)),
                           hintText: "Your message",
                           focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
@@ -338,7 +379,7 @@ class _SettingScreenState extends State<SettingScreen> {
                           enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
                               borderSide:
-                              BorderSide(color: AppTheme.whiteColor))),
+                                  BorderSide(color: AppTheme.whiteColor))),
                     ),
                   ),
                   const SizedBox(
@@ -352,9 +393,9 @@ class _SettingScreenState extends State<SettingScreen> {
                         height: 50,
                         width: 180,
                         backgroundColor: AppTheme.whiteColor, onTap: () {
-                          // push(context, ForgotPasswordScreen());
-                          // push(context, const ForgotPasswordPage());
-                        }),
+                      // push(context, ForgotPasswordScreen());
+                      // push(context, const ForgotPasswordPage());
+                    }),
                   ),
                   const SizedBox(
                     height: 30,

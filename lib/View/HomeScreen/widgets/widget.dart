@@ -14,7 +14,7 @@ class CustomRecipesSelection extends StatelessWidget {
       onTap: onTap,
       child: Container(
         width: width,
-        height: 48,
+        height: 55,
         decoration: BoxDecoration(
           // color: Colors.redAccent,
             borderRadius: BorderRadius.circular(5),

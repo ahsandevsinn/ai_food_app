@@ -20,17 +20,17 @@ class _RecipeInfoState extends State<RecipeInfo>
   late TabController _tabController;
   final List<Widget> _tabs = [
     AppText.appText("Preparation",
-        textColor: AppTheme.appColor,
+        // textColor: AppTheme.appColor,
         fontSize: 16,
-        fontWeight: FontWeight.w600),
+        fontWeight: FontWeight.w700),
     AppText.appText("Ingredients",
-        textColor: AppTheme.appColor,
+        // textColor: AppTheme.appColor,
         fontSize: 16,
-        fontWeight: FontWeight.w600),
+        fontWeight: FontWeight.w700),
     AppText.appText("Links",
-        textColor: AppTheme.appColor,
+        // textColor: AppTheme.appColor,
         fontSize: 16,
-        fontWeight: FontWeight.w600),
+        fontWeight: FontWeight.w700),
   ];
 
   var data;
@@ -85,11 +85,7 @@ class _RecipeInfoState extends State<RecipeInfo>
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.only(
-                left: 20.0,
-                right: 20,
-                top: 10
-              ),
+              padding: const EdgeInsets.only(left: 20.0, right: 20, top: 10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -111,7 +107,7 @@ class _RecipeInfoState extends State<RecipeInfo>
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) => ShoppingList(
                                         image: widget.recipeData["image"],
-                                        name:widget.recipeData["title"],
+                                        name: widget.recipeData["title"],
                                         ingredient: widget
                                             .recipeData["extendedIngredients"],
                                       )));
@@ -122,10 +118,10 @@ class _RecipeInfoState extends State<RecipeInfo>
                                 decoration: BoxDecoration(
                                     color: AppTheme.appColor,
                                     borderRadius: BorderRadius.circular(25)),
-                                child: Icon(Icons.shopping_cart_outlined,
-                                    color: AppTheme.whiteColor)),
+                                child:
+                                    Image.asset("assets/images/shop_bag.png")),
                           ),
-                          const SizedBox(width: 10),
+                          SizedBox(width: 10),
                           GestureDetector(
                             child: Container(
                                 height: 45,
@@ -133,8 +129,7 @@ class _RecipeInfoState extends State<RecipeInfo>
                                 decoration: BoxDecoration(
                                     color: AppTheme.appColor,
                                     borderRadius: BorderRadius.circular(25)),
-                                child: Icon(Icons.favorite_border_outlined,
-                                    color: AppTheme.whiteColor)),
+                                child: Image.asset("assets/images/fav.png")),
                           ),
                         ],
                       )
@@ -199,43 +194,54 @@ class _RecipeInfoState extends State<RecipeInfo>
                   ),
                 ),
                 Positioned(
-                    top: 320,
-                    left: 65.w,
+                  top: 310,
+                  left: 60.w,
+                  child: Container(
+                    // color: Colors.red,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        SizedBox(
+                          height: 10,
+                        ),
                         Row(
                           children: [
-                            Icon(
-                              Icons.punch_clock,
-                              color: AppTheme.appColor,
+                            Image.asset(
+                              "assets/images/clock.png",
+                              height: 15,
+                              width: 15,
                             ),
                             const SizedBox(
                               width: 5,
                             ),
                             AppText.appText("25-30 min",
                                 textColor: AppTheme.appColor,
-                                fontSize: 15,
+                                fontSize: 16,
                                 fontWeight: FontWeight.w500)
                           ],
                         ),
+                        SizedBox(
+                          height: 10,
+                        ),
                         Row(
                           children: [
-                            Icon(
-                              Icons.group,
-                              color: AppTheme.appColor,
+                            Image.asset(
+                              "assets/images/person.png",
+                              height: 20,
+                              width: 20,
                             ),
                             const SizedBox(
                               width: 5,
                             ),
                             AppText.appText("2-3 Persons",
                                 textColor: AppTheme.appColor,
-                                fontSize: 15,
+                                fontSize: 16,
                                 fontWeight: FontWeight.w500)
                           ],
                         ),
                       ],
                     ),
+                  ),
                 ),
               ]),
             ),
@@ -247,8 +253,10 @@ class _RecipeInfoState extends State<RecipeInfo>
                     indicatorColor: AppTheme.appColor,
                     indicatorSize: TabBarIndicatorSize.label,
                     indicatorWeight: 3,
-                    unselectedLabelColor: Colors.grey,
+                    labelColor: AppTheme.appColor,
+                    unselectedLabelColor: Color(0xffd9c4ef),
                     tabs: _tabs,
+                    labelPadding: EdgeInsets.only(top: 20.0, bottom: 8.0),
                     controller: _tabController,
                   ),
                   Expanded(
@@ -257,45 +265,56 @@ class _RecipeInfoState extends State<RecipeInfo>
                       children: [
                         SingleChildScrollView(
                           physics: ScrollPhysics(),
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 10.0),
-                            child: Column(
-                              children: List.generate(
-                                widget
-                                    .recipeData["analyzedInstructions"][0]
-                                        ["steps"]
-                                    .length,
-                                (index) {
-                                  return Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 20, vertical: 8),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "${index + 1}.",
-                                          style: const TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w700),
-                                        ),
-                                        const SizedBox(width: 5),
-                                        Expanded(
-                                          child: Container(
-                                            child: Text(
-                                              "${widget.recipeData["analyzedInstructions"][0]["steps"][index]["step"]}",
-                                              textAlign: TextAlign.justify,
-                                              softWrap: true,
+                          child: Column(
+                            children: List.generate(
+                              widget
+                                  .recipeData["analyzedInstructions"][0]
+                                      ["steps"]
+                                  .length,
+                              (index) {
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 8),
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(top: 8.0),
+                                            child: Container(
+                                              height: 4,
+                                              width: 4,
+                                              decoration: BoxDecoration(
+                                                color: AppTheme.appColor,
+                                                borderRadius:
+                                                    BorderRadius.circular(100),
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                },
-                              ),
+                                          const SizedBox(width: 5),
+                                          Expanded(
+                                            child: Container(
+                                              child: Text(
+                                                "${widget.recipeData["analyzedInstructions"][0]["steps"][index]["step"]}",
+                                                textAlign: TextAlign.justify,
+                                                style: TextStyle(
+                                                    color: AppTheme.appColor,
+                                                    fontSize: 14,
+                                                    fontWeight:
+                                                        FontWeight.w500),
+                                                softWrap: true,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
                             ),
                           ),
                         ),
@@ -310,26 +329,47 @@ class _RecipeInfoState extends State<RecipeInfo>
                                   return Padding(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 20, vertical: 8),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
+                                    child: Column(
+                                      // mainAxisAlignment:
+                                      //     MainAxisAlignment.start,
                                       children: [
-                                        Text(
-                                          "${index + 1} .",
-                                          style: const TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w700),
-                                        ),
-                                        const SizedBox(width: 5),
-                                        Expanded(
-                                          child: Container(
-                                            child: Text(
-                                              "${ingredient[index]["original"]}",
-                                              textAlign: TextAlign.justify,
-                                              softWrap: true,
-                                            ),
+                                        Container(
+                                          child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 8.0),
+                                                child: Container(
+                                                  height: 4,
+                                                  width: 4,
+                                                  decoration: BoxDecoration(
+                                                    color: AppTheme.appColor,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            100),
+                                                  ),
+                                                ),
+                                              ),
+                                              const SizedBox(width: 5),
+                                              Expanded(
+                                                child: Container(
+                                                  child: Text(
+                                                    "${ingredient[index]["original"]}",
+                                                    textAlign:
+                                                        TextAlign.justify,
+                                                    softWrap: true,
+                                                    style: TextStyle(
+                                                        color:
+                                                            AppTheme.appColor,
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                            FontWeight.w500),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ),
                                       ],
@@ -357,7 +397,9 @@ class _RecipeInfoState extends State<RecipeInfo>
                               child: Padding(
                                 padding: const EdgeInsets.only(bottom: 8.0),
                                 child: Text(
-                                    "${widget.recipeData["spoonacularSourceUrl"]}"),
+                                  "${widget.recipeData["spoonacularSourceUrl"]}",
+                                  style: TextStyle(color: AppTheme.appColor),
+                                ),
                               ),
                             ),
                           ),
@@ -374,3 +416,19 @@ class _RecipeInfoState extends State<RecipeInfo>
     );
   }
 }
+                                                // "${widget.recipeData["analyzedInstructions"][0]["steps"][index]["step"]}",
+// const SizedBox(width: 5),
+                                          // Expanded(
+                                          //   child: Container(
+                                          //     child: Text(
+                                          //       "29${widget.recipeData["analyzedInstructions"][0]["steps"][index]["step"]}",
+                                          //       textAlign: TextAlign.justify,
+                                          //       style: TextStyle(
+                                          //           color: AppTheme.appColor,
+                                          //           fontSize: 14,
+                                          //           fontWeight:
+                                          //               FontWeight.w500),
+                                          //       softWrap: true,
+                                          //     ),
+                                          //   ),
+                                          // ),

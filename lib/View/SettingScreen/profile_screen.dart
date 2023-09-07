@@ -11,6 +11,7 @@ import 'package:ai_food/config/dio/app_dio.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
 import 'dart:math' as math;
 
@@ -28,6 +29,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   AppLogger logger = AppLogger();
   final _userNameController = TextEditingController();
   List<int> numberListShow = [];
+  DateTime? selectedDate;
   List<String> measuringUnitListShow = ["Grams","Ounce", "Pound"];
   String updatedvalueM = "";
   bool showMenu = false;
@@ -74,6 +76,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
     super.initState();
   }
 
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: selectedDate ?? DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            primaryColor: AppTheme.appColor, // Change the primary color
+            colorScheme: ColorScheme.light(
+                primary: AppTheme.appColor), // Change overall color scheme
+            buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
+          ),
+          child: child!,
+        );
+      },
+    );
+    if (picked != null && picked != selectedDate) {
+      setState(() {
+        selectedDate = picked;
+      });
+    }
+  }
   @override
   void dispose() {
     _userNameController.dispose();
@@ -123,40 +150,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         GestureDetector(
-                          onTap: () {
-                            showMenu = !showMenu;
-                            setState(() {});
-                          },
-                          child: Container(
-                            color: Colors.transparent,
-                            child: Row(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 5.0),
-                                  child: AppText.appText(
-                                      numberListShow.isEmpty
-                                          ? "Age"
-                                          : numberListShow[0].toString(),
-                                      fontSize: 18,
-                                      textColor: AppTheme.appColor),
-                                ),
-                                const SizedBox(width: 45),
-                                !showMenu
-                                    ? Icon(
-                                  Icons.keyboard_arrow_down,
-                                  color: AppTheme.appColor,
-                                  size: 30,
-                                )
-                                    : Icon(
-                                  Icons.keyboard_arrow_up,
-                                  color: AppTheme.appColor,
-                                  size: 30,
-                                ),
-                              ],
-                            ),
+                    onTap: () {
+                      _selectDate(context);
+                    },
+                    child: Container(
+                      width: MediaQuery.of(context).size.width - 90,
+                      child: Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 12.0, top: 4),
+                            child: AppText.appText(
+                                "DOB: ${selectedDate == null ? "MM-DD-YYYY" : DateFormat('MM-dd-yyyy').format(selectedDate!)}",
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                textColor: AppTheme.appColor),
                           ),
-                        ),
-                        GestureDetector(
+                        ],
+                      ),
+                    ),
+                  ),   GestureDetector(
                           onTap: () {
                             setState(() {
                               measuringUnit = !measuringUnit;
@@ -518,7 +530,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   getSuggestedRecipes({allergies, context}) async {
-    const apiKey = 'd9186e5f351240e094658382be62d948';
+    // const apiKey = 'd9186e5f351240e094658382be62d948';
+    const apiKey = '56806fa3f874403c8794d4b7e491c937';
     final apiUrl =
         'https://api.spoonacular.com/recipes/random?number=8&intolerances=$allergies&apiKey=$apiKey';
 

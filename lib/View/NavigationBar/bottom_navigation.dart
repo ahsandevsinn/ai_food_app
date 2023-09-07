@@ -2,14 +2,34 @@ import 'package:ai_food/Utils/resources/res/app_theme.dart';
 import 'package:ai_food/View/AskMaida/ask_maida_screen.dart';
 import 'package:ai_food/View/FavouriteScreen/favourite_screen.dart';
 import 'package:ai_food/View/HomeScreen/home_screen.dart';
+import 'package:ai_food/View/HomeScreen/widgets/providers/dietary_restrictions_provider.dart';
 import 'package:ai_food/View/SettingScreen/setting_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
 class BottomNavView extends StatefulWidget {
-  final responseData;
+  final type;
+  final allergies;
+  final dietaryRestrictions;
+  final data;
+  final offset;
+  final totalResults;
+  final foodStyle;
+  final searchType;
+  final query;
 
-  BottomNavView({super.key, this.responseData});
+  BottomNavView({
+    super.key,
+    this.allergies,
+    this.type,
+    this.dietaryRestrictions,
+    this.data,
+    this.offset,
+    this.totalResults,
+    this.foodStyle,
+    this.searchType,
+    this.query,
+  });
 
   @override
   State<BottomNavView> createState() => _BottomNavViewState();
@@ -24,7 +44,21 @@ class _BottomNavViewState extends State<BottomNavView> {
   void initState() {
     super.initState();
     _widgetOptions = [
-      HomeScreen(responseData: widget.responseData ?? ""),
+      widget.type == 1
+          ? HomeScreen(
+              type: 1,
+              data: widget.data,
+              offset: widget.offset,
+              totalResults: widget.totalResults,
+              foodStyle: widget.foodStyle,
+              searchType: widget.searchType,
+              query: widget.query,
+            )
+          : HomeScreen(
+              dietaryRestrictions: widget.dietaryRestrictions,
+              allergies: widget.allergies,
+              searchType: 0,
+            ),
       const FavouriteScreen(),
       const AskMaidaScreen(),
       const SettingScreen(),
@@ -64,7 +98,7 @@ class _BottomNavViewState extends State<BottomNavView> {
                   text: 'Home',
                 ),
                 GButton(
-                  icon: Icons.favorite_border_outlined,
+                  icon: Icons.favorite,
                   text: 'Favourite',
                 ),
                 GButton(

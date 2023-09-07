@@ -1,3 +1,4 @@
+import 'package:ai_food/Utils/resources/res/app_theme.dart';
 import 'package:flutter/material.dart';
 
 class FavouriteScreen extends StatefulWidget {
@@ -10,6 +11,16 @@ class FavouriteScreen extends StatefulWidget {
 class _FavouriteScreenState extends State<FavouriteScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        centerTitle: true,
+        title: Text(
+          "Favorite Recipes",
+          style:
+              TextStyle(color: AppTheme.appColor, fontWeight: FontWeight.bold),
+        ),
+      ),
+    );
   }
 }
