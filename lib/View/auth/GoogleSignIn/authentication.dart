@@ -3,13 +3,18 @@ import 'package:ai_food/View/AskMaida/ask_maida_screen.dart';
 import 'package:ai_food/View/NavigationBar/bottom_navigation.dart';
 import 'package:ai_food/View/auth/auth_screen.dart';
 import 'package:ai_food/View/profile/user_profile_screen.dart';
+import 'package:ai_food/config/app_urls.dart';
+import 'package:ai_food/config/dio/app_dio.dart';
+import 'package:ai_food/config/keys/pref_keys.dart';
 import 'package:ai_food/providers/google_signin_provider.dart';
+import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Authentication {
   static SnackBar customSnackBar({required String content}) {
@@ -32,7 +37,7 @@ class Authentication {
     if (user != null) {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (context) => UserProfileScreen(
+          builder: (context) => const UserProfileScreen(
               // user: user,
               ),
         ),
@@ -78,13 +83,15 @@ class Authentication {
               await auth.signInWithCredential(credential);
 
           user = userCredential.user;
-          print("This is the UID: ${user!.uid}");
-
+          bool newUser = userCredential.additionalUserInfo!.isNewUser;
+          String? displayName = user?.displayName;
+          print("This is the UID: ${user!.uid} newuser $newUser name $displayName");
           // Check if the user already exists
+          login(userId: user.uid, context: context, isNewUser: newUser, name: displayName!);
           // if (userCredential.additionalUserInfo!.isNewUser) {
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => UserProfileScreen()));
+          //   login(userId: user.uid, context: context, isNewUser: userCredential.additionalUserInfo!.isNewUser);
           // } else {
-          //   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => BottomNavView()));
+          //   login(userId: user.uid, context: context, isNewUser: userCredential.additionalUserInfo!.isNewUser);
           // }
 
         } on FirebaseAuthException catch (e) {
@@ -132,5 +139,54 @@ class Authentication {
         ),
       );
     }
+  }
+}
+
+void login({required String userId, context, required bool isNewUser, required String name}) async {
+  var response;
+  const int responseCode200 = 200; // For successful request.
+  const int responseCode400 = 400; // For Bad Request.
+  const int responseCode401 = 401; // For Unauthorized access.
+  const int responseCode404 = 404; // For For data not found
+  const int responseCode500 = 500; // Internal server error.
+
+  Map<String, dynamic> params = {
+    "google": userId,
+  };
+  try {
+    response = await AppDio(context).post(path: AppUrls.loginUrl, data: params);
+    var responseData = response.data;
+    if(response.statusCode == responseCode404) {
+      showSnackBar(context, "${responseData["message"]}");
+    } else if (response.statusCode == responseCode400) {
+      print(" Bad Request.");
+      showSnackBar(context, "${responseData["message"]}");
+    } else if (response.statusCode == responseCode401) {
+      print(" Unauthorized access.");
+      showSnackBar(context, "${responseData["message"]}");
+    } else if (response.statusCode == responseCode500) {
+      print("Internal server error.");
+      showSnackBar(context, "${responseData["message"]}");
+    } else if (response.statusCode == responseCode200) {
+      if (responseData["status"] == false) {
+        showSnackBar(context, "${responseData["message"]}");
+        return;
+      } else {
+        if(isNewUser){
+          pushReplacement(context, const UserProfileScreen());
+        } else {
+          pushReplacement(context, BottomNavView());
+        }
+        var token = responseData['data']['token'];
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+
+        prefs.setString(PrefKey.authorization, token ?? '');
+        prefs.setString(PrefKey.name, name ?? '');
+        showSnackBar(context, "${responseData["message"]}");
+      }
+    }
+  } catch (e) {
+    print("Something went Wrong ${e}");
+    showSnackBar(context, "Something went Wrong.");
   }
 }

@@ -11,9 +11,11 @@ import 'package:ai_food/View/HomeScreen/widgets/providers/regionalDelicacy_provi
 import 'package:ai_food/View/NavigationBar/bottom_navigation.dart';
 import 'package:ai_food/View/recipe_info/recipe_info.dart';
 import 'package:ai_food/config/dio/app_dio.dart';
+import 'package:ai_food/config/keys/pref_keys.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
   final allergies;
@@ -54,6 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
     print("bsjbdbd$type");
     dio = AppDio(context);
     logger.init();
+    getUserCredentials();
 
     if (widget.type == 1) {
       type = widget.type;
@@ -66,6 +69,14 @@ class _HomeScreenState extends State<HomeScreen> {
       );
     }
     super.initState();
+  }
+
+  void getUserCredentials() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString(PrefKey.authorization);
+    String? name = prefs.getString(PrefKey.name);
+    print("home_token $token");
+    print("home_name $name");
   }
 
   @override

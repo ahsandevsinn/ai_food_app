@@ -1,5 +1,5 @@
 class AppUrls {
-  static const String baseUrl = "https://dfe5-182-188-103-127.ngrok-free.app";
+  static const String baseUrl = "https://8a56-182-188-103-127.ngrok-free.app";
   static const String signUpUrl = "/api/register";
   static const String loginUrl = "/api/login";
   static const String updateUrl = "/api/user";
