@@ -18,8 +18,8 @@ import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 Future<void> main() async {
-  // WidgetsFlutterBinding.ensureInitialized();
-  // await Firebase.initializeApp();
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   AppLogger logger = AppLogger();
   logger.init();
   runApp(const MyApp());
@@ -34,13 +34,21 @@ class MyApp extends StatelessWidget {
     return Sizer(builder: (context, orientation, deviceType) {
       return MultiProvider(
         providers: [
-          ChangeNotifierProvider<GoogleSignInProvider>(create: (_) => GoogleSignInProvider()), // Your GoogleSignInProvider
-          ChangeNotifierProvider<AllergiesProvider>(create: (_) => AllergiesProvider()),
-          ChangeNotifierProvider<DietaryRestrictionsProvider>(create: (_) => DietaryRestrictionsProvider()),
-          ChangeNotifierProvider<PreferredProteinProvider>(create: (_) => PreferredProteinProvider()),
-          ChangeNotifierProvider<RegionalDelicacyProvider>(create: (_) => RegionalDelicacyProvider()),
-          ChangeNotifierProvider<KitchenResourcesProvider>(create: (_) => KitchenResourcesProvider()),
-          ChangeNotifierProvider<ChatBotProvider>(create: (_) => ChatBotProvider()),
+          ChangeNotifierProvider<GoogleSignInProvider>(
+              create: (_) =>
+                  GoogleSignInProvider()), // Your GoogleSignInProvider
+          ChangeNotifierProvider<AllergiesProvider>(
+              create: (_) => AllergiesProvider()),
+          ChangeNotifierProvider<DietaryRestrictionsProvider>(
+              create: (_) => DietaryRestrictionsProvider()),
+          ChangeNotifierProvider<PreferredProteinProvider>(
+              create: (_) => PreferredProteinProvider()),
+          ChangeNotifierProvider<RegionalDelicacyProvider>(
+              create: (_) => RegionalDelicacyProvider()),
+          ChangeNotifierProvider<KitchenResourcesProvider>(
+              create: (_) => KitchenResourcesProvider()),
+          ChangeNotifierProvider<ChatBotProvider>(
+              create: (_) => ChatBotProvider()),
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
@@ -49,7 +57,7 @@ class MyApp extends StatelessWidget {
             primarySwatch: Colors.blue,
           ),
           // home: BottomNavView(),
-          home:  const SplashScreen(),
+          home: const SplashScreen(),
         ),
       );
     });

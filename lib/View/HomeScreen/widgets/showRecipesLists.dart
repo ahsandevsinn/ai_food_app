@@ -30,14 +30,14 @@ class _RecipesSelectionState extends State<RecipesSelection> {
         elevation: 0,
         backgroundColor: AppTheme.appColor,
         leading: IconButton(
-          icon: const Icon(Icons.close, size: 40),
+          icon: const Icon(Icons.close, size: 30),
           onPressed: () {
             Navigator.of(context).pop();
           },
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        padding:  EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
         child: Stack(
           children: [
             Column(
@@ -45,14 +45,15 @@ class _RecipesSelectionState extends State<RecipesSelection> {
               children: [
                 AppText.appText(
                   widget.parameter,
-                  fontWeight: FontWeight.w700,
-                  fontSize: 40,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 32,
                   textColor: AppTheme.whiteColor,
                 ),
                 AppText.appText(
                   "Lorem ipsum is just simply dummy text.",
                   fontSize: 16,
                   textColor: AppTheme.whiteColor,
+                  fontWeight: FontWeight.w400
                 ),
               ],
             ),
@@ -61,7 +62,7 @@ class _RecipesSelectionState extends State<RecipesSelection> {
               child: allListsProviders(),
             ),
             Padding(
-              padding: const EdgeInsets.only(bottom: 60.0),
+              padding: const EdgeInsets.only(bottom: 30.0),
               child: Align(
                 alignment: Alignment.bottomCenter,
                 child: Container(

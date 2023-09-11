@@ -44,6 +44,7 @@ class Authentication {
 
   static Future<User?> signInWithGoogle({required BuildContext context}) async {
     FirebaseAuth auth = FirebaseAuth.instance;
+
     User? user;
 
     if (kIsWeb) {
@@ -77,10 +78,11 @@ class Authentication {
               await auth.signInWithCredential(credential);
 
           user = userCredential.user;
+          print("This is the UID: ${user!.uid}");
 
           // Check if the user already exists
           // if (userCredential.additionalUserInfo!.isNewUser) {
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => UserProfileScreen()));
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => UserProfileScreen()));
           // } else {
           //   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => BottomNavView()));
           // }

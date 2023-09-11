@@ -1,19 +1,20 @@
 import 'package:ai_food/Constants/app_logger.dart';
 import 'package:ai_food/config/app_urls.dart';
 import 'package:ai_food/config/keys/headers.dart';
+import 'package:ai_food/config/keys/pref_keys.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:req_fun/req_fun.dart';
 
 class AppDioInterceptor extends Interceptor {
-  // final BuildContext context;
+   final BuildContext  context;
   String token = "";
   final AppLogger _logger = AppLogger();
 
-  // AppDioInterceptor(this.context) {
-  //   Prefs.getPrefs().then((prefs) {
-  //     token = prefs.getString(PrefKey.authorization) ?? "";
-  //   });
-  // }
+  AppDioInterceptor(this.context) {
+    gettokenSharedPreferences();
+  }
 
   @override
   void onError(DioError err, ErrorInterceptorHandler handler) {
@@ -76,5 +77,10 @@ class AppDioInterceptor extends Interceptor {
     _logger.d(er);
 
     handler.next(options);
+  }
+
+  void gettokenSharedPreferences() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    token = prefs.getString(PrefKey.authorization) ?? "";
   }
 }

@@ -2,17 +2,21 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:ai_food/Constants/app_logger.dart';
 import 'package:ai_food/Utils/resources/res/app_theme.dart';
 import 'package:ai_food/Utils/utils.dart';
 import 'package:ai_food/Utils/widgets/others/app_button.dart';
 import 'package:ai_food/Utils/widgets/others/app_field.dart';
 import 'package:ai_food/Utils/widgets/others/app_text.dart';
 import 'package:ai_food/Utils/widgets/others/custom_card.dart';
-import 'package:ai_food/View/auth/GoogleSignIn/authentication.dart';
+import 'package:ai_food/View/NavigationBar/bottom_navigation.dart';
 import 'package:ai_food/View/auth/forgot_password_screen.dart';
-import 'package:ai_food/View/auth/set_password_screen.dart';
 import 'package:ai_food/View/profile/user_profile_screen.dart';
+import 'package:ai_food/config/app_urls.dart';
+import 'package:ai_food/config/dio/app_dio.dart';
+import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:sizer/sizer.dart';
@@ -29,26 +33,30 @@ class AuthScreen extends StatefulWidget {
 
 class _AuthScreenState extends State<AuthScreen> {
   bool login = true;
+  late AppDio dio;
+  AppLogger logger = AppLogger();
+
+  bool _isLoading = false;
 
   //final _formKey = GlobalKey<FormState>();
   final _formKeyName = GlobalKey<FormState>();
   final _formKeyEmail = GlobalKey<FormState>();
   final _formKeyLoginEmail = GlobalKey<FormState>();
+  final _formKeyLoginPassword = GlobalKey<FormState>();
   final _formKeyPhone = GlobalKey<FormState>();
   final _formKeyPassword = GlobalKey<FormState>();
-  final _formKeyLoginPassword = GlobalKey<FormState>();
   final _formKeyConfirmPassword = GlobalKey<FormState>();
 
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _loginEmailController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
+  final TextEditingController _loginEmailController = TextEditingController();
   final TextEditingController _loginPasswordController =
       TextEditingController();
 
-  final TextEditingController _confirmPasswordController =
-      TextEditingController();
   //sign in with apple code
   String generateNonce([int length = 32]) {
     const charset =
@@ -64,7 +72,15 @@ class _AuthScreenState extends State<AuthScreen> {
     final digest = sha256.convert(bytes);
     return digest.toString();
   }
+
 //ends
+
+  @override
+  void initState() {
+    dio = AppDio(context);
+    logger.init();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,12 +93,12 @@ class _AuthScreenState extends State<AuthScreen> {
         body: SingleChildScrollView(
           child: Padding(
             padding:
-                const EdgeInsets.only(left: 25, right: 25, bottom: 25, top: 50),
-            child: Container(
+                const EdgeInsets.only(left: 25, right: 25, bottom: 25, top: 25),
+            child: SizedBox(
               height: MediaQuery.of(context).size.height * 0.93,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(left: 1.0),
@@ -104,315 +120,367 @@ class _AuthScreenState extends State<AuthScreen> {
                     ),
                   ),
                   Customcard(
-                      childWidget: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              children: [
-                                InkWell(
-                                    onTap: () {
-                                      setState(() {
-                                        login = true;
-                                      });
-                                    },
-                                    child: Container(
-                                      width: 90,
-                                      child: AppText.appText("Sign In",
-                                          textColor: login == true
-                                              ? AppTheme.appColor
-                                              : AppTheme.primaryColor,
-                                          fontSize: 24,
-                                          fontWeight: FontWeight.w600),
-                                    )),
-                                login == true
-                                    ? SizedBox(
-                                        height: 5,
-                                        width: 90,
-                                        child: Divider(
-                                          color: AppTheme.appColor,
-                                          thickness: 2.0,
-                                          height: 20.0,
-                                        ),
-                                      )
-                                    : const SizedBox(
-                                        height: 5,
-                                      )
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                InkWell(
-                                    onTap: () {
-                                      setState(() {
-                                        login = false;
-                                      });
-                                    },
-                                    child: Container(
-                                      width: 95,
-                                      child: AppText.appText("Sign Up",
-                                          textColor: login == false
-                                              ? AppTheme.appColor
-                                              : AppTheme.primaryColor,
-                                          fontSize: 24,
-                                          fontWeight: FontWeight.w600),
-                                    )),
-                                login == false
-                                    ? SizedBox(
-                                        height: 5,
-                                        width: 95,
-                                        child: Divider(
-                                          color: AppTheme.appColor,
-                                          thickness: 2.0,
-                                          height: 20.0,
-                                        ),
-                                      )
-                                    : const SizedBox(
-                                        height: 5,
-                                      )
-                              ],
-                            ),
-                          ],
-                        ),
-                        login == true
-                            ? Column(
+                    childWidget: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
                                 children: [
-                                  Form(
-                                    key: _formKeyLoginEmail,
-                                    autovalidateMode:
-                                        AutovalidateMode.onUserInteraction,
-                                    child: CustomAppFormField(
+                                  InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          login = true;
+                                        });
+                                      },
+                                      child: SizedBox(
+                                        width: 90,
+                                        child: AppText.appText("Sign in",
+                                            textColor: login == true
+                                                ? AppTheme.appColor
+                                                : const Color(0xffBFBFBF),
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.w600),
+                                      )),
+                                  login == true
+                                      ? SizedBox(
+                                          height: 5,
+                                          width: 90,
+                                          child: Divider(
+                                            color: AppTheme.appColor,
+                                            thickness: 2.0,
+                                            height: 20.0,
+                                          ),
+                                        )
+                                      : const SizedBox(
+                                          height: 5,
+                                        )
+                                ],
+                              ),
+                              Column(
+                                children: [
+                                  InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          login = false;
+                                          _nameController.text = '';
+                                          _emailController.text = '';
+                                          _phoneController.text = '';
+                                          _passwordController.text = '';
+                                          _confirmPasswordController.text = '';
+                                        });
+                                      },
+                                      child: SizedBox(
+                                        width: 95,
+                                        child: AppText.appText("Sign up",
+                                            textColor: login == false
+                                                ? AppTheme.appColor
+                                                // : Colors.black.withOpacity(0.25),
+                                                : const Color(0xffBFBFBF),
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.w600),
+                                      )),
+                                  login == false
+                                      ? SizedBox(
+                                          height: 5,
+                                          width: 95,
+                                          child: Divider(
+                                            color: AppTheme.appColor,
+                                            thickness: 2.0,
+                                            height: 20.0,
+                                          ),
+                                        )
+                                      : const SizedBox(
+                                          height: 5,
+                                        )
+                                ],
+                              ),
+                            ],
+                          ),
+                          login == true
+                              ? Column(
+                                  children: [
+                                    Form(
+                                      key: _formKeyLoginEmail,
+                                      autovalidateMode:
+                                          AutovalidateMode.onUserInteraction,
+                                      child: CustomAppFormField(
+                                          validator: (value) {
+                                            final isEmailValid = RegExp(
+                                                    r'^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+\.[a-z]')
+                                                .hasMatch(value);
+                                            final isMobileValid = RegExp(
+                                                    r'^\+(?:[0-9] ?){6,14}[0-9]$')
+                                                .hasMatch(value);
+                                            if (value.isEmpty ||
+                                                value == null) {
+                                              return "Please enter your email or mobile number";
+                                            }
+                                            if (!isEmailValid &&
+                                                !isMobileValid) {
+                                              return "Please enter a valid email";
+                                            }
+                                            return null;
+                                          },
+                                          texthint: "Email or Mobile number",
+                                          hintStyle: TextStyle(
+                                              color: AppTheme.appColor),
+                                          controller: _loginEmailController),
+                                    ),
+                                    Form(
+                                      key: _formKeyLoginPassword,
+                                      autovalidateMode:
+                                          AutovalidateMode.onUserInteraction,
+                                      child: CustomAppPasswordfield(
                                         validator: (value) {
-                                          if (value!.isEmpty) {
-                                            return "Please enter your email or mobile number";
-                                          }
-                                          final isEmailValid = RegExp(
-                                                  r'^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+\.[a-z]')
-                                              .hasMatch(value);
-                                          final isMobileValid =
-                                              RegExp(r'^\d{10}$')
-                                                  .hasMatch(value);
-
-                                          if (!isEmailValid && !isMobileValid) {
-                                            return "Please enter a valid email or mobile number";
+                                          if (value.isEmpty) {
+                                            return "Field cannot be empty";
+                                          } else if (value.length < 8) {
+                                            return "password length should atleast 8";
                                           }
                                           return null;
                                         },
-                                        texthint: "Email or Mobile number",
-                                        controller: _loginEmailController),
-                                  ),
-                                  CustomAppPasswordfield(
-                                    texthint: "Enter Password",
-                                    controller: _loginPasswordController,
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      InkWell(
-                                          onTap: () {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      ForgotPasswordScreen(),
-                                                ));
+                                        texthint: "Password",
+                                        controller: _loginPasswordController,
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        InkWell(
+                                            onTap: () {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        ForgotPasswordScreen(),
+                                                  ));
+                                            },
+                                            child: AppText.appText(
+                                              "Forgot password?",
+                                              textColor: AppTheme.appColor,
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w500,
+                                            )),
+                                      ],
+                                    )
+                                  ],
+                                )
+                              : Column(
+                                  children: [
+                                    Form(
+                                      autovalidateMode:
+                                          AutovalidateMode.onUserInteraction,
+                                      key: _formKeyName,
+                                      child: CustomAppFormField(
+                                          validator: (value) {
+                                            if (value == null ||
+                                                value.isEmpty) {
+                                              return 'Please enter your name';
+                                            }
+                                            return null; // Validation passed
                                           },
-                                          child: AppText.appText(
-                                            "Forgot Password?",
-                                            textColor: AppTheme.appColor,
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w500,
-                                          )),
-                                    ],
-                                  )
-                                ],
-                              )
-                            : Column(
-                                children: [
-                                  Form(
-                                    autovalidateMode:
-                                        AutovalidateMode.onUserInteraction,
-                                    key: _formKeyName,
-                                    child: CustomAppFormField(
+                                          height: 50,
+                                          texthint: "Enter full name",
+                                          hintStyle: TextStyle(
+                                              color: AppTheme.appColor),
+                                          controller: _nameController),
+                                    ),
+                                    Form(
+                                      autovalidateMode:
+                                          AutovalidateMode.onUserInteraction,
+                                      key: _formKeyEmail,
+                                      child: CustomAppFormField(
                                         validator: (value) {
                                           if (value == null || value.isEmpty) {
-                                            return 'Please enter your name';
+                                            return 'Please enter your email';
                                           }
-                                          return null; // Validation passed
+                                          final emailRegex = RegExp(
+                                              r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$');
+                                          if (!emailRegex.hasMatch(value)) {
+                                            return 'Invalid Email';
+                                          }
+                                          return null;
                                         },
                                         height: 50,
-                                        texthint: "Enter full name",
-                                        controller: _nameController),
-                                  ),
-                                  Form(
-                                    autovalidateMode:
-                                        AutovalidateMode.onUserInteraction,
-                                    key: _formKeyEmail,
-                                    child: CustomAppFormField(
-                                      validator: (value) {
-                                        if (value == null || value.isEmpty) {
-                                          return 'Please enter your email';
-                                        }
-                                        final emailRegex = RegExp(
-                                            r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$');
-                                        if (!emailRegex.hasMatch(value)) {
-                                          return 'Please enter a valid email address';
-                                        }
-                                        return null;
-                                      },
-                                      height: 50,
-                                      texthint: "Enter email",
-                                      controller: _emailController,
+                                        texthint: "Enter email",
+                                        hintStyle:
+                                            TextStyle(color: AppTheme.appColor),
+                                        controller: _emailController,
+                                      ),
                                     ),
-                                  ),
-                                  Form(
-                                    key: _formKeyPhone,
-                                    autovalidateMode:
-                                        AutovalidateMode.onUserInteraction,
-                                    child: CustomAppFormField(
+                                    Form(
+                                      key: _formKeyPhone,
+                                      autovalidateMode:
+                                          AutovalidateMode.onUserInteraction,
+                                      child: CustomAppFormField(
+                                          validator: (value) {
+                                            if (value == null ||
+                                                value.isEmpty) {
+                                              return 'Please enter your mobile number';
+                                            }
+                                            final isMobileValid = RegExp(
+                                                    r'^\+(?:[0-9] ?){6,14}[0-9]$')
+                                                .hasMatch(value);
+
+                                            if (!isMobileValid) {
+                                              return "Please enter a valid email or mobile number";
+                                            }
+                                            return null; // Validation passed
+                                          },
+                                          texthint: "Enter mobile number",
+                                          hintStyle: TextStyle(
+                                              color: AppTheme.appColor),
+                                          controller: _phoneController),
+                                    ),
+                                    Form(
+                                      autovalidateMode:
+                                          AutovalidateMode.onUserInteraction,
+                                      key: _formKeyPassword,
+                                      child: CustomAppPasswordfield(
                                         validator: (value) {
                                           if (value == null || value.isEmpty) {
-                                            return 'Please enter your mobile number';
-                                          }
-                                          final isMobileValid = RegExp(
-                                                  r'^\+?\d{1,3}[-.\s]?\d{1,12}$')
-                                              .hasMatch(value);
-
-                                          if (!isMobileValid) {
-                                            return "Please enter a valid email or mobile number";
+                                            return 'Please enter your password';
+                                          } else if (value.length < 8) {
+                                            return "password length should atleast 8";
                                           }
                                           return null; // Validation passed
                                         },
-                                        texthint: "Enter mobile number",
-                                        controller: _phoneController),
-                                  ),
-                                  Form(
-                                    autovalidateMode:
-                                        AutovalidateMode.onUserInteraction,
-                                    key: _formKeyPassword,
-                                    child: CustomAppPasswordfield(
-                                      validator: (value) {
-                                        if (value == null || value.isEmpty) {
-                                          return 'Please enter your password';
-                                        }
-                                        return null; // Validation passed
-                                      },
-                                      texthint: "Enter password",
-                                      controller: _passwordController,
+                                        texthint: "Enter password",
+                                        controller: _passwordController,
+                                      ),
                                     ),
-                                  ),
-                                  Form(
-                                    autovalidateMode:
-                                        AutovalidateMode.onUserInteraction,
-                                    key: _formKeyConfirmPassword,
-                                    child: CustomAppPasswordfield(
-                                      validator: (value) {
-                                        if (value == null || value.isEmpty) {
-                                          return 'Please enter your confirm Password';
-                                        } else if(_passwordController.text != value){
-                                          return "password does not match";
-                                        }
-                                        return null; // Validation passed
-                                      },
-                                      texthint: "Confirm password",
-                                      controller: _confirmPasswordController,
+                                    Form(
+                                      autovalidateMode:
+                                          AutovalidateMode.onUserInteraction,
+                                      key: _formKeyConfirmPassword,
+                                      child: CustomAppPasswordfield(
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return 'Please enter your confirm Password';
+                                          } else if (value.length < 8) {
+                                            return "password length should atleast 8";
+                                          } else if (_passwordController.text !=
+                                              value) {
+                                            return "password does not match";
+                                          }
+                                          return null; // Validation passed
+                                        },
+                                        texthint: "Confirm password",
+                                        controller: _confirmPasswordController,
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                        AppButton.appButton(onTap: () {
-                          if (login == true) {
-                            if (_formKeyLoginEmail.currentState!.validate()) {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      const UserProfileScreen(),
+                                  ],
                                 ),
-                              );
-                            }
-                          } else {
-                            if (_formKeyName.currentState!.validate() &&
-                                _formKeyEmail.currentState!.validate() &&
-                                _formKeyPhone.currentState!.validate() &&
-                                _formKeyPassword.currentState!.validate() &&
-                                _formKeyConfirmPassword.currentState!
-                                    .validate()) {
-                              // Navigator.of(context).push(
-                              //   MaterialPageRoute(
-                              //     builder: (context) => ForgotPasswordScreen(),
-                              //   ),
-                              // );
-                              showSnackBar(context, "User created successfully");
-                            }
-                          }
-                        }, login == true ? "Sign In" : "Sign Up",
-                            backgroundColor: AppTheme.appColor,
-                            textColor: Colors.white,
-                            width: 44.w,
-                            height: 40,
-                            fontSize: 20,
-                            fontWeight: FontWeight.w600)
-                      ])),
+                          _isLoading
+                              ? CircularProgressIndicator(
+                                  color: AppTheme.appColor,
+                                )
+                              : AppButton.appButton(onTap: () {
+                                  if (login == true) {
+                                    if (_formKeyLoginEmail.currentState!
+                                            .validate() &&
+                                        _formKeyLoginPassword.currentState!
+                                            .validate()) {
+                                      // Navigator.of(context).push(
+                                      //   MaterialPageRoute(
+                                      //     builder: (context) =>
+                                      //         const UserProfileScreen(),
+                                      //   ),
+                                      // );
+                                      Login();
+                                      print("Email:${_emailController.text}");
+                                      print("Password:${_passwordController.text}");
+                                    }
+                                  } else {
+                                    if (_formKeyName.currentState!.validate() &&
+                                        _formKeyEmail.currentState!
+                                            .validate() &&
+                                        _formKeyPhone.currentState!
+                                            .validate() &&
+                                        _formKeyPassword.currentState!
+                                            .validate() &&
+                                        _formKeyConfirmPassword.currentState!
+                                            .validate()) {
+                                      SignUp();
+                                      print("name:${_nameController.text}");
+                                      print("Email:${_emailController.text}");
+                                      print(
+                                          "Phone Number:${_phoneController.text}");
+                                      print(
+                                          "Password:${_passwordController.text}");
+                                      //alertDialogError(context);
+                                    }
+                                  }
+                                }, login == true ? "Sign in" : "Sign Up",
+                                  blurContainer: true,
+                                  backgroundColor: AppTheme.appColor,
+                                  textColor: Colors.white,
+                                  width: 44.w,
+                                  height: 40,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w600)
+                        ]),
+                  ),
                   Column(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Platform.isIOS ? Center(
-                        child: AppButton.appButtonWithLeadingIcon(
-                            "Continue with Apple",
-                            onTap: () {},
-                            fontSize: 20,
-                            fontWeight: FontWeight.w400,
-                            textColor: AppTheme.appColor,
-                            icons: Icons.apple,
-                            height: 48,
-                            width: 79.w),
-                      ) : const SizedBox.shrink(),
+                      Platform.isIOS
+                          ? Center(
+                              child: AppButton.appButtonWithLeadingIcon(
+                                "Continue with Apple",
+                                onTap: () async {
+                                  await handleAppleSignIn();
+                                },
+                                fontSize: 20,
+                                fontWeight: FontWeight.w400,
+                                textColor: AppTheme.appColor,
+                                icons: Icons.apple,
+                                height: 48,
+                              ),
+                            )
+                          : const SizedBox.shrink(),
                       const SizedBox(
                         height: 6,
                       ),
                       const GoogleSignInButton(),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      InkWell(
-                        onTap: () {
-                          if (login == true) {
-                            setState(() {
-                              login = false;
-                            });
-                          } else if (login == false) {
-                            setState(() {
-                              login = true;
-                            });
-                          }
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            AppText.appText(
-                                login == true
-                                    ? "Don't have an Account? "
-                                    : "Already have an Account? ",
-                                textColor: AppTheme.appColor,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w500),
-                            AppText.appText(
-                                login == true ? "Sign Up" : "Sign In",
-                                textColor: AppTheme.appColor,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w500,
-                                underLine: true),
-                          ],
-                        ),
-                      )
                     ],
                   ),
+                  InkWell(
+                    onTap: () {
+                      if (login == true) {
+                        setState(() {
+                          login = false;
+                        });
+                      } else if (login == false) {
+                        setState(() {
+                          login = true;
+                        });
+                      }
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        AppText.appText(
+                            login == true
+                                ? "Don't have an Account? "
+                                : "Already have an Account? ",
+                            textColor: AppTheme.appColor,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400),
+                        AppText.appText(login == true ? "Sign up" : "Sign in",
+                            textColor: AppTheme.appColor,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            underLine: true),
+                      ],
+                    ),
+                  )
                 ],
               ),
             ),
@@ -443,14 +511,186 @@ class _AuthScreenState extends State<AuthScreen> {
       final result =
           await FirebaseAuth.instance.signInWithCredential(oauthCredential);
 
-      print(result.user!.displayName.toString());
+      if (kDebugMode) {
+        print(result.user!.displayName.toString());
+      }
       print(result.user!.email.toString());
       print(result.user!.uid.toString());
       print(result.additionalUserInfo!.username.toString());
+      push(context, const UserProfileScreen());
     } catch (e, stackTrace) {
       // Handle exceptions here
       print("Error during Apple Sign-In: $e");
       print("Stack trace: $stackTrace");
     }
+  }
+
+  void SignUp() async {
+    setState(() {
+      _isLoading = true;
+    });
+    var response;
+    int responseCode200 = 200; // For successful request.
+    int responseCode400 = 400; // For Bad Request.
+    int responseCode401 = 401; // For Unauthorized access.
+    int responseCode404 = 404; // For For data not found
+    int responseCode500 = 500; // Internal server error.
+    Map<String, dynamic> params = {
+      "name": _nameController.text,
+      "email": _emailController.text,
+      "phone": _phoneController.text,
+      "password": _passwordController.text,
+      "password_confirmation": _confirmPasswordController.text,
+    };
+    try {
+      response = await dio.post(path: AppUrls.signUpUrl, data: params);
+      var responseData = response.data;
+      if (response.statusCode == responseCode400) {
+        print("Bad Request.");
+        showSnackBar(context, "${responseData["message"]}");
+        setState(() {
+          _isLoading = false;
+        });
+      } else if (response.statusCode == responseCode401) {
+        print("Unauthorized access.");
+        showSnackBar(context, "${responseData["message"]}");
+        setState(() {
+          _isLoading = false;
+        });
+      } else if (response.statusCode == responseCode404) {
+        print(
+            "The requested resource could not be found but may be available again in the future. Subsequent requests by the client are permissible.");
+        showSnackBar(context, "${responseData["message"]}");
+        setState(() {
+          _isLoading = false;
+        });
+      } else if (response.statusCode == responseCode500) {
+        print("Internal server error.");
+        showSnackBar(context, "${responseData["message"]}");
+        setState(() {
+          _isLoading = false;
+        });
+      } else if (response.statusCode == responseCode200) {
+        if (responseData["status"] == false) {
+          setState(() {
+            _isLoading = false;
+          });
+          showSnackBar(context, "${responseData["message"]}");
+          return;
+        } else {
+          print("responseData${responseData}");
+          showSnackBar(context, "${responseData["message"]}");
+          setState(() {
+            _isLoading = false;
+          });
+          push(context, const UserProfileScreen());
+        }
+      }
+    } catch (e) {
+      print("Something went Wrong ${e}");
+      showSnackBar(context, "Something went Wrong.");
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  void Login() async {
+    setState(() {
+      _isLoading = true;
+    });
+    var response;
+    int responseCode200 = 200; // For successful request.
+    int responseCode400 = 400; // For Bad Request.
+    int responseCode401 = 401; // For Unauthorized access.
+    int responseCode500 = 500; // Internal server error.
+
+    Map<String, dynamic> params = {
+      "email": _loginEmailController.text,
+      "password": _loginPasswordController.text,
+    };
+    try {
+      response = await dio.post(path: AppUrls.loginUrl, data: params);
+      var responseData = response.data;
+      if (response.statusCode == responseCode400) {
+        print(" Bad Request.");
+        setState(() {
+          _isLoading = false;
+        });
+        showSnackBar(context, "${responseData["message"]}");
+      } else if (response.statusCode == responseCode401) {
+        print(" Unauthorized access.");
+        setState(() {
+          _isLoading = false;
+        });
+        showSnackBar(context, "${responseData["message"]}");
+      } else if (response.statusCode == responseCode500) {
+        print("Internal server error.");
+        setState(() {
+          _isLoading = false;
+        });
+        showSnackBar(context, "${responseData["message"]}");
+      } else if (response.statusCode == responseCode200) {
+        if (responseData["status"] == false) {
+          setState(() {
+            _isLoading = false;
+          });
+          showSnackBar(context, "${responseData["message"]}");
+          return;
+        } else {
+          print("responseData${responseData}");
+          showSnackBar(context, "${responseData["message"]}");
+          setState(() {
+            _isLoading = false;
+          });
+          push(context, BottomNavView());
+        }
+        // push(context, const UserProfileScreen());
+      }
+    } catch (e) {
+      print("Something went Wrong ${e}");
+      showSnackBar(context, "Something went Wrong.");
+    }
+  }
+
+  alertDialogError(context) {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: AppTheme.whiteColor,
+          actionsAlignment: MainAxisAlignment.center,
+          actions: [
+            Center(
+                child: Image.asset(
+              "assets/images/done.gif",
+              height: 120,
+            )),
+            const SizedBox(
+              height: 50,
+            ),
+            Center(
+              child: AppText.appText(
+                "User Created Successfully",
+                fontSize: 24,
+                textColor: AppTheme.appColor,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            AppButton.appButton("Okay",
+                onTap: () => Navigator.of(context).pop(),
+                height: 30,
+                fontWeight: FontWeight.w600,
+                fontSize: 20,
+                textColor: AppTheme.appColor,
+                backgroundColor: AppTheme.whiteColor,
+                border: false)
+          ],
+        );
+      },
+    );
   }
 }

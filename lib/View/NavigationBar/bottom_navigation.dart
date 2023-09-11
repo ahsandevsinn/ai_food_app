@@ -18,18 +18,17 @@ class BottomNavView extends StatefulWidget {
   final searchType;
   final query;
 
-  BottomNavView({
-    super.key,
-    this.allergies,
-    this.type,
-    this.dietaryRestrictions,
-    this.data,
-    this.offset,
-    this.totalResults,
-    this.foodStyle,
-    this.searchType,
-    this.query,
-  });
+  BottomNavView(
+      {super.key,
+      this.allergies,
+      this.type,
+      this.dietaryRestrictions,
+      this.data,
+      this.foodStyle,
+      this.offset,
+      this.query,
+      this.searchType,
+      this.totalResults});
 
   @override
   State<BottomNavView> createState() => _BottomNavViewState();
@@ -57,8 +56,7 @@ class _BottomNavViewState extends State<BottomNavView> {
           : HomeScreen(
               dietaryRestrictions: widget.dietaryRestrictions,
               allergies: widget.allergies,
-              searchType: 0,
-            ),
+              searchType: 0,),
       const FavouriteScreen(),
       const AskMaidaScreen(),
       const SettingScreen(),
@@ -94,7 +92,7 @@ class _BottomNavViewState extends State<BottomNavView> {
               color: AppTheme.whiteColor,
               tabs: const [
                 GButton(
-                  icon: Icons.home,
+                  icon: Icons.home_outlined,
                   text: 'Home',
                 ),
                 GButton(

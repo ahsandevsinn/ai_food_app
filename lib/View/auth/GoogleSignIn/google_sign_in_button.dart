@@ -26,9 +26,11 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16.0),
       child: googleSignInProvider.isSigningIn
-          ? const CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(Color(0xffB38ADE)),
-            )
+          ? Center(
+            child: const CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Color(0xffB38ADE)),
+              ),
+          )
           : Center(
               child: AppButton.appButtonWithLeadingImage(
                 "Continue with Google",
@@ -65,7 +67,6 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
                 fontWeight: FontWeight.w400,
                 textColor: AppTheme.appColor,
                 height: 48,
-                width: 79.w,
                 imagePath: "assets/images/google_logo.png",
               ),
             ),

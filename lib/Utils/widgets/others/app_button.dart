@@ -19,7 +19,8 @@ class AppButton {
       double? letterSpacing,
       bool underLine = false,
       bool fontFamily = false,
-      bool? border}) {
+      bool? border,
+      bool? blurContainer}) {
     return InkWell(
       onTap: onTap,
       child: Container(
@@ -27,7 +28,7 @@ class AppButton {
         padding: padding,
         width: width,
         height: height,
-        decoration: BoxDecoration(
+        decoration: BoxDecoration(boxShadow: [blurContainer==true?BoxShadow(color: Colors.black26,blurRadius: 2,offset: Offset(0.0, 4)):BoxShadow()],
             color: backgroundColor,
             borderRadius: BorderRadius.circular(50),
             border: border == false
@@ -142,19 +143,14 @@ class AppButton {
                     color: AppTheme.appColor,
                     width: 2,
                   )),
-        child: Row(
+        child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            const SizedBox(
-              width: 20,
-            ),
+
             Image(
               image: AssetImage(imagePath!),
               height: 25,
-              width: 25,
             ),
-            const SizedBox(
-              width: 20,
-            ),
+
             AppText.appText(text,
                 fontFamily: fontFamily,
                 fontSize: fontSize,
@@ -166,6 +162,7 @@ class AppButton {
                 textBaseline: textBaseline,
                 fontStyle: fontStyle,
                 underLine: underLine),
+            SizedBox(width: 20,),
           ],
         ),
       ),

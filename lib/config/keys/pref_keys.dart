@@ -7,6 +7,11 @@ class PrefKey {
   static const String firstTimeGetProfile = "first_get_profile";
   static const String notification = "notification";
   static const String id = "id";
+  static const String unit = "unit";
+
+  static const String dataonBoardScreenAllergies = "dataonBoardScreenAllergies";
+  static const String dataonBoardScreenDietryRestriction =
+      "dataonBoardScreenDietryRestriction";
   static const String type = "type";
   static const String verified = "verified";
   static const String name = "name";
@@ -23,7 +28,6 @@ class PrefKey {
   static const String accountNumber = "account_number";
   static const String authorizationStatus = "authorization_status";
   static const String nottifyCount = "notifyCount";
-
 
   static const String slug = "slug";
   static const String email = "email";

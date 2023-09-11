@@ -15,6 +15,7 @@ class KitchenResourcesProvider extends ChangeNotifier {
     notifyListeners();
     return addKitchenResources;
   }
+
   List<String> removeKitchenResourcesValue(String kitchenResources, int index) {
     _addKitchenResources.remove(kitchenResources);
     notifyListeners();
@@ -23,37 +24,46 @@ class KitchenResourcesProvider extends ChangeNotifier {
 
   final List<RecipesParameterClass> _kitchenResourcesRecipesParameters = [];
 
-  List<RecipesParameterClass> get kitchenResourcesRecipesParameters => _kitchenResourcesRecipesParameters;
+  List<RecipesParameterClass> get kitchenResourcesRecipesParameters =>
+      _kitchenResourcesRecipesParameters;
 
   List<RecipesParameterClass> preferredKitchenResourcesParametersRecipe = [
-    RecipesParameterClass(parameter: 'Frying Pan'),
-    RecipesParameterClass(parameter: 'Bowl'),
     RecipesParameterClass(parameter: 'Blender'),
+    RecipesParameterClass(parameter: 'Cutting board'),
+    RecipesParameterClass(parameter: 'Frying pan'),
+    RecipesParameterClass(parameter: 'knife'),
+    RecipesParameterClass(parameter: 'Salad spinner'),
+    RecipesParameterClass(parameter: 'Sheet pan'),
+    RecipesParameterClass(parameter: 'Measuring cup'),
+    RecipesParameterClass(parameter: 'Measuring spoon'),
+    RecipesParameterClass(parameter: 'Whisk'),
+    RecipesParameterClass(parameter: 'Tongs'),
+    RecipesParameterClass(parameter: 'Bowl'),
     RecipesParameterClass(parameter: 'Oven'),
-    RecipesParameterClass(parameter: 'Slow Cooker'),
     RecipesParameterClass(parameter: 'Microwave'),
     RecipesParameterClass(parameter: 'Food Processor'),
-    RecipesParameterClass(parameter: 'Grill'),
+    RecipesParameterClass(parameter: 'Slow Cooker'),
   ];
 
   void showKitchenResourcesParameterDetails(context, String parameter) {
     if (parameter == "Kitchen Resources") {
-      _kitchenResourcesRecipesParameters.addAll(preferredKitchenResourcesParametersRecipe);
+      _kitchenResourcesRecipesParameters
+          .addAll(preferredKitchenResourcesParametersRecipe);
       Navigator.push(
         context,
         CupertinoPageRoute(
-          builder: (_) =>
-              RecipesSelection(
-                  parameter: parameter,
-                  recipesParameters: preferredKitchenResourcesParametersRecipe),
+          builder: (_) => RecipesSelection(
+              parameter: parameter,
+              recipesParameters: preferredKitchenResourcesParametersRecipe),
         ),
       );
       notifyListeners();
     }
   }
 
-  void toggleKitchenResourcesRecipeState(int index){
-    _kitchenResourcesRecipesParameters[index].isChecked = !_kitchenResourcesRecipesParameters[index].isChecked;
+  void toggleKitchenResourcesRecipeState(int index) {
+    _kitchenResourcesRecipesParameters[index].isChecked =
+        !_kitchenResourcesRecipesParameters[index].isChecked;
     notifyListeners();
   }
 
@@ -71,7 +81,8 @@ class KitchenResourcesProvider extends ChangeNotifier {
   }
 
   void addNextPage(BuildContext context) {
-    _kitchenResourcesRecipesParameters.addAll(preferredKitchenResourcesParametersRecipe);
+    _kitchenResourcesRecipesParameters
+        .addAll(preferredKitchenResourcesParametersRecipe);
     var newScreen = RecipesSelection(
       parameter: "Kitchen Resources",
       recipesParameters: preferredKitchenResourcesParametersRecipe,

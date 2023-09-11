@@ -1,13 +1,13 @@
-import 'package:ai_food/Constants/app_logger.dart';
 import 'package:ai_food/Utils/resources/res/AppAssetsImage.dart';
 import 'package:ai_food/Utils/resources/res/app_theme.dart';
 import 'package:ai_food/Utils/utils.dart';
 import 'package:ai_food/Utils/widgets/others/app_button.dart';
 import 'package:ai_food/Utils/widgets/others/app_text.dart';
 import 'package:ai_food/View/NavigationBar/bottom_navigation.dart';
-import 'package:ai_food/config/dio/app_dio.dart';
+import 'package:ai_food/config/keys/pref_keys.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UserProfileScreen extends StatefulWidget {
   const UserProfileScreen({Key? key}) : super(key: key);
@@ -49,7 +49,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     "Primal",
     "Low FODMAP",
     "Whole30",
-    "Shellfish",
   ];
 
   List<String> addAllergies = [];
@@ -157,7 +156,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                           AppText.appText(
                             "Allergies:",
                             fontSize: 22,
-                            fontWeight: FontWeight.w800,
+                            fontWeight: FontWeight.w600,
                             textColor: AppTheme.appColor,
                           ),
                           const SizedBox(height: 10),
@@ -193,7 +192,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                           AppText.appText(
                             "Dietary restrictions:",
                             fontSize: 22,
-                            fontWeight: FontWeight.w800,
+                            fontWeight: FontWeight.w600,
                             textColor: AppTheme.appColor,
                           ),
                           const SizedBox(height: 10),
@@ -250,6 +249,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 onTap: () {
                   print(
                       "allergies:$addAllergies  and restrictions: $addDietaryRestrictions");
+                  StoreDatainSharedPref(addAllergies,addDietaryRestrictions);
                   pushReplacement(
                       context,
                       BottomNavView(
@@ -337,6 +337,13 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       ),
     );
   }
+
+  void StoreDatainSharedPref(allergies,dietryRestriction)async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setStringList(PrefKey.dataonBoardScreenAllergies, allergies);
+    prefs.setStringList(PrefKey.dataonBoardScreenDietryRestriction, dietryRestriction);
+
+  }
 }
 
 class CustomContainer extends StatelessWidget {
@@ -361,7 +368,7 @@ class CustomContainer extends StatelessWidget {
         decoration: BoxDecoration(
             color: containerColor,
             borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: borderColor, width: 2)),
+            border: Border.all(color: borderColor, width: 1.5)),
         child: AppText.appText(
           text,
           textColor: textColor,

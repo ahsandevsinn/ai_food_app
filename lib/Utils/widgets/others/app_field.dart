@@ -24,31 +24,30 @@ class CustomAppFormField extends StatefulWidget {
   final Color? suffixIconColor;
   final TextStyle? hintStyle;
 
-  CustomAppFormField(
-      {Key? key,
-      this.containerBorderCondition = false,
-      required this.texthint,
-      required this.controller,
-      this.validator,
-      this.height,
-      this.width,
-      this.obscureText = false,
-      this.onChanged,
-      this.onTap,
-      this.onTapOutside,
-      this.onEditingComplete,
-      this.onFieldSubmitted,
-      this.cursorHeight,
-      this.textAlign = TextAlign.start,
-      this.prefix,
-      this.suffix,
-      this.prefixIcon,
-      this.suffixIcon,
-      this.prefixIconColor,
-      this.suffixIconColor,
-      this.hintStyle,
-      })
-      : super(key: key);
+  CustomAppFormField({
+    Key? key,
+    this.containerBorderCondition = false,
+    required this.texthint,
+    required this.controller,
+    this.validator,
+    this.height,
+    this.width,
+    this.obscureText = false,
+    this.onChanged,
+    this.onTap,
+    this.onTapOutside,
+    this.onEditingComplete,
+    this.onFieldSubmitted,
+    this.cursorHeight,
+    this.textAlign = TextAlign.start,
+    this.prefix,
+    this.suffix,
+    this.prefixIcon,
+    this.suffixIcon,
+    this.prefixIconColor,
+    this.suffixIconColor,
+    this.hintStyle,
+  }) : super(key: key);
 
   @override
   State<CustomAppFormField> createState() => _CustomAppFormFieldState();
@@ -159,32 +158,29 @@ class _CustomAppPasswordfieldState extends State<CustomAppPasswordfield> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 15),
-      child: Container(
-          height: 37,
-          width: widget.width,
-          child: TextFormField(
-            textAlignVertical: TextAlignVertical.center,
-            onChanged: widget.onChanged,
-            onTap: widget.onTap,
-            onTapOutside: widget.onTapOutside,
-            onFieldSubmitted: widget.onFieldSubmitted,
-            cursorHeight: widget.cursorHeight,
-            textAlign: widget.textAlign,
-            key: widget.key,
-            obscureText: _obscureText,
-            validator: widget.validator,
-            controller: widget.controller,
-            cursorColor: AppTheme.appColor,
-            style: TextStyle(color: AppTheme.appColor),
-            decoration: InputDecoration(
+    return Container(
+        height: 60,
+        child: TextFormField(
+          textAlignVertical: TextAlignVertical.center,
+          onChanged: widget.onChanged,
+          onTap: widget.onTap,
+          onTapOutside: widget.onTapOutside,
+          onFieldSubmitted: widget.onFieldSubmitted,
+          cursorHeight: widget.cursorHeight,
+          textAlign: widget.textAlign,
+          key: widget.key,
+          obscureText: _obscureText,
+          validator: widget.validator,
+          controller: widget.controller,
+          cursorColor: AppTheme.appColor,
+          style: TextStyle(color: AppTheme.appColor),
+          decoration: InputDecoration(
               prefixIconColor: widget.prefixIconColor,
               suffixIconColor: widget.suffixIconColor,
               prefix: widget.prefix,
               suffix: widget.suffix,
               prefixIcon: widget.prefixIcon,
-              contentPadding: const EdgeInsets.only(
+              contentPadding: const EdgeInsets.only(top: 20,
                 left: 5,
               ),
               enabledBorder: UnderlineInputBorder(
@@ -199,19 +195,18 @@ class _CustomAppPasswordfieldState extends State<CustomAppPasswordfield> {
                   borderSide: BorderSide(color: AppTheme.appColor)),
               hintText: widget.texthint,
               hintStyle: TextStyle(color: AppTheme.appColor),
-              suffixIcon: IconButton(
-                icon: Icon(
-                  _obscureText ? Icons.visibility_off : Icons.visibility,
-                  color: AppTheme.appColor,
-                ),
-                onPressed: () {
+              suffixIcon: InkWell(
+                onTap: () {
                   setState(() {
                     _obscureText = !_obscureText;
                   });
                 },
-              ),
-            ),
-          )),
-    );
+                child: Padding(padding: EdgeInsets.only(top: 13),
+                  child: Icon(
+                      _obscureText ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                      color: AppTheme.appColor,),
+                ),
+              )),
+        ));
   }
 }

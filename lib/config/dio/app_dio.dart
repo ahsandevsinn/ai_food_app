@@ -23,7 +23,7 @@ class AppDio {
   init() {
     _dio = Dio();
     if (!customRequest) {
-      _dio.interceptors.add(AppDioInterceptor());
+      _dio.interceptors.add(AppDioInterceptor(context));
     }
     initialize = true;
   }

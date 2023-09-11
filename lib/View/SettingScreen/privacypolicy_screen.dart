@@ -18,11 +18,10 @@ class _PrivacyPolicyScreenState extends State<PrivacyPolicyScreen> {
       appBar: AppBar(
         backgroundColor: AppTheme.whiteColor,
         centerTitle: true,
-        title: AppText.appText(
-          "Privacy Policy",
-          fontSize: 24,
-          textColor: AppTheme.appColor,
-        ),
+        title: AppText.appText("Privacy Policy",
+            fontSize: 24,
+            textColor: AppTheme.appColor,
+            fontWeight: FontWeight.w600),
         elevation: 5,
         leading: InkWell(
           onTap: () {
@@ -62,9 +61,9 @@ class _PrivacyPolicyScreenState extends State<PrivacyPolicyScreen> {
                 child: Text(
                   "Privacy Policy",
                   style: TextStyle(
-                    color: AppTheme.appColor,
-                    fontSize: 24,
-                  ),
+                      color: AppTheme.appColor,
+                      fontSize: 24,
+                      fontWeight: FontWeight.w600),
                 )),
             const SizedBox(
               height: 20,

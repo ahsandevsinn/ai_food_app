@@ -32,17 +32,21 @@ class _ShoppingListState extends State<ShoppingList> {
               bottom: 10,
               top: 10,
             ),
-            child: Container(
-                height: 20,
-                width: 20,
-                decoration: BoxDecoration(
-                    color: AppTheme.appColor,
-                    borderRadius: BorderRadius.circular(20)),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 8.0),
-                  child: Icon(Icons.arrow_back_ios,
-                      size: 20, color: AppTheme.whiteColor),
-                )),
+            child: Hero(
+                tag: "hero-shopping",transitionOnUserGestures: true,
+
+              child: Container(
+                  height: 20,
+                  width: 20,
+                  decoration: BoxDecoration(
+                      color: AppTheme.appColor,
+                      borderRadius: BorderRadius.circular(20)),
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: Icon(Icons.arrow_back_ios,
+                        size: 20, color: AppTheme.whiteColor),
+                  )),
+            ),
           ),
         ),
         title: AppText.appText(
@@ -61,7 +65,7 @@ class _ShoppingListState extends State<ShoppingList> {
             return Column(
               children: [
                 Container(
-                  height: MediaQuery.of(context).size.height-91.7,
+                  height: MediaQuery.of(context).size.height-110.7,
                   // color: Colors.black,
                   child: Stack(
                     children: [
@@ -112,7 +116,7 @@ class _ShoppingListState extends State<ShoppingList> {
                                   height: 30,
                                 ),
                                 Container(
-                                  height: screenHeight -305,
+                                  height: screenHeight -340,
                                   child: SingleChildScrollView(
                                     physics: const ScrollPhysics(),
                                     child: Column(
