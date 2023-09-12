@@ -8,11 +8,13 @@ import 'package:ai_food/View/SettingScreen/privacypolicy_screen.dart';
 import 'package:ai_food/View/SettingScreen/profile_screen.dart';
 import 'package:ai_food/View/SettingScreen/termsofuse_screen.dart';
 import 'package:ai_food/View/auth/GoogleSignIn/authentication.dart';
+import 'package:ai_food/config/keys/pref_keys.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 
 class SettingScreen extends StatefulWidget {
@@ -139,7 +141,7 @@ class _SettingScreenState extends State<SettingScreen> {
                 Container(
                   height: 20,
                   width: 20,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     image: DecorationImage(image: AssetImage("assets/images/logout.png"))
                   ),
                 ),
@@ -235,7 +237,7 @@ class _SettingScreenState extends State<SettingScreen> {
                       children: [
                         GestureDetector(
                           onTap: () async {
-                            await Authentication.signOut(context: context);
+                            await logout(context);
                           },
                           child: const Text(
                             'Yes',
@@ -305,7 +307,7 @@ class _SettingScreenState extends State<SettingScreen> {
                     decoration: BoxDecoration(
                       color: AppTheme.whiteColor,
                       // color: Color(0xFFB38ADE),
-                      borderRadius: BorderRadius.only(
+                      borderRadius: const BorderRadius.only(
                           topLeft: Radius.circular(8.0),
                           topRight: Radius.circular(8.0)),
                     ),
@@ -334,7 +336,7 @@ class _SettingScreenState extends State<SettingScreen> {
                             cursorColor: AppTheme.whiteColor,
                             decoration: InputDecoration(
                                 contentPadding:
-                                    EdgeInsets.only(top: 20, left: 10),
+                                    const EdgeInsets.only(top: 20, left: 10),
                                 hintStyle:
                                     TextStyle(color: AppTheme.whiteColor),
                                 hintText: "jessica hanson",
@@ -358,7 +360,7 @@ class _SettingScreenState extends State<SettingScreen> {
                           cursorColor: AppTheme.whiteColor,
                           decoration: InputDecoration(
                               contentPadding:
-                                  EdgeInsets.only(top: 20, left: 10),
+                                  const EdgeInsets.only(top: 20, left: 10),
                               hintStyle: TextStyle(color: AppTheme.whiteColor),
                               hintText: "jessicahanson@gmail.com",
                               focusedBorder: UnderlineInputBorder(
@@ -381,7 +383,7 @@ class _SettingScreenState extends State<SettingScreen> {
                       style: TextStyle(color: AppTheme.whiteColor),
                       cursorColor: AppTheme.whiteColor,
                       decoration: InputDecoration(
-                          contentPadding: EdgeInsets.only(top: 20, left: 10),
+                          contentPadding: const EdgeInsets.only(top: 20, left: 10),
                           hintStyle: TextStyle(
                               color: AppTheme.whiteColor.withOpacity(0.5)),
                           hintText: "Your message",
@@ -422,4 +424,12 @@ class _SettingScreenState extends State<SettingScreen> {
       },
     );
   }
+
+  Future<void> logout(context) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove(PrefKey.authorization);
+    await Authentication.signOut(context: context);
+  }
+
+
 }

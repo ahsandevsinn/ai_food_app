@@ -26,8 +26,8 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16.0),
       child: googleSignInProvider.isSigningIn
-          ? Center(
-            child: const CircularProgressIndicator(
+          ? const Center(
+            child: CircularProgressIndicator(
                 valueColor: AlwaysStoppedAnimation<Color>(Color(0xffB38ADE)),
               ),
           )

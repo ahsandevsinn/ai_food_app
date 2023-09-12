@@ -27,6 +27,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     "Metric",
   ];
   String updatedvalueM = "US";
+  String myName = "Howdy Sir!";
   bool showMenu = false;
   bool measuringUnit = false;
   var responseData;
@@ -91,7 +92,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void initState() {
     dio = AppDio(context);
     logger.init();
-    // TODO: implement initState
+    getUserName();
     super.initState();
   }
 
@@ -99,6 +100,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void dispose() {
     _userNameController.dispose();
     super.dispose();
+  }
+
+  void getUserName() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? userName = prefs.getString(PrefKey.name);
+    setState(() {
+      myName = userName!;
+    });
+    print("profile_name $myName");
   }
 
   @override
@@ -145,7 +155,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         Flexible(
                           fit: FlexFit.loose,
                           child: CustomAppFormField(
-                            texthint: "User name",
+                            texthint: myName,
+                            hintStyle: TextStyle(
+                              color: AppTheme.appColor,
+                            ),
                             controller: _userNameController,
                           ),
                         ),

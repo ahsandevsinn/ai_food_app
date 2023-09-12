@@ -8,6 +8,7 @@ import 'package:ai_food/View/HomeScreen/recipe_params_screen.dart';
 import 'package:ai_food/View/NavigationBar/bottom_navigation.dart';
 import 'package:ai_food/config/dio/app_dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -56,7 +57,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     color: AppTheme.appColor,
                     borderRadius: BorderRadius.circular(20)),
                 child: Padding(
-                  padding: EdgeInsets.only(left: 8.0),
+                  padding: const EdgeInsets.only(left: 8.0),
                   child: Icon(Icons.arrow_back_ios,
                       size: 20, color: AppTheme.whiteColor),
                 )),
@@ -88,9 +89,14 @@ class _SearchScreenState extends State<SearchScreen> {
                           child: SizedBox(
                             width: width * 0.65,
                             child: TextFormField(
+                              onFieldSubmitted: (value){
+                                print("search_value $value");
+                                getFood();
+                              },
                               controller: _searchController,
                               autofocus: true,
                               cursorColor: AppTheme.appColor,
+                              textInputAction: TextInputAction.search,
                               style: TextStyle(color: AppTheme.appColor),
                               decoration: InputDecoration.collapsed(
                                 hintText: 'Search',
@@ -115,8 +121,7 @@ class _SearchScreenState extends State<SearchScreen> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            FocusScope.of(context)
-                                .requestFocus(new FocusNode());
+                            FocusScope.of(context).requestFocus(FocusNode());
                             getFood();
                           },
                           child: Container(
@@ -138,7 +143,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       ],
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 24,
                   ),
                   Row(
@@ -219,7 +224,7 @@ class _SearchScreenState extends State<SearchScreen> {
           ),
         );
 
-        _searchController.clear();
+        // _searchController.clear();
       } else {
         print('API request failed with status code: ${response.statusCode}');
       }

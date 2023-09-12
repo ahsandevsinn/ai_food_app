@@ -6,6 +6,7 @@ import 'package:ai_food/View/HomeScreen/widgets/providers/dietary_restrictions_p
 import 'package:ai_food/View/HomeScreen/widgets/providers/kitchenResources_provider.dart';
 import 'package:ai_food/View/HomeScreen/widgets/providers/preferredProtein_provider.dart';
 import 'package:ai_food/View/HomeScreen/widgets/providers/regionalDelicacy_provider.dart';
+import 'package:ai_food/View/NavigationBar/bottom_navigation.dart';
 import 'package:ai_food/View/auth/forgot_password_screen.dart';
 import 'package:ai_food/View/profile/user_profile_screen.dart';
 import 'package:ai_food/View/splash_screen.dart';

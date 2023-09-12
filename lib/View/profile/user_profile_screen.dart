@@ -71,7 +71,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             primaryColor: AppTheme.appColor, // Change the primary color
             colorScheme: ColorScheme.light(
                 primary: AppTheme.appColor), // Change overall color scheme
-            buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
+            buttonTheme: const ButtonThemeData(textTheme: ButtonTextTheme.primary),
           ),
           child: child!,
         );
@@ -82,6 +82,23 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         selectedDate = picked;
       });
     }
+  }
+
+  String myName = "Howdy Sir!";
+
+  @override
+  void initState() {
+    getUserName();
+    super.initState();
+  }
+
+  void getUserName() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? userName = prefs.getString(PrefKey.name);
+    setState(() {
+      myName = userName!;
+    });
+    print("profile_name $myName");
   }
 
   @override
@@ -109,7 +126,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   Padding(
                     padding: const EdgeInsets.only(left: 12.0),
                     child: AppText.appText(
-                      "Jassica Hanson",
+                      myName,
                       fontWeight: FontWeight.w500,
                       textColor: AppTheme.appColor,
                       fontSize: 16,

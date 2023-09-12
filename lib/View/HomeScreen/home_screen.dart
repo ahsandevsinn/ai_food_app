@@ -26,8 +26,8 @@ class HomeScreen extends StatefulWidget {
   final totalResults;
   final foodStyle;
   final searchType;
-  final query;
-  const HomeScreen(
+  var query;
+   HomeScreen(
       {Key? key,
       this.data,
       this.type,
@@ -53,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    print("bsjbdbd$type");
+    print("type$type");
     dio = AppDio(context);
     logger.init();
     getUserCredentials();
@@ -61,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
     if (widget.type == 1) {
       type = widget.type;
     } else {
-      print("bsjbdbd22222$type");
+      print("type$type");
 
       getSuggestedRecipes(
         allergies: widget.allergies ?? "",
@@ -80,10 +80,16 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   @override
+  void dispose() {
+    widget.query = null;
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    print("djvbwdbw3${widget.allergies}");
-    print("djvbwdbw3uod${widget.dietaryRestrictions}");
+    print("allergies${widget.allergies}");
+    print("dietaryRestrictions${widget.dietaryRestrictions}");
 
     return Scaffold(
       appBar: AppBar(
@@ -105,11 +111,11 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Padding(
-                  padding: EdgeInsets.only(left: 20.0),
+                Padding(
+                  padding: const EdgeInsets.only(left: 20.0),
                   child: Text(
-                    "Search",
-                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+                    "${widget.query ?? "Search"}",
+                    style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
                   ),
                 ),
                 Container(
@@ -121,7 +127,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         topRight: Radius.circular(100),
                         bottomRight: Radius.circular(100)),
                   ),
-                  child: Icon(
+                  child: const Icon(
                     Icons.search_outlined,
                     size: 35,
                     color: Color(0xffFFFFFF),

@@ -95,8 +95,7 @@ class _AuthScreenState extends State<AuthScreen> {
         resizeToAvoidBottomInset: true,
         body: SingleChildScrollView(
           child: Padding(
-            padding:
-                const EdgeInsets.only(left: 25, right: 25, bottom: 25, top: 25),
+            padding: const EdgeInsets.only(left: 25, right: 25, bottom: 25, top: 25),
             child: SizedBox(
               height: MediaQuery.of(context).size.height * 0.93,
               child: Column(
@@ -220,9 +219,8 @@ class _AuthScreenState extends State<AuthScreen> {
                                                 value == null) {
                                               return "Please enter your email or mobile number";
                                             }
-                                            if (!isEmailValid &&
-                                                !isMobileValid) {
-                                              return "Please enter a valid email";
+                                            if (!isEmailValid && !isMobileValid) {
+                                              return "Please enter a valid email or Number i.e (+1)";
                                             }
                                             return null;
                                           },
@@ -331,7 +329,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                                 .hasMatch(value);
 
                                             if (!isMobileValid) {
-                                              return "Please enter a valid email or mobile number";
+                                              return "Please enter a valid email or Number i.e (+1)";
                                             }
                                             return null; // Validation passed
                                           },
@@ -722,7 +720,7 @@ class _AuthScreenState extends State<AuthScreen> {
     const int responseCode200 = 200; // For successful request.
     const int responseCode400 = 400; // For Bad Request.
     const int responseCode401 = 401; // For Unauthorized access.
-    const int responseCode404 = 404; // For For data not found
+    const int responseCode404 = 404; // For For data not found.
     const int responseCode500 = 500; // Internal server error.
 
     Map<String, dynamic> params = {

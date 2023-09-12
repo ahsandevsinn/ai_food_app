@@ -267,7 +267,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                 RegExp(r'^\d{10}$').hasMatch(value);
 
                             if (!isEmailValid && !isMobileValid) {
-                              return "Please enter a valid email or mobile number";
+                              return "Please enter a valid email or Number i.e (+1)";
                             }
                             return null;
                           },

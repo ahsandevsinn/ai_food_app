@@ -30,19 +30,20 @@ class Authentication {
   static Future<FirebaseApp> initializeFirebase({
     required BuildContext context,
   }) async {
-    FirebaseApp firebaseApp = await Firebase.initializeApp();
+    FirebaseApp firebaseApp =
+    await Firebase.initializeApp();
 
-    User? user = FirebaseAuth.instance.currentUser;
-    // print("usr_id ${user?.uid}  ${user.uid}");
-    if (user != null) {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => const UserProfileScreen(
-              // user: user,
-              ),
-        ),
-      );
-    }
+    // User? user = FirebaseAuth.instance.currentUser;
+    // // print("usr_id ${user?.uid}  ${user.uid}");
+    // if (user != null) {
+    //   Navigator.of(context).pushReplacement(
+    //     MaterialPageRoute(
+    //       builder: (context) => const UserProfileScreen(
+    //           // user: user,
+    //           ),
+    //     ),
+    //   );
+    // }
 
     return firebaseApp;
   }
