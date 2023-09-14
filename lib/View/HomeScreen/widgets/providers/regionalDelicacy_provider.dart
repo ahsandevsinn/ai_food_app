@@ -28,16 +28,16 @@ class RegionalDelicacyProvider extends ChangeNotifier {
       _regionalDelicacyRecipesParameters;
 
   List<RecipesParameterClass> preferredRegionalDelicacyParametersRecipe = [
-    RecipesParameterClass(parameter: 'Italian Pizza'),
-    RecipesParameterClass(parameter: 'Mexican Tacos'),
-    RecipesParameterClass(parameter: 'Japanese Sushi'),
-    RecipesParameterClass(parameter: 'Chinese Dumplings'),
-    RecipesParameterClass(parameter: 'Indian Curry'),
-    RecipesParameterClass(parameter: 'French Baguette'),
-    RecipesParameterClass(parameter: 'Italian Pasta'),
-    RecipesParameterClass(parameter: 'Thai Pad Thai'),
-    RecipesParameterClass(parameter: 'Greek Souvlaki'),
-    RecipesParameterClass(parameter: 'American Burger'),
+    // RecipesParameterClass(parameter: 'Italian Pizza'),
+    // RecipesParameterClass(parameter: 'Mexican Tacos'),
+    // RecipesParameterClass(parameter: 'Japanese Sushi'),
+    // RecipesParameterClass(parameter: 'Chinese Dumplings'),
+    // RecipesParameterClass(parameter: 'Indian Curry'),
+    // RecipesParameterClass(parameter: 'French Baguette'),
+    // RecipesParameterClass(parameter: 'Italian Pasta'),
+    // RecipesParameterClass(parameter: 'Thai Pad Thai'),
+    // RecipesParameterClass(parameter: 'Greek Souvlaki'),
+    // RecipesParameterClass(parameter: 'American Burger'),
   ];
 
   void showRegionalDelicacyParameterDetails(context, String parameter) {

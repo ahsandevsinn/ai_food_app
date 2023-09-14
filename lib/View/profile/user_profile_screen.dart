@@ -1,9 +1,12 @@
+import 'package:ai_food/Constants/app_logger.dart';
 import 'package:ai_food/Utils/resources/res/AppAssetsImage.dart';
 import 'package:ai_food/Utils/resources/res/app_theme.dart';
 import 'package:ai_food/Utils/utils.dart';
 import 'package:ai_food/Utils/widgets/others/app_button.dart';
 import 'package:ai_food/Utils/widgets/others/app_text.dart';
 import 'package:ai_food/View/NavigationBar/bottom_navigation.dart';
+import 'package:ai_food/config/app_urls.dart';
+import 'package:ai_food/config/dio/app_dio.dart';
 import 'package:ai_food/config/keys/pref_keys.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -17,48 +20,23 @@ class UserProfileScreen extends StatefulWidget {
 }
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
-  final _userNameController = TextEditingController();
-  List<int> numberListShow = [];
   bool showMenu = false;
+  bool checkAPI = false;
+
+  //initializing Global variables for DIO package
+  late AppDio dio;
+  AppLogger logger = AppLogger();
+  String myName = "Howdy Sir!";
+
+  //final data stores and sent to UpdateAPI
+  final _userNameController = TextEditingController();
+  Map<String, dynamic> addAllergies = {};
+  Map<String, dynamic> addDietaryRestrictions = {};
+  Map<String, dynamic> allergies = {};
+  Map<String, dynamic> dietaryRestrictions = {};
   DateTime? selectedDate;
-  var responseData;
-  //allergies
-  List allergies = [
-    "Dairy",
-    "Peanut",
-    "Seafood",
-    "Sesame",
-    "Wheat",
-    "Soy",
-    "Sulfite",
-    "Gluten",
-    "Egg",
-    "Grain",
-    "Tree nut",
-    "Shellfish",
-  ];
-  List dietaryRestrictions = [
-    "Gluten free",
-    "ketogenic",
-    "Vegetarian",
-    "Lacto-Vegetarian",
-    "Ovo-Vegetarian",
-    "Vegan",
-    "Pescetarian",
-    "Paleo",
-    "Primal",
-    "Low FODMAP",
-    "Whole30",
-  ];
 
-  List<String> addAllergies = [];
-  List<String> addDietaryRestrictions = [];
-  @override
-  void dispose() {
-    _userNameController.dispose();
-    super.dispose();
-  }
-
+  //------------------------------------//
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -71,7 +49,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             primaryColor: AppTheme.appColor, // Change the primary color
             colorScheme: ColorScheme.light(
                 primary: AppTheme.appColor), // Change overall color scheme
-            buttonTheme: const ButtonThemeData(textTheme: ButtonTextTheme.primary),
+            buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
           ),
           child: child!,
         );
@@ -84,21 +62,14 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     }
   }
 
-  String myName = "Howdy Sir!";
-
   @override
   void initState() {
+    //initializing DIO on initial state
+    dio = AppDio(context);
+    logger.init();
     getUserName();
+    loadselectParamsfromAPI(); //-----------------//
     super.initState();
-  }
-
-  void getUserName() async {
-    final prefs = await SharedPreferences.getInstance();
-    String? userName = prefs.getString(PrefKey.name);
-    setState(() {
-      myName = userName!;
-    });
-    print("profile_name $myName");
   }
 
   @override
@@ -123,18 +94,32 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 12.0),
-                    child: AppText.appText(
-                      myName,
-                      fontWeight: FontWeight.w500,
-                      textColor: AppTheme.appColor,
-                      fontSize: 16,
+                  Container(
+                    height: 50,
+                    child: TextFormField(
+                      cursorColor: AppTheme.appColor,
+                      style: TextStyle(color: AppTheme.appColor),
+                      controller: _userNameController,
+                      decoration: InputDecoration(
+                          isDense: true,
+                          contentPadding:
+                              const EdgeInsets.only(left: 12, bottom: 3),
+                          enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: AppTheme.appColor)),
+                          disabledBorder: const UnderlineInputBorder(
+                              borderSide: BorderSide.none),
+                          focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                            color: AppTheme.appColor,
+                          )),
+                          border: UnderlineInputBorder(
+                              borderSide: BorderSide(color: AppTheme.appColor)),
+                          hintText: myName,
+                          hintStyle: TextStyle(
+                              color: AppTheme.appColor,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16)),
                     ),
-                  ),
-                  Divider(
-                    thickness: 1,
-                    color: AppTheme.appColor,
                   ),
                   const SizedBox(height: 10),
                   GestureDetector(
@@ -180,25 +165,26 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                           Wrap(
                             runSpacing: 10,
                             spacing: 10,
-                            children: allergies.map((allergy) {
+                            children: allergies.entries.map((allergy) {
+                              String key = allergy.key;
+                              dynamic value = allergy.value;
                               return CustomContainer(
-                                borderColor:
-                                    addDietaryRestrictions.contains(allergy)
-                                        ? AppTheme.whiteColor
-                                        : AppTheme.appColor,
-                                containerColor: addAllergies.contains(allergy)
+                                borderColor: addAllergies.containsKey(key)
+                                    ? AppTheme.whiteColor
+                                    : AppTheme.appColor,
+                                containerColor: addAllergies.containsKey(key)
                                     ? AppTheme.appColor
                                     : Colors.white,
-                                text: allergy,
-                                textColor: addAllergies.contains(allergy)
+                                text: value.toString(),
+                                textColor: addAllergies.containsKey(key)
                                     ? Colors.white
                                     : AppTheme.appColor,
                                 onTap: () {
                                   setState(() {
-                                    if (addAllergies.contains(allergy)) {
-                                      addAllergies.remove(allergy);
+                                    if (addAllergies.containsKey(key)) {
+                                      addAllergies.remove(key);
                                     } else {
-                                      addAllergies.add(allergy);
+                                      addAllergies[key] = value;
                                     }
                                   });
                                 },
@@ -216,33 +202,33 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                           Wrap(
                             spacing: 10,
                             runSpacing: 10,
-                            children: dietaryRestrictions.map((restriction) {
+                            children:
+                                dietaryRestrictions.entries.map((restriction) {
+                              String key = restriction.key;
+                              dynamic value = restriction.value;
                               return CustomContainer(
                                 borderColor:
-                                    addDietaryRestrictions.contains(restriction)
+                                    addDietaryRestrictions.containsKey(key)
                                         ? AppTheme.whiteColor
                                         : AppTheme.appColor,
                                 containerColor:
-                                    addDietaryRestrictions.contains(restriction)
+                                    addDietaryRestrictions.containsKey(key)
                                         ? AppTheme.appColor
                                         : Colors.white,
                                 textColor:
-                                    addDietaryRestrictions.contains(restriction)
+                                    addDietaryRestrictions.containsKey(key)
                                         ? Colors.white
                                         : AppTheme.appColor,
-                                text: restriction,
+                                text: value.toString(),
                                 onTap: () {
                                   setState(() {
                                     if (addDietaryRestrictions
-                                        .contains(restriction)) {
-                                      addDietaryRestrictions
-                                          .remove(restriction);
-                                      print(
-                                          "restriction_is ${restriction} an list ${addDietaryRestrictions.toString().substring(1, addDietaryRestrictions.toString().length - 1)}");
+                                        .containsKey(key)) {
+                                      addDietaryRestrictions.remove(key);
                                     } else {
-                                      addDietaryRestrictions.add(restriction);
+                                      addDietaryRestrictions[key] = value;
                                       print(
-                                          "restriction_is ${restriction} an list ${addDietaryRestrictions.toString().substring(1, addDietaryRestrictions.toString().length - 1)}");
+                                          "how much data has been added here${addDietaryRestrictions[key] = value}");
                                     }
                                   });
                                 },
@@ -251,7 +237,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                           ),
                         ],
                       ),
-                      showMenu ? customMenu() : const SizedBox.shrink(),
                     ],
                   ),
                 ],
@@ -260,28 +245,42 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             const SizedBox(
               height: 30,
             ),
-            Center(
-              child: AppButton.appButton(
-                "Save",
-                onTap: () {
-                  print(
-                      "allergies:$addAllergies  and restrictions: $addDietaryRestrictions");
-                  StoreDatainSharedPref(addAllergies,addDietaryRestrictions);
-                  pushReplacement(
-                      context,
-                      BottomNavView(
-                        allergies: addAllergies,
-                        dietaryRestrictions: addDietaryRestrictions,
-                      ));
-                },
-                fontSize: 20,
-                fontWeight: FontWeight.w800,
-                textColor: Colors.white,
-                height: 50,
-                width: 180,
-                backgroundColor: AppTheme.appColor,
-              ),
-            ),
+            checkAPI == false
+                ? Center(
+                    child: AppButton.appButton(
+                      "Save",
+                      onTap: () async {
+                        setState(() {
+                          checkAPI = true;
+                        });
+                        /* where i am converting the map keys into list so that i can call them in
+                         profile screen to fetch the data from sharedpreference
+                          by calling the keys and match them */
+                        List<String> allergiesList = addAllergies.entries
+                            .map((value) => value.toString())
+                            .toList();
+
+                        List<String> dietaryRestrictionsList =
+                            addDietaryRestrictions.entries
+                                .map((value) => value.toString())
+                                .toList();
+                        await StoreDatainSharedPref(
+                            allergiesList, dietaryRestrictionsList);
+                        await UpdateSetupProfileOnUpdateAPI();
+                      },
+                      fontSize: 20,
+                      fontWeight: FontWeight.w800,
+                      textColor: Colors.white,
+                      height: 50,
+                      width: 180,
+                      backgroundColor: AppTheme.appColor,
+                    ),
+                  )
+                : Center(
+                    child: CircularProgressIndicator(
+                      color: AppTheme.appColor,
+                    ),
+                  ),
             const SizedBox(height: 30),
           ],
         ),
@@ -289,77 +288,236 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     );
   }
 
-  // Here is the code of custom menu
-  Widget customMenu() {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppTheme.whiteColor,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: SizedBox(
-        width: 110,
-        height: 230,
-        child: GestureDetector(
-          onTap: () {
+  UpdateSetupProfileOnUpdateAPI() async {
+    var response;
+    Map<String, dynamic> arrangeIndexParam = {};
+    Map<String, dynamic> arrangeIndexParam2 = {};
+    int index = 0;
+    int index1 = 0;
+    const int responseCode200 = 200; // For successful request.
+    const int responseCode400 = 400; // For Bad Request.
+    const int responseCode401 = 401; // For Unauthorized access.
+    const int responseCode404 = 404; // For For data not found
+    const int responseCode500 = 500; // Internal server error.
+    for (var data in addAllergies.entries) {
+      String key = "allergies[${index}]";
+      String key2 = data.key;
+      dynamic value = data.value;
+      arrangeIndexParam[key] = key2;
+      index++;
+    }
+    for (var data in addDietaryRestrictions.entries) {
+      String key = "dietary_restrictions[${index1}]";
+      String key2 = data.key;
+      dynamic value = data.value;
+      arrangeIndexParam2[key] = key2;
+      index1++;
+    }
+    if (selectedDate == null) {
+      showSnackBar(context, "select DOB");
+      setState(() {
+        checkAPI = false;
+      });
+    } else if (_userNameController.text.isEmpty) {
+      showSnackBar(context, "field cannot be empty");
+      setState(() {
+        checkAPI = false;
+      });
+    }
+    Map<String, dynamic> params = {
+      "name": _userNameController.text,
+      "DOB": DateFormat('yyyy-MM-dd').format(selectedDate!),
+      ...arrangeIndexParam,
+      ...arrangeIndexParam2,
+    };
+
+    try {
+      response = await dio.post(
+        path: AppUrls.updateUrl,
+        data: params,
+      );
+      var responseData = response.data;
+      switch (response.statusCode) {
+        case responseCode400:
+          setState(() {
+            checkAPI = false;
+          });
+          print("Bad Request.");
+          break;
+        case responseCode401:
+          setState(() {
+            checkAPI = false;
+          });
+          print("Unauthorized access.");
+          break;
+        case responseCode404:
+          setState(() {
+            checkAPI = false;
+          });
+          print(
+              "The requested resource could not be found but may be available again in the future. Subsequent requests by the client are permissible.");
+          break;
+        case responseCode500:
+          setState(() {
+            checkAPI = false;
+          });
+          print("Internal server error.");
+          break;
+        case responseCode200:
+          if (responseData["status"] == false) {
             setState(() {
-              showMenu = false;
+              checkAPI = false;
             });
-          },
-          child: ListView.builder(
-            scrollDirection: Axis.vertical,
-            shrinkWrap: true,
-            itemCount: 80,
-            itemBuilder: (context, int index) {
-              return InkWell(
-                onTap: () {
-                  setState(() {
-                    if (numberListShow.isNotEmpty) {
-                      numberListShow.removeAt(0);
-                    }
-                    showMenu = false;
-                    numberListShow.insert(0, index + 1);
-                    print("number_is ${numberListShow[0]}");
-                  });
-                },
-                child: Container(
-                  color: Colors.transparent,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 10),
-                      AppText.appText(
-                        "${index + 1}",
-                        fontSize: 18,
-                        textColor: AppTheme.appColor,
-                      ),
-                      Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 10),
-                        decoration: BoxDecoration(
-                          border: Border(
-                            bottom: BorderSide(
-                              width: 1.0,
-                              color: AppTheme.appColor,
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                    ],
-                  ),
-                ),
-              );
-            },
-          ),
-        ),
-      ),
-    );
+            showSnackBar(context, "${responseData["message"]}");
+            // print("Something Went Wrong: ${responseData["message"]}");
+          } else {
+            setState(() {
+              checkAPI = false;
+            });
+            print("everything is alright");
+            pushReplacement(
+                context,
+                BottomNavView(
+                  allergies: addAllergies.values,
+                  dietaryRestrictions: addDietaryRestrictions,
+                ));
+          }
+          break;
+        default:
+          setState(() {
+            checkAPI = false;
+          });
+          // Handle other response codes here if needed.
+          break;
+      }
+
+      // if (response.statusCode == responseCode400) {
+      //   setState(() {
+      //     checkAPI =false;
+      //   });
+      //   print("Bad Request.");
+      // } else if (response.statusCode == responseCode401) {
+      //   setState(() {
+      //     checkAPI =false;
+      //   });
+      //   print("Unauthorized access.");
+      // } else if (response.statusCode == responseCode404) {
+      //   setState(() {
+      //     checkAPI =false;
+      //   });
+      //   print(
+      //       "The requested resource could not be found but may be available again in the future. Subsequent requests by the client are permissible.");
+      // } else if (response.statusCode == responseCode500) {
+      //   setState(() {
+      //     checkAPI =false;
+      //   });
+      //   print("Internal server error.");
+      // } else if (response.statusCode == responseCode200) {
+      //   if(responseData["status"] == false){
+      //     setState(() {
+      //       checkAPI =false;
+      //     });
+      //     print("Something Went Wrong: ${responseData["message"]}");
+      //   } else {
+      //     print("every thing is alright");
+      //
+      //     // pushReplacement(
+      //     //     context,
+      //     //     BottomNavView(
+      //     //       allergies: addAllergies,
+      //     //       dietaryRestrictions: addDietaryRestrictions,
+      //     //     ));
+      //   }
+      //
+      // }
+    } catch (e) {
+      setState(() {
+        checkAPI = false;
+      });
+      print("Something went Wrong ${e}");
+    }
   }
 
-  void StoreDatainSharedPref(allergies,dietryRestriction)async {
+  StoreDatainSharedPref(allergies, dietryRestriction) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (_userNameController.text.isEmpty) {
+      showSnackBar(context, "field cannot be empty");
+      setState(() {
+        checkAPI == false;
+      });
+    } else if (selectedDate == null) {
+      showSnackBar(context, "select DOB");
+      setState(() {
+        checkAPI == false;
+      });
+    } else {
+      prefs.setString(PrefKey.userName, _userNameController.text);
+      prefs.setString(
+          PrefKey.dateOfBirth, DateFormat('MM-dd-yyyy').format(selectedDate!));
+    }
     prefs.setStringList(PrefKey.dataonBoardScreenAllergies, allergies);
-    prefs.setStringList(PrefKey.dataonBoardScreenDietryRestriction, dietryRestriction);
+    prefs.setStringList(
+        PrefKey.dataonBoardScreenDietryRestriction, dietryRestriction);
+    setState(() {
+      checkAPI == false;
+    });
+  }
 
+  loadselectParamsfromAPI() async {
+    var response;
+    const int responseCode200 = 200; // For successful request.
+    const int responseCode400 = 400; // For Bad Request.
+    const int responseCode401 = 401; // For Unauthorized access.
+    const int responseCode404 = 404; // For For data not found
+    const int responseCode500 = 500; // Internal server error.
+    try {
+      response = await dio.get(
+        path: AppUrls.searchParameterUrl,
+      );
+      var responseData = response.data;
+      switch (response.statusCode) {
+        case responseCode400:
+          print("Bad Request.");
+          break;
+        case responseCode401:
+          print("Unauthorized access.");
+          break;
+        case responseCode404:
+          print(
+              "The requested resource could not be found but may be available again in the future. Subsequent requests by the client are permissible.");
+          break;
+        case responseCode500:
+          print("Internal server error.");
+          break;
+        case responseCode200:
+          if (responseData["status"] == false) {
+            print("Something Went Wrong: ${responseData["message"]}");
+          } else {
+            var data = responseData["data"]["allergies"];
+            var data2 = responseData["data"]["dietaryRestrictions"];
+            setState(() {
+              allergies = data;
+              dietaryRestrictions = data2;
+            });
+            print("everything is alright");
+          }
+          break;
+        default:
+          // Handle other response codes here if needed.
+          break;
+      }
+    } catch (e) {
+      print("Something went Wrong ${e}");
+    }
+  }
+
+  void getUserName() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? userName = prefs.getString(PrefKey.name);
+    setState(() {
+      _userNameController.text = userName!;
+    });
+    print("profile_name $myName");
   }
 }
 
@@ -369,6 +527,7 @@ class CustomContainer extends StatelessWidget {
   final Color textColor;
   final Color containerColor;
   final borderColor;
+
   CustomContainer(
       {super.key,
       this.text,
@@ -376,6 +535,7 @@ class CustomContainer extends StatelessWidget {
       required this.textColor,
       required this.containerColor,
       this.borderColor});
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(

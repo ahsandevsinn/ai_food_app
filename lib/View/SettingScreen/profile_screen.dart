@@ -1,14 +1,17 @@
 import 'package:ai_food/Constants/app_logger.dart';
 import 'package:ai_food/Utils/resources/res/AppAssetsImage.dart';
 import 'package:ai_food/Utils/resources/res/app_theme.dart';
+import 'package:ai_food/Utils/utils.dart';
 import 'package:ai_food/Utils/widgets/others/app_button.dart';
 import 'package:ai_food/Utils/widgets/others/app_field.dart';
 import 'package:ai_food/Utils/widgets/others/app_text.dart';
+import 'package:ai_food/config/app_urls.dart';
 import 'package:ai_food/config/dio/app_dio.dart';
 import 'package:ai_food/config/keys/pref_keys.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sizer/sizer.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -26,43 +29,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
     "US",
     "Metric",
   ];
+  bool checkAPI = false;
   String updatedvalueM = "US";
-  String myName = "Howdy Sir!";
   bool showMenu = false;
   bool measuringUnit = false;
   var responseData;
-  List allergies = [
-    "Dairy",
-    "Peanut",
-    "Seafood",
-    "Sesame",
-    "Wheat",
-    "Soy",
-    "Sulfite",
-    "Gluten",
-    "Egg",
-    "Grain",
-    "Tree nut",
-    "Shellfish",
-  ];
-  List dietaryRestrictions = [
-    "Gluten free",
-    "ketogenic",
-    "Vegetarian",
-    "Lacto-Vegetarian",
-    "Ovo-Vegetarian",
-    "Vegan",
-    "Pescetarian",
-    "Paleo",
-    "Primal",
-    "Low FODMAP",
-    "Whole30",
-    "Shellfish",
-  ];
+  Map<String, dynamic> addAllergies = {};
+  Map<String, dynamic> addDietaryRestrictions = {};
+  Map<String, dynamic> allergies = {};
+  Map<String, dynamic> dietaryRestrictions = {};
 
-  List<String> addAllergies = [];
-  List<String> addDietaryRestrictions = [];
   DateTime? selectedDate;
+  String? selectedDateFromPref;
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -75,7 +53,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             primaryColor: AppTheme.appColor, // Change the primary color
             colorScheme: ColorScheme.light(
                 primary: AppTheme.appColor), // Change overall color scheme
-            buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
+            buttonTheme: const ButtonThemeData(textTheme: ButtonTextTheme.primary),
           ),
           child: child!,
         );
@@ -92,7 +70,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void initState() {
     dio = AppDio(context);
     logger.init();
-    getUserName();
+
+    loadselectParamsfromAPI();
+    LoadingSelectedDataFromSetupProfileScreen();
+
     super.initState();
   }
 
@@ -100,15 +81,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void dispose() {
     _userNameController.dispose();
     super.dispose();
-  }
-
-  void getUserName() async {
-    final prefs = await SharedPreferences.getInstance();
-    String? userName = prefs.getString(PrefKey.name);
-    setState(() {
-      myName = userName!;
-    });
-    print("profile_name $myName");
   }
 
   @override
@@ -126,14 +98,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Flexible(
                 fit: FlexFit.loose,
                 child: Container(
                   height: 220,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     image: DecorationImage(
                       image: AssetImage(
                         AppAssetsImage.profile_text_background,
@@ -155,18 +127,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         Flexible(
                           fit: FlexFit.loose,
                           child: CustomAppFormField(
-                            texthint: myName,
-                            hintStyle: TextStyle(
-                              color: AppTheme.appColor,
-                            ),
+                            texthint: "User name",
                             controller: _userNameController,
+                            hintStyle: TextStyle(color: AppTheme.appColor),
                           ),
                         ),
                         const SizedBox(height: 10),
                         Row(
                           mainAxisSize: MainAxisSize.max,
                           children: [
-                            SizedBox(
+                            const SizedBox(
                               width: 5,
                             ),
                             Flexible(
@@ -182,8 +152,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       flex: 5,
                                       fit: FlexFit.tight,
                                       child: AppText.appText(
-                                          "DOB: ${selectedDate == null ? "MM/DD/YYYY" : DateFormat('MM-dd-yyyy').format(selectedDate!)}",
-                                          fontSize: 15,
+                                          "DOB: ${selectedDate == null ? "${selectedDateFromPref == ""?"MM-DD-YYYY":selectedDateFromPref}" : DateFormat('MM-dd-yyyy').format(selectedDate!)}",
+                                          fontSize: 11.sp,
                                           textColor: AppTheme.appColor),
                                     ),
                                     Flexible(
@@ -246,7 +216,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             Flexible(
                                 fit: FlexFit.loose,
                                 child: Divider(
-                                  thickness: 2,
+                                  thickness: 1,
                                   color: AppTheme.appColor,
                                 )),
                             const SizedBox(
@@ -255,7 +225,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             Flexible(
                                 fit: FlexFit.loose,
                                 child: Divider(
-                                  thickness: 2,
+                                  thickness: 1,
                                   color: AppTheme.appColor,
                                 )),
                           ],
@@ -271,33 +241,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                         const SizedBox(height: 10),
                         Wrap(
-                          runSpacing: 10,
-                          spacing: 10,
-                          children: allergies.map((allergy) {
-                            return CustomContainer(
-                              containerColor: addAllergies.contains(allergy)
-                                  ? AppTheme.appColor
-                                  : Colors.white,
-                              text: allergy,
-                              textColor: addAllergies.contains(allergy)
-                                  ? Colors.white
-                                  : AppTheme.appColor,
-                              onTap: () {
-                                setState(() {
-                                  if (addAllergies.contains(allergy)) {
-                                    addAllergies.remove(allergy);
-                                    print(
-                                        "allergy_is ${allergy} an list ${addAllergies.toString().substring(1, addAllergies.toString().length - 1)}");
-                                  } else {
-                                    addAllergies.add(allergy);
-                                    print(
-                                        "allergy_is ${allergy} an list ${addAllergies.toString().substring(1, addAllergies.toString().length - 1)}");
-                                  }
-                                });
-                              },
-                            );
-                          }).toList(),
-                        ),
+                    runSpacing: 10,
+                    spacing: 10,
+                    children: allergies.entries.map((allergy) {
+                      String key = allergy.key;
+                      dynamic value = allergy.value;
+                      return CustomContainer(
+                        borderColor: addAllergies.containsKey(key)
+                            ? AppTheme.whiteColor
+                            : AppTheme.appColor,
+                        containerColor: addAllergies.containsKey(key)
+                            ? AppTheme.appColor
+                            : Colors.white,
+                        text: value.toString(),
+                        textColor: addAllergies.containsKey(key)
+                            ? Colors.white
+                            : AppTheme.appColor,
+                        onTap: () {
+                          setState(() {
+                            if (addAllergies.containsKey(key)) {
+                              addAllergies.remove(key);
+                            } else {
+                              addAllergies[key] = value;
+                            }
+                          });
+                        },
+                      );
+                    }).toList(),
+                  ),
                         const SizedBox(height: 30),
                         AppText.appText(
                           "Dietary restrictions:",
@@ -309,28 +280,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         Wrap(
                           spacing: 10,
                           runSpacing: 10,
-                          children: dietaryRestrictions.map((restriction) {
+                          children: dietaryRestrictions.entries.map((restriction) {
+                            String key = restriction.key;
+                            dynamic value = restriction.value;
                             return CustomContainer(
+                              borderColor:
+                              addDietaryRestrictions.containsKey(key)
+                                  ? AppTheme.whiteColor
+                                  : AppTheme.appColor,
                               containerColor:
-                                  addDietaryRestrictions.contains(restriction)
-                                      ? AppTheme.appColor
-                                      : Colors.white,
+                              addDietaryRestrictions.containsKey(key)
+                                  ? AppTheme.appColor
+                                  : Colors.white,
                               textColor:
-                                  addDietaryRestrictions.contains(restriction)
-                                      ? Colors.white
-                                      : AppTheme.appColor,
-                              text: restriction,
+                              addDietaryRestrictions.containsKey(key)
+                                  ? Colors.white
+                                  : AppTheme.appColor,
+                              text: value.toString(),
                               onTap: () {
                                 setState(() {
                                   if (addDietaryRestrictions
-                                      .contains(restriction)) {
-                                    addDietaryRestrictions.remove(restriction);
-                                    print(
-                                        "restriction_is ${restriction} an list ${addDietaryRestrictions.toString().substring(1, addDietaryRestrictions.toString().length - 1)}");
+                                      .containsKey(key)) {
+                                    addDietaryRestrictions
+                                        .remove(key);
                                   } else {
-                                    addDietaryRestrictions.add(restriction);
-                                    print(
-                                        "restriction_is ${restriction} an list ${addDietaryRestrictions.toString().substring(1, addDietaryRestrictions.toString().length - 1)}");
+                                    addDietaryRestrictions[key] = value;
                                   }
                                 });
                               },
@@ -340,7 +314,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ],
                     ),
                     Positioned(
-                      top: 68,
+                      top: 8.5.h,
                       right: 0,
                       child: measuringUnit
                           ? customMeasuringUnit()
@@ -352,11 +326,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
               const SizedBox(
                 height: 30,
               ),
-              Center(
+            checkAPI == false
+                ? Center(
                 child: AppButton.appButton(
-                  "Save",
-                  onTap: () {
+                   "Save",
+                  onTap: ()async {
+                    setState(() {
+                      checkAPI = true;
+                    });
                     SaveUnit();
+                    List<String> allergiesList = addAllergies.entries
+                        .map((value) => value.toString())
+                        .toList();
+                    List<String> dietaryRestrictionsList = addDietaryRestrictions.entries
+                        .map((value) => value.toString())
+                        .toList();
+                   await StoreDatainSharedPref(allergiesList,dietaryRestrictionsList);
+                    await UpdateSetupProfileOnUpdateAPI();
                   },
                   fontSize: 20,
                   fontWeight: FontWeight.w800,
@@ -365,7 +351,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   width: 180,
                   backgroundColor: AppTheme.appColor,
                 ),
-              ),
+              ): Center(child: CircularProgressIndicator(color: AppTheme.appColor),),
               const SizedBox(height: 30),
             ],
           ),
@@ -385,7 +371,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               borderRadius: BorderRadius.circular(5),
               color: AppTheme.whiteColor,
             ),
-            height: 160,
+            height: 110,
             width: MediaQuery.of(context).size.width * 0.415,
             child: Center(
               child: GestureDetector(
@@ -403,8 +389,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       onTap: () {
                         setState(() {
                           measuringUnit = false;
-                          updatedvalueM =
-                              measuringUnitListShow.elementAt(index);
+                          updatedvalueM = measuringUnitListShow.elementAt(index);
                         });
                       },
                       child: Container(
@@ -412,7 +397,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            const SizedBox(height: 10),
                             AppText.appText(
                               "${measuringUnitListShow[index]}",
                               fontSize: 18,
@@ -430,7 +414,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ),
                               ),
                             ),
-                            const SizedBox(height: 10),
+                            const SizedBox(height: 20),
                           ],
                         ),
                       ),
@@ -447,7 +431,201 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   SaveUnit() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString(PrefKey.unit, updatedvalueM);
+   prefs.setString(PrefKey.unit, updatedvalueM);
+  }
+  loadselectParamsfromAPI() async {
+    var response;
+    const int responseCode200 = 200; // For successful request.
+    const int responseCode400 = 400; // For Bad Request.
+    const int responseCode401 = 401; // For Unauthorized access.
+    const int responseCode404 = 404; // For For data not found
+    const int responseCode500 = 500; // Internal server error.
+    try {
+      response = await dio.get(
+          path: AppUrls.searchParameterUrl,  queryParameters: {"search": 0});
+      var responseData = response.data;
+      switch (response.statusCode) {
+        case responseCode400:
+          print("Bad Request.");
+          break;
+        case responseCode401:
+          print("Unauthorized access.");
+          break;
+        case responseCode404:
+          print("The requested resource could not be found but may be available again in the future. Subsequent requests by the client are permissible.");
+          break;
+        case responseCode500:
+          print("Internal server error.");
+          break;
+        case responseCode200:
+          if (responseData["status"] == false) {
+            showSnackBar(context, "${responseData["message"]}");
+          } else {
+            var data = responseData["data"]["allergies"];
+            var data2 = responseData["data"]["dietaryRestrictions"];
+            //this condition is to make sure that if server didn;t work or server don't load the data.
+            if (data == null &&data2 == null ) {
+              showSnackBar(context, "Something went wrong reload the page");
+            }
+            //-----------------//
+            //when data is loaded
+            else {
+              setState(() {
+                allergies = data;
+                dietaryRestrictions = data2;
+              });
+            }
+            showSnackBar(context, "selection Loaded from API");
+            //----------------------//
+
+          }
+          break;
+        default:
+        // Handle other response codes here if needed.
+          break;
+      }
+    } catch (e) {
+      showSnackBar(context, "Reload the page ${e}");
+    }
+  }
+  LoadingSelectedDataFromSetupProfileScreen() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      selectedDateFromPref= prefs.getString(PrefKey.dateOfBirth);
+      List<String> storedData =prefs.getStringList(PrefKey.dataonBoardScreenAllergies)!;
+        for (String entry in storedData) {
+          String result = entry.replaceAll(RegExp(r'^MapEntry\(|\)'), '');
+          List<String> parts = result.split(':');
+          if (parts.length == 2) {
+            String key = parts[0].trim();
+            String value = parts[1].trim();
+           addAllergies[key] = value;
+          }
+        }
+      List<String> storedData2 =prefs.getStringList(PrefKey.dataonBoardScreenDietryRestriction)!;
+      for (String entry in storedData2) {
+        String result = entry.replaceAll(RegExp(r'^MapEntry\(|\)'), '');
+        List<String> parts = result.split(':');
+        if (parts.length == 2) {
+          String key = parts[0].trim();
+          String value = parts[1].trim();
+          addDietaryRestrictions[key] = value;
+        }
+      }
+      _userNameController.text= prefs.getString(PrefKey.userName)!;
+      updatedvalueM==""? "US": prefs.getString(PrefKey.unit);
+    });
+    showSnackBar(context, "Data is Loaded from SharedPreference");
+  }
+  UpdateSetupProfileOnUpdateAPI() async {
+    var response;
+    Map<String, dynamic> arrangeIndexParam = {};
+    Map<String, dynamic> arrangeIndexParam2 = {};
+    int index = 0;
+    int index1 = 0;
+    const int responseCode200 = 200; // For successful request.
+    const int responseCode400 = 400; // For Bad Request.
+    const int responseCode401 = 401; // For Unauthorized access.
+    const int responseCode404 = 404; // For For data not found
+    const int responseCode500 = 500; // Internal server error.
+
+    //here creates map like allergies[0]: 4,... using for loop to insert the data;
+    for (var data in addAllergies.entries) {
+      String key = "allergies[${index}]";
+      String key2 = data.key;
+      dynamic value = data.value;
+      arrangeIndexParam[key] = key2;
+      index++;
+    }
+    for (var data in addDietaryRestrictions.entries) {
+      String key = "dietary_restrictions[${index1}]";
+      String key2 = data.key;
+      dynamic value = data.value;
+      arrangeIndexParam2[key] = key2;
+      index1++;
+    }
+    //----------------------//
+    //check if username is empty or not
+    if (_userNameController.text.isEmpty) {
+      showSnackBar(context, "field cannot be empty");
+      setState(() {
+        checkAPI = false;
+      });
+    }
+    Map<String, dynamic> params = {
+      "name": _userNameController.text,
+      "DOB": selectedDateFromPref?? DateFormat('yyyy-MM-dd').format(selectedDate!),
+      ...arrangeIndexParam,
+      ...arrangeIndexParam2,
+    };
+    try {
+      response = await dio.post(
+        path: AppUrls.updateUrl,
+        data: params,
+      );
+      var responseData = response.data;
+      switch (response.statusCode) {
+        case responseCode400:
+          setState(() {
+            checkAPI = false;
+          });
+          print("Bad Request.");
+          break;
+        case responseCode401:
+          setState(() {
+            checkAPI = false;
+          });
+          print("Unauthorized access.");
+          break;
+        case responseCode404:
+          setState(() {
+            checkAPI = false;
+          });
+          print("The requested resource could not be found but may be available again in the future. Subsequent requests by the client are permissible.");
+          break;
+        case responseCode500:
+          setState(() {
+            checkAPI = false;
+          });
+          print("Internal server error.");
+          break;
+        case responseCode200:
+          if (responseData["status"] == false) {
+            setState(() {
+              checkAPI = false;
+            });
+            showSnackBar(context, "${responseData["message"]}");
+            // print("Something Went Wrong: ${responseData["message"]}");
+          } else {
+            setState(() {
+              checkAPI = false;
+            });
+            print("everything is alright");
+          }
+          break;
+        default:
+          setState(() {
+            checkAPI = false;
+          });
+          // Handle other response codes here if needed.
+          break;
+      }
+
+    } catch (e) {
+      //check if there is any other issue with the data from server
+      setState(() {
+        checkAPI = false;
+      });
+      print("Something went Wrong ${e}");
+    }
+  }
+  StoreDatainSharedPref(allergies, dietryRestriction) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString(PrefKey.userName, _userNameController.text);
+    selectedDate == null?prefs.setString(PrefKey.dateOfBirth, selectedDateFromPref!):prefs.setString(PrefKey.dateOfBirth, DateFormat('MM-dd-yyyy').format(selectedDate!));
+    prefs.setStringList(PrefKey.dataonBoardScreenAllergies, allergies);
+    prefs.setStringList(PrefKey.dataonBoardScreenDietryRestriction, dietryRestriction);
+    showSnackBar(context, "Data is saved in SharedPreference");
   }
 }
 
@@ -456,13 +634,15 @@ class CustomContainer extends StatelessWidget {
   final Function() onTap;
   final Color textColor;
   final Color containerColor;
+  final borderColor;
 
-  const CustomContainer(
+  CustomContainer(
       {super.key,
-      this.text,
-      required this.onTap,
-      required this.textColor,
-      required this.containerColor});
+        this.text,
+        required this.onTap,
+        required this.textColor,
+        required this.containerColor,
+        this.borderColor});
 
   @override
   Widget build(BuildContext context) {
@@ -473,7 +653,7 @@ class CustomContainer extends StatelessWidget {
         decoration: BoxDecoration(
             color: containerColor,
             borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: AppTheme.appColor, width: 2)),
+            border: Border.all(color: borderColor, width: 1.5)),
         child: AppText.appText(
           text,
           textColor: textColor,

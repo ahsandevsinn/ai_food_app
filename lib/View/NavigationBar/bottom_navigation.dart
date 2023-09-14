@@ -97,7 +97,7 @@ class _BottomNavViewState extends State<BottomNavView> {
                 ),
                 GButton(
                   icon: Icons.favorite,
-                  text: 'Favourite',
+                  text: 'Favourites',
                 ),
                 GButton(
                   icon: Icons.message,

@@ -141,9 +141,9 @@ class _SettingScreenState extends State<SettingScreen> {
                 Container(
                   height: 20,
                   width: 20,
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(image: AssetImage("assets/images/logout.png"))
-                  ),
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: AssetImage("assets/images/logout.png"))),
                 ),
                 SizedBox(width: 2.w),
                 AppText.appText("Log out",
@@ -246,7 +246,7 @@ class _SettingScreenState extends State<SettingScreen> {
                               color: Colors.white,
                               fontSize: 20,
                               fontFamily: 'Roboto',
-                              fontWeight: FontWeight.w600,
+                              fontWeight: FontWeight.w400,
                               letterSpacing: -0.33,
                             ),
                           ),
@@ -307,12 +307,12 @@ class _SettingScreenState extends State<SettingScreen> {
                     decoration: BoxDecoration(
                       color: AppTheme.whiteColor,
                       // color: Color(0xFFB38ADE),
-                      borderRadius: const BorderRadius.only(
+                      borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(8.0),
                           topRight: Radius.circular(8.0)),
                     ),
                     height: 56,
-                    width: 300,
+                    width: MediaQuery.sizeOf(context).width,
                     child: Center(
                       child: Text(
                         "Contact Us",
@@ -336,9 +336,11 @@ class _SettingScreenState extends State<SettingScreen> {
                             cursorColor: AppTheme.whiteColor,
                             decoration: InputDecoration(
                                 contentPadding:
-                                    const EdgeInsets.only(top: 20, left: 10),
-                                hintStyle:
-                                    TextStyle(color: AppTheme.whiteColor),
+                                    EdgeInsets.only(top: 20, left: 10),
+                                hintStyle: TextStyle(
+                                    color: AppTheme.whiteColor,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w400),
                                 hintText: "jessica hanson",
                                 focusedBorder: UnderlineInputBorder(
                                     borderSide:
@@ -360,8 +362,11 @@ class _SettingScreenState extends State<SettingScreen> {
                           cursorColor: AppTheme.whiteColor,
                           decoration: InputDecoration(
                               contentPadding:
-                                  const EdgeInsets.only(top: 20, left: 10),
-                              hintStyle: TextStyle(color: AppTheme.whiteColor),
+                                  EdgeInsets.only(top: 20, left: 10),
+                              hintStyle: TextStyle(
+                                  color: AppTheme.whiteColor,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400),
                               hintText: "jessicahanson@gmail.com",
                               focusedBorder: UnderlineInputBorder(
                                   borderSide:
@@ -383,7 +388,7 @@ class _SettingScreenState extends State<SettingScreen> {
                       style: TextStyle(color: AppTheme.whiteColor),
                       cursorColor: AppTheme.whiteColor,
                       decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.only(top: 20, left: 10),
+                          contentPadding: EdgeInsets.only(top: 20, left: 10),
                           hintStyle: TextStyle(
                               color: AppTheme.whiteColor.withOpacity(0.5)),
                           hintText: "Your message",
@@ -404,7 +409,7 @@ class _SettingScreenState extends State<SettingScreen> {
                   Center(
                     child: AppButton.appButton("Send message ",
                         fontSize: 20,
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w600,
                         textColor: AppTheme.appColor,
                         height: 50,
                         width: 180,
@@ -424,12 +429,9 @@ class _SettingScreenState extends State<SettingScreen> {
       },
     );
   }
-
   Future<void> logout(context) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.remove(PrefKey.authorization);
-    await Authentication.signOut(context: context);
-  }
-
-
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.remove(PrefKey.authorization);
+  await Authentication.signOut(context: context);
+}
 }

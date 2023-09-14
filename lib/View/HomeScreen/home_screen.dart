@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:ai_food/Constants/app_logger.dart';
 import 'package:ai_food/Utils/resources/res/app_theme.dart';
 import 'package:ai_food/Utils/utils.dart';
 import 'package:ai_food/Utils/widgets/others/app_text.dart';
+import 'package:ai_food/View/HomeScreen/get_recipes_api.dart';
 import 'package:ai_food/View/HomeScreen/search_screen.dart';
 import 'package:ai_food/View/HomeScreen/widgets/providers/allergies_provider.dart';
 import 'package:ai_food/View/HomeScreen/widgets/providers/dietary_restrictions_provider.dart';
@@ -10,6 +13,7 @@ import 'package:ai_food/View/HomeScreen/widgets/providers/preferredProtein_provi
 import 'package:ai_food/View/HomeScreen/widgets/providers/regionalDelicacy_provider.dart';
 import 'package:ai_food/View/NavigationBar/bottom_navigation.dart';
 import 'package:ai_food/View/recipe_info/recipe_info.dart';
+import 'package:ai_food/config/app_urls.dart';
 import 'package:ai_food/config/dio/app_dio.dart';
 import 'package:ai_food/config/keys/pref_keys.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -27,7 +31,7 @@ class HomeScreen extends StatefulWidget {
   final foodStyle;
   final searchType;
   var query;
-   HomeScreen(
+  HomeScreen(
       {Key? key,
       this.data,
       this.type,
@@ -57,6 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
     dio = AppDio(context);
     logger.init();
     getUserCredentials();
+    getRecipesParameters();
 
     if (widget.type == 1) {
       type = widget.type;
@@ -70,6 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
     super.initState();
   }
+
 
   void getUserCredentials() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -93,7 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: 80,
+        toolbarHeight: 120,
         backgroundColor: Colors.white,
         automaticallyImplyLeading: false,
         elevation: 0,
@@ -115,7 +121,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   padding: const EdgeInsets.only(left: 20.0),
                   child: Text(
                     "${widget.query ?? "Search"}",
-                    style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+                    style: const TextStyle(
+                        fontSize: 15, fontWeight: FontWeight.w500),
                   ),
                 ),
                 Container(
@@ -157,12 +164,15 @@ class _HomeScreenState extends State<HomeScreen> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                          padding: const EdgeInsets.only(
+                              left: 10.0, right: 10, bottom: 5),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               AppText.appText(
-                                  type == 0 ? "Recommended:" : "Search results",
+                                  type == 0
+                                      ? "Recommended:"
+                                      : "Search results:",
                                   fontSize: 20,
                                   textColor: AppTheme.appColor,
                                   fontWeight: FontWeight.w600),
@@ -177,7 +187,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         }
                                       },
                                       child: Container(
-                                        height: 50,
+                                        height: 35,
                                         decoration: BoxDecoration(
                                           color: AppTheme.whiteColor,
                                           borderRadius:
@@ -186,7 +196,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                               color: AppTheme.appColor),
                                         ),
                                         child: Padding(
-                                          padding: const EdgeInsets.all(12.0),
+                                          padding: const EdgeInsets.only(
+                                              left: 10.0, right: 10),
                                           child: Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
@@ -194,10 +205,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                               Icon(
                                                 Icons.autorenew,
                                                 color: AppTheme.appColor,
+                                                size: 18,
+                                              ),
+                                              const SizedBox(
+                                                width: 4,
                                               ),
                                               AppText.appText(
-                                                "Regenerate",
-                                                fontSize: 14,
+                                                "Regenerate result",
+                                                fontSize: 12,
                                                 fontWeight: FontWeight.w600,
                                                 textColor: AppTheme.appColor,
                                               ),
@@ -482,6 +497,52 @@ class _HomeScreenState extends State<HomeScreen> {
       }
     } catch (e) {
       print(e);
+    }
+  }
+
+  //get recipes data api
+  void getRecipesParameters() async {
+    var response;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    const int responseCode200 = 200; // For successful request.
+    const int responseCode400 = 400; // For Bad Request.
+    const int responseCode401 = 401; // For Unauthorized access.
+    const int responseCode404 = 404; // For For data not found
+    const int responseCode405 = 405; // Method not allowed
+    const int responseCode500 = 500; // Internal server error.
+
+    try {
+      response = await dio.get(path: AppUrls.searchParameterUrl);
+      var responseData = response.data;
+      if(response.statusCode == responseCode405){
+        print("For For data not found.");
+        showSnackBar(context, "${responseData["message"]}");
+      } else if (response.statusCode == responseCode404) {
+        print("For For data not found.");
+        showSnackBar(context, "${responseData["message"]}");
+      } else if (response.statusCode == responseCode400) {
+        print(" Bad Request.");
+        showSnackBar(context, "${responseData["message"]}");
+      } else if (response.statusCode == responseCode401) {
+        print(" Unauthorized access.");
+        showSnackBar(context, "${responseData["message"]}");
+      } else if (response.statusCode == responseCode500) {
+        print("Internal server error.");
+        showSnackBar(context, "${responseData["message"]}");
+      } else if (response.statusCode == responseCode200) {
+        if (responseData["status"] == false) {
+          showSnackBar(context, "${responseData["message"]}");
+        } else {
+          print("responseData${responseData}");
+          var encodeData = jsonEncode(responseData);
+          print("encoded_data is $encodeData");
+          prefs.setString(PrefKey.parametersLists, encodeData);
+          showSnackBar(context, "${responseData["message"]}");
+        }
+      }
+    } catch (e) {
+      print("Something went Wrong ${e}");
+      showSnackBar(context, "Something went Wrong.");
     }
   }
 

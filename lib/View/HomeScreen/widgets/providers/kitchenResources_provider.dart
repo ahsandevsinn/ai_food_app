@@ -28,27 +28,26 @@ class KitchenResourcesProvider extends ChangeNotifier {
       _kitchenResourcesRecipesParameters;
 
   List<RecipesParameterClass> preferredKitchenResourcesParametersRecipe = [
-    RecipesParameterClass(parameter: 'Blender'),
-    RecipesParameterClass(parameter: 'Cutting board'),
-    RecipesParameterClass(parameter: 'Frying pan'),
-    RecipesParameterClass(parameter: 'knife'),
-    RecipesParameterClass(parameter: 'Salad spinner'),
-    RecipesParameterClass(parameter: 'Sheet pan'),
-    RecipesParameterClass(parameter: 'Measuring cup'),
-    RecipesParameterClass(parameter: 'Measuring spoon'),
-    RecipesParameterClass(parameter: 'Whisk'),
-    RecipesParameterClass(parameter: 'Tongs'),
-    RecipesParameterClass(parameter: 'Bowl'),
-    RecipesParameterClass(parameter: 'Oven'),
-    RecipesParameterClass(parameter: 'Microwave'),
-    RecipesParameterClass(parameter: 'Food Processor'),
-    RecipesParameterClass(parameter: 'Slow Cooker'),
+    // RecipesParameterClass(parameter: 'Blender'),
+    // RecipesParameterClass(parameter: 'Cutting board'),
+    // RecipesParameterClass(parameter: 'Frying pan'),
+    // RecipesParameterClass(parameter: 'knife'),
+    // RecipesParameterClass(parameter: 'Salad spinner'),
+    // RecipesParameterClass(parameter: 'Sheet pan'),
+    // RecipesParameterClass(parameter: 'Measuring cup'),
+    // RecipesParameterClass(parameter: 'Measuring spoon'),
+    // RecipesParameterClass(parameter: 'Whisk'),
+    // RecipesParameterClass(parameter: 'Tongs'),
+    // RecipesParameterClass(parameter: 'Bowl'),
+    // RecipesParameterClass(parameter: 'Oven'),
+    // RecipesParameterClass(parameter: 'Microwave'),
+    // RecipesParameterClass(parameter: 'Food Processor'),
+    // RecipesParameterClass(parameter: 'Slow Cooker'),
   ];
 
   void showKitchenResourcesParameterDetails(context, String parameter) {
     if (parameter == "Kitchen Resources") {
-      _kitchenResourcesRecipesParameters
-          .addAll(preferredKitchenResourcesParametersRecipe);
+      _kitchenResourcesRecipesParameters.addAll(preferredKitchenResourcesParametersRecipe);
       Navigator.push(
         context,
         CupertinoPageRoute(

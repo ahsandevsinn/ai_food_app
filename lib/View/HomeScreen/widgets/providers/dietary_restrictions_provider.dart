@@ -28,18 +28,17 @@ class DietaryRestrictionsProvider extends ChangeNotifier {
       _dietaryRestrictionsRecipesParameters;
 
   List<RecipesParameterClass> preferredDietaryRestrictionsParametersRecipe = [
-    RecipesParameterClass(parameter: 'Gluten Free'),
-    RecipesParameterClass(parameter: 'Ketogenic'),
-    RecipesParameterClass(parameter: 'Vegetarian'),
-    RecipesParameterClass(parameter: 'Lacto-Vegetarian'),
-    RecipesParameterClass(parameter: 'Ovo-Vegetarian'),
-    RecipesParameterClass(parameter: 'Vegan'),
-    RecipesParameterClass(parameter: 'Pescetarian'),
-    RecipesParameterClass(parameter: 'Paleo'),
-    RecipesParameterClass(parameter: 'Primal'),
-    RecipesParameterClass(parameter: 'Low FODMAP'),
-    RecipesParameterClass(parameter: 'Whole30'),
-    RecipesParameterClass(parameter: 'Shellfish'),
+    // RecipesParameterClass(parameter: 'Gluten Free'),
+    // RecipesParameterClass(parameter: 'Ketogenic'),
+    // RecipesParameterClass(parameter: 'Vegetarian'),
+    // RecipesParameterClass(parameter: 'Lacto-Vegetarian'),
+    // RecipesParameterClass(parameter: 'Ovo-Vegetarian'),
+    // RecipesParameterClass(parameter: 'Vegan'),
+    // RecipesParameterClass(parameter: 'Pescetarian'),
+    // RecipesParameterClass(parameter: 'Paleo'),
+    // RecipesParameterClass(parameter: 'Primal'),
+    // RecipesParameterClass(parameter: 'Low FODMAP'),
+    // RecipesParameterClass(parameter: 'Whole30'),
   ];
 
   void showDietaryRestrictionsParameterDetails(context, String parameter) {

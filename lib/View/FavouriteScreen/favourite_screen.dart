@@ -16,7 +16,7 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         centerTitle: true,
-        title: AppText.appText("Favourites Recipes", fontSize: 24, fontWeight: FontWeight.w600, textColor: AppTheme.appColor)
+        title: AppText.appText("Favourite Recipes", fontSize: 24, fontWeight: FontWeight.w600, textColor: AppTheme.appColor)
       ),
     );
   }

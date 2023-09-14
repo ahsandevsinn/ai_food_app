@@ -28,7 +28,15 @@ class AppButton {
         padding: padding,
         width: width,
         height: height,
-        decoration: BoxDecoration(boxShadow: [blurContainer==true?BoxShadow(color: Colors.black26,blurRadius: 2,offset: Offset(0.0, 4)):BoxShadow()],
+        decoration: BoxDecoration(
+            boxShadow: [
+              blurContainer == true
+                  ? BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: 2,
+                      offset: Offset(0.0, 4))
+                  : BoxShadow()
+            ],
             color: backgroundColor,
             borderRadius: BorderRadius.circular(50),
             border: border == false
@@ -123,7 +131,7 @@ class AppButton {
       TextOverflow? overflow,
       double? letterSpacing,
       IconData? icons,
-    Function()? onTap,
+      Function()? onTap,
       String? imagePath,
       bool underLine = false,
       bool fontFamily = false,
@@ -143,14 +151,13 @@ class AppButton {
                     color: AppTheme.appColor,
                     width: 2,
                   )),
-        child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-
             Image(
               image: AssetImage(imagePath!),
               height: 25,
             ),
-
             AppText.appText(text,
                 fontFamily: fontFamily,
                 fontSize: fontSize,
@@ -162,7 +169,9 @@ class AppButton {
                 textBaseline: textBaseline,
                 fontStyle: fontStyle,
                 underLine: underLine),
-            SizedBox(width: 20,),
+            SizedBox(
+              width: 20,
+            ),
           ],
         ),
       ),

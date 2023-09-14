@@ -16,7 +16,7 @@ class _CustomcardState extends State<Customcard> {
       opacity: 0.90,
       child: Container(
         // width: 320,
-        height: 425,
+        height: 450,
         decoration: ShapeDecoration(
           image: DecorationImage(
             image: AssetImage('assets/images/logo.png'),

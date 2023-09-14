@@ -1,9 +1,11 @@
+import 'package:ai_food/Constants/app_logger.dart';
 import 'package:ai_food/Utils/resources/res/app_theme.dart';
 import 'package:ai_food/Utils/utils.dart';
 import 'package:ai_food/Utils/widgets/others/app_button.dart';
 import 'package:ai_food/Utils/widgets/others/app_text.dart';
-import 'package:ai_food/Utils/widgets/others/custom_app_bar.dart';
 import 'package:ai_food/Utils/widgets/others/custom_card.dart';
+import 'package:ai_food/config/app_urls.dart';
+import 'package:ai_food/config/dio/app_dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
@@ -12,10 +14,18 @@ import 'package:sizer/sizer.dart';
 import 'set_password_screen.dart';
 
 class OTPScreen extends StatefulWidget {
-  final String verificationId;
-  final String mobileNumber;
+  final verificationId;
+  final mobileNumber;
+  final otp;
+  final email;
+  final type;
   const OTPScreen(
-      {super.key, required this.verificationId, required this.mobileNumber});
+      {super.key,
+      this.verificationId,
+      this.mobileNumber,
+      this.otp,
+      this.email,
+      this.type});
 
   @override
   State<OTPScreen> createState() => _OTPScreenState();
@@ -25,6 +35,10 @@ class _OTPScreenState extends State<OTPScreen> {
   final TextEditingController _smsCodeController = TextEditingController();
   bool _verificationInProgress = false;
   String? verificationIdCheck;
+  late AppDio dio;
+  AppLogger logger = AppLogger();
+  var responseData;
+  bool isLoading = false;
 
   Future<void> _signInWithPhoneNumber(String smsCode) async {
     setState(() {
@@ -41,7 +55,9 @@ class _OTPScreenState extends State<OTPScreen> {
       setState(() {
         _verificationInProgress = false;
       });
-      push(context, SetPasswordSreen());
+
+      verfyOTP(code: smsCode);
+
       // _timer.cancel();
     }).catchError((error) {
       setState(() {
@@ -170,22 +186,30 @@ class _OTPScreenState extends State<OTPScreen> {
   }
 
   @override
+  void initState() {
+    dio = AppDio(context);
+    logger.init();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
+    print("otp${widget.email}");
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.only(left: 20, right: 10, top: 70),
+          padding: const EdgeInsets.only(left: 20, right: 10, top: 80),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               AppText.appText("Forgot Password",
-                  fontSize: 25,
+                  fontSize: 32,
                   textColor: AppTheme.appColor,
                   fontWeight: FontWeight.w600),
               AppText.appText(
                 "Enter OTP to continue",
-                fontSize: 12,
+                fontSize: 16,
                 textColor: AppTheme.appColor,
               ),
               const SizedBox(
@@ -241,7 +265,8 @@ class _OTPScreenState extends State<OTPScreen> {
                   const SizedBox(
                     height: 160,
                   ),
-                  _verificationInProgress
+                  // _verificationInProgress ||
+                  isLoading == true
                       ? Center(
                           child: CircularProgressIndicator(
                             color: AppTheme.appColor,
@@ -249,12 +274,17 @@ class _OTPScreenState extends State<OTPScreen> {
                           ),
                         )
                       : AppButton.appButton("Continue", onTap: () {
-                          if (!_verificationInProgress) {
-                            String smsCode = _smsCodeController.text.trim();
-                            if (smsCode.isNotEmpty) {
-                              print("Check_sms $smsCode");
-                              _signInWithPhoneNumber(smsCode);
+                          if (widget.type == 0) {
+                            if (!_verificationInProgress) {
+                              String smsCode = _smsCodeController.text.trim();
+                              if (smsCode.isNotEmpty) {
+                                print("Check_sms $smsCode");
+                                _smsCodeController.clear();
+                                _signInWithPhoneNumber(smsCode);
+                              }
                             }
+                          } else if (widget.type == 1) {
+                            verfyOTP(code: widget.otp);
                           }
                         },
                           width: 43.w,
@@ -276,5 +306,44 @@ class _OTPScreenState extends State<OTPScreen> {
   void _handleControllers(List<TextEditingController?> controllers) {
     final code = controllers.map((c) => c?.text).join('');
     _smsCodeController.text = code;
+  }
+
+  void verfyOTP({code}) async {
+    setState(() {
+      isLoading = true;
+    });
+
+    Map<String, dynamic> params = {
+      "email": widget.email,
+      "OTP": widget.otp,
+    };
+
+    final response = await dio.post(path: AppUrls.verifyUrl, data: params);
+
+    if (response.statusCode == 200) {
+      print("response_data_is  ${response.data}");
+      setState(() {
+        isLoading = false;
+      });
+      pushReplacement(
+          context,
+          SetPasswordScreen(
+            email: widget.email,
+            otp: code,
+          ));
+    } else {
+      if (response.statusCode == 402) {
+        setState(() {
+          isLoading = false;
+        });
+        showSnackBar(context, "${response.statusMessage}");
+      } else {
+        setState(() {
+          isLoading = false;
+        });
+        print('API request failed with status code: ${response.statusCode}');
+        showSnackBar(context, "${response.statusMessage}");
+      }
+    }
   }
 }
