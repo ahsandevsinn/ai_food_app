@@ -13,8 +13,7 @@ import 'package:sizer/sizer.dart';
 class SetPasswordScreen extends StatefulWidget {
   final email;
   final otp;
-  final type;
-  const SetPasswordScreen({super.key, this.email, this.otp, this.type});
+  const SetPasswordScreen({super.key, this.email, this.otp,});
 
   @override
   State<SetPasswordScreen> createState() => _SetPasswordScreenState();

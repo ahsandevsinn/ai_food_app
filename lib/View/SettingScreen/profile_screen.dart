@@ -1,3 +1,7 @@
+
+
+import 'dart:convert';
+
 import 'package:ai_food/Constants/app_logger.dart';
 import 'package:ai_food/Utils/resources/res/AppAssetsImage.dart';
 import 'package:ai_food/Utils/resources/res/app_theme.dart';
@@ -33,7 +37,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String updatedvalueM = "US";
   bool showMenu = false;
   bool measuringUnit = false;
-  var responseData;
+
   Map<String, dynamic> addAllergies = {};
   Map<String, dynamic> addDietaryRestrictions = {};
   Map<String, dynamic> allergies = {};
@@ -82,7 +86,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
     _userNameController.dispose();
     super.dispose();
   }
+  void loadselectParamsfromAPI() async {
+    var recipesParams;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? recipesParamsJson = prefs.getString(PrefKey.parametersLists);
 
+    if (recipesParamsJson != null) {
+      try {
+        recipesParams = jsonDecode(recipesParamsJson);
+        allergies=recipesParams["data"]["allergies"];
+        dietaryRestrictions=recipesParams["data"]["dietaryRestrictions"];
+      } catch (e) {
+        print("Error decoding JSON: $e");
+      }
+    } else {
+      print("recipesParamsJson is null");
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -314,7 +334,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ],
                     ),
                     Positioned(
-                      top: 8.5.h,
+                      top: 8.4.h,
                       right: 0,
                       child: measuringUnit
                           ? customMeasuringUnit()
@@ -368,60 +388,67 @@ class _ProfileScreenState extends State<ProfileScreen> {
           fit: FlexFit.loose,
           child: Container(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-              color: AppTheme.whiteColor,
+              borderRadius: const BorderRadius.only(
+                  bottomLeft: Radius.circular(10),
+                  bottomRight: Radius.circular(10)),
+              color: AppTheme.appColor,
             ),
             height: 110,
             width: MediaQuery.of(context).size.width * 0.415,
             child: Center(
               child: GestureDetector(
-                onTap: () {
-                  setState(() {
-                    measuringUnit = false;
-                  });
-                },
-                child: ListView.builder(
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  itemCount: measuringUnitListShow.length,
-                  itemBuilder: (context, index) {
-                    return InkWell(
-                      onTap: () {
-                        setState(() {
-                          measuringUnit = false;
-                          updatedvalueM = measuringUnitListShow.elementAt(index);
-                        });
-                      },
-                      child: Container(
-                        color: Colors.transparent,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            AppText.appText(
-                              "${measuringUnitListShow[index]}",
+                  onTap: () {
+                    setState(() {
+                      measuringUnit = false;
+                    });
+                  },
+                  child: Container(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 20.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                measuringUnit = false;
+                                updatedvalueM = "US";
+                              });
+                            },
+                            child: AppText.appText(
+                              "US",
                               fontSize: 18,
-                              textColor: AppTheme.appColor,
+                              textColor: AppTheme.whiteColor,
                             ),
-                            Container(
-                              margin:
-                                  const EdgeInsets.symmetric(horizontal: 10),
-                              decoration: BoxDecoration(
-                                border: Border(
-                                  bottom: BorderSide(
-                                    width: 1.0,
-                                    color: AppTheme.appColor,
-                                  ),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 10),
+                            decoration: BoxDecoration(
+                              border: Border(
+                                bottom: BorderSide(
+                                  width: 1.0,
+                                  color: AppTheme.whiteColor,
                                 ),
                               ),
                             ),
-                            const SizedBox(height: 20),
-                          ],
-                        ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                measuringUnit = false;
+                                updatedvalueM = "Metric";
+                              });
+                            },
+                            child: AppText.appText(
+                              "Metric",
+                              fontSize: 18,
+                              textColor: AppTheme.whiteColor,
+                            ),
+                          ),
+                        ],
                       ),
-                    );
-                  },
-                ),
-              ),
+                    ),
+                  )),
             ),
           ),
         ),
@@ -433,66 +460,68 @@ class _ProfileScreenState extends State<ProfileScreen> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
    prefs.setString(PrefKey.unit, updatedvalueM);
   }
-  loadselectParamsfromAPI() async {
-    var response;
-    const int responseCode200 = 200; // For successful request.
-    const int responseCode400 = 400; // For Bad Request.
-    const int responseCode401 = 401; // For Unauthorized access.
-    const int responseCode404 = 404; // For For data not found
-    const int responseCode500 = 500; // Internal server error.
-    try {
-      response = await dio.get(
-          path: AppUrls.searchParameterUrl,  queryParameters: {"search": 0});
-      var responseData = response.data;
-      switch (response.statusCode) {
-        case responseCode400:
-          print("Bad Request.");
-          break;
-        case responseCode401:
-          print("Unauthorized access.");
-          break;
-        case responseCode404:
-          print("The requested resource could not be found but may be available again in the future. Subsequent requests by the client are permissible.");
-          break;
-        case responseCode500:
-          print("Internal server error.");
-          break;
-        case responseCode200:
-          if (responseData["status"] == false) {
-            showSnackBar(context, "${responseData["message"]}");
-          } else {
-            var data = responseData["data"]["allergies"];
-            var data2 = responseData["data"]["dietaryRestrictions"];
-            //this condition is to make sure that if server didn;t work or server don't load the data.
-            if (data == null &&data2 == null ) {
-              showSnackBar(context, "Something went wrong reload the page");
-            }
-            //-----------------//
-            //when data is loaded
-            else {
-              setState(() {
-                allergies = data;
-                dietaryRestrictions = data2;
-              });
-            }
-            showSnackBar(context, "selection Loaded from API");
-            //----------------------//
+  // loadselectParamsfromAPI() async {
+  //   var response;
+  //   const int responseCode200 = 200; // For successful request.
+  //   const int responseCode400 = 400; // For Bad Request.
+  //   const int responseCode401 = 401; // For Unauthorized access.
+  //   const int responseCode404 = 404; // For For data not found
+  //   const int responseCode500 = 500; // Internal server error.
+  //   try {
+  //     response = await dio.get(
+  //         path: AppUrls.searchParameterUrl,  queryParameters: {"search": 0});
+  //     var responseData = response.data;
+  //     switch (response.statusCode) {
+  //       case responseCode400:
+  //         print("Bad Request.");
+  //         break;
+  //       case responseCode401:
+  //         print("Unauthorized access.");
+  //         break;
+  //       case responseCode404:
+  //         print("The requested resource could not be found but may be available again in the future. Subsequent requests by the client are permissible.");
+  //         break;
+  //       case responseCode500:
+  //         print("Internal server error.");
+  //         break;
+  //       case responseCode200:
+  //         if (responseData["status"] == false) {
+  //           showSnackBar(context, "${responseData["message"]}");
+  //         } else {
+  //           var data = responseData["data"]["allergies"];
+  //           var data2 = responseData["data"]["dietaryRestrictions"];
+  //           //this condition is to make sure that if server didn;t work or server don't load the data.
+  //           if (data == null &&data2 == null ) {
+  //             showSnackBar(context, "Something went wrong reload the page");
+  //           }
+  //           //-----------------//
+  //           //when data is loaded
+  //           else {
+  //             setState(() {
+  //               allergies = data;
+  //               dietaryRestrictions = data2;
+  //             });
+  //           }
+  //           showSnackBar(context, "selection Loaded from API");
+  //           //----------------------//
+  //
+  //         }
+  //         break;
+  //       default:
+  //       // Handle other response codes here if needed.
+  //         break;
+  //     }
+  //   } catch (e) {
+  //     showSnackBar(context, "Reload the page ${e}");
+  //   }
+  // }
 
-          }
-          break;
-        default:
-        // Handle other response codes here if needed.
-          break;
-      }
-    } catch (e) {
-      showSnackBar(context, "Reload the page ${e}");
-    }
-  }
   LoadingSelectedDataFromSetupProfileScreen() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       selectedDateFromPref= prefs.getString(PrefKey.dateOfBirth);
       List<String> storedData =prefs.getStringList(PrefKey.dataonBoardScreenAllergies)!;
+
         for (String entry in storedData) {
           String result = entry.replaceAll(RegExp(r'^MapEntry\(|\)'), '');
           List<String> parts = result.split(':');
@@ -512,9 +541,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
           addDietaryRestrictions[key] = value;
         }
       }
+
       _userNameController.text= prefs.getString(PrefKey.userName)!;
       updatedvalueM==""? "US": prefs.getString(PrefKey.unit);
     });
+
+
     showSnackBar(context, "Data is Loaded from SharedPreference");
   }
   UpdateSetupProfileOnUpdateAPI() async {

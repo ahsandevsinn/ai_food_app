@@ -1,6 +1,5 @@
 class PrefKey {
   static const String authorization = "token";
-  static const String parametersLists = "parameters";
   static const String customerReferenceNumber = "CustomerReferenceNumber";
   static const String fcm_token = "Fcm_token";
   static const String onAndOffStatus = "onlineOffline";
@@ -9,6 +8,7 @@ class PrefKey {
   static const String notification = "notification";
   static const String id = "id";
   static const String unit = "unit";
+  static const String parametersLists = "parameters";
   static const String dataonBoardScreenAllergies = "dataonBoardScreenAllergies";
   static const String dataonBoardScreenDietryRestriction =
       "dataonBoardScreenDietryRestriction";

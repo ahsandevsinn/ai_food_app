@@ -27,20 +27,7 @@ class AllergiesProvider extends ChangeNotifier {
   List<RecipesParameterClass> get allergiesRecipesParameters =>
       _allergiesRecipesParameters;
 
-  List<RecipesParameterClass> preferredAllergiesRecipe = [
-    // RecipesParameterClass(parameter: 'Dairy'),
-    // RecipesParameterClass(parameter: 'Peanut'),
-    // RecipesParameterClass(parameter: 'Seafood'),
-    // RecipesParameterClass(parameter: 'Sesame'),
-    // RecipesParameterClass(parameter: 'Wheat'),
-    // RecipesParameterClass(parameter: 'Soy'),
-    // RecipesParameterClass(parameter: 'Sulfite'),
-    // RecipesParameterClass(parameter: 'Gluten'),
-    // RecipesParameterClass(parameter: 'Egg'),
-    // RecipesParameterClass(parameter: 'Grain'),
-    // RecipesParameterClass(parameter: 'Tree Nut'),
-    // RecipesParameterClass(parameter: 'Shellfish'),
-  ];
+  List<RecipesParameterClass> preferredAllergiesRecipe = [];
 
   void showAllergiesParameterDetails(context, String parameter) {
     if (parameter == "Allergies") {

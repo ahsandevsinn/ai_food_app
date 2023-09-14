@@ -4,7 +4,9 @@ import 'package:ai_food/Utils/utils.dart';
 import 'package:ai_food/Utils/widgets/others/app_text.dart';
 import 'package:ai_food/View/HomeScreen/widgets/providers/chat_bot_provider.dart';
 import 'package:ai_food/View/recipe_info/recipe_info.dart';
+import 'package:ai_food/config/app_urls.dart';
 import 'package:ai_food/config/dio/app_dio.dart';
+import 'package:ai_food/config/dio/spoonacular_app_dio.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -21,10 +23,14 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
   final TextEditingController _messageController = TextEditingController();
   late ScrollController _scrollController;
   late AppDio dio;
+  late SpoonAcularAppDio spoonDio;
+
   AppLogger logger = AppLogger();
   @override
   void initState() {
     dio = AppDio(context);
+    spoonDio = SpoonAcularAppDio(context);
+
     logger.init();
     _scrollController = ScrollController();
     super.initState();
@@ -341,8 +347,8 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
     print("gurirug23r3rhi3hrihior");
     const apiKey = '1acf1e54a67342b3bfa0f3d0b7888c6e';
     var url =
-        "https://api.spoonacular.com/recipes/$id/information?includeNutrition=false&apiKey=$apiKey";
-    final response = await dio.get(path: url);
+        "${AppUrls.spoonacularBaseUrl}/recipes/$id/information?includeNutrition=false&apiKey=$apiKey";
+    final response = await spoonDio.get(path: url);
 
     if (response.statusCode == 200) {
       Navigator.of(context).push(MaterialPageRoute(

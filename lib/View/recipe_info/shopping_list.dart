@@ -97,7 +97,7 @@ class _ShoppingListState extends State<ShoppingList> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  AppText.appText("${widget.name} ingredients",
+                                  AppText.appText("${widget.name} ingredients:",
                                       textColor: AppTheme.appColor,
                                       fontSize: 22,
                                       fontWeight: FontWeight.w600),

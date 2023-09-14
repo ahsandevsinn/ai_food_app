@@ -13,7 +13,9 @@ import 'package:ai_food/View/HomeScreen/widgets/providers/preferredProtein_provi
 import 'package:ai_food/View/HomeScreen/widgets/providers/regionalDelicacy_provider.dart';
 import 'package:ai_food/View/HomeScreen/widgets/widget.dart';
 import 'package:ai_food/View/NavigationBar/bottom_navigation.dart';
+import 'package:ai_food/config/app_urls.dart';
 import 'package:ai_food/config/dio/app_dio.dart';
+import 'package:ai_food/config/dio/spoonacular_app_dio.dart';
 import 'package:ai_food/config/keys/pref_keys.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -35,6 +37,8 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
   List<String> addFoodStyle = [];
 
   late AppDio dio;
+  late SpoonAcularAppDio spoonDio;
+
   AppLogger logger = AppLogger();
 
   bool isLoading = false;
@@ -42,6 +46,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
   @override
   void initState() {
     dio = AppDio(context);
+    spoonDio =  SpoonAcularAppDio(context);
     logger.init();
     getRecipesParameters(context);
     super.initState();
@@ -458,7 +463,8 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
         Provider.of<RegionalDelicacyProvider>(context, listen: false);
     final kitchenProvider =
         Provider.of<KitchenResourcesProvider>(context, listen: false);
-    const apiKey = 'd9186e5f351240e094658382be62d948';
+    // const apiKey = 'd9186e5f351240e094658382be62d948';
+    const apiKey = '6fee21631c5c432dba9b34b9070a2d31';
     final style = addFoodStyle.isNotEmpty
         ? "&cuisine=${addFoodStyle.toString().substring(1, addFoodStyle.toString().length - 1)}"
         : "";
@@ -479,9 +485,9 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
         ? "query=${delicacyProvider.addRegionalDelicacy.toString().substring(1, delicacyProvider.addRegionalDelicacy.toString().length - 1)}"
         : "";
     final apiUrl =
-        'https://api.spoonacular.com/recipes/complexSearch?$regionalDelicacy$style$kitchenResources$preferredProtein$allergies$dietaryRestrictions&number=8&apiKey=$apiKey';
+        '${AppUrls.spoonacularBaseUrl}/recipes/complexSearch?$regionalDelicacy$style$kitchenResources$preferredProtein$allergies$dietaryRestrictions&number=8&apiKey=$apiKey';
 
-    final response = await dio.get(path: apiUrl);
+    final response = await spoonDio.get(path: apiUrl);
 
     if (response.statusCode == 200) {
       // ignore: use_build_context_synchronously

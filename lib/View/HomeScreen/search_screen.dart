@@ -6,7 +6,9 @@ import 'package:ai_food/Utils/widgets/others/app_text.dart';
 import 'package:ai_food/View/HomeScreen/home_screen.dart';
 import 'package:ai_food/View/HomeScreen/recipe_params_screen.dart';
 import 'package:ai_food/View/NavigationBar/bottom_navigation.dart';
+import 'package:ai_food/config/app_urls.dart';
 import 'package:ai_food/config/dio/app_dio.dart';
+import 'package:ai_food/config/dio/spoonacular_app_dio.dart';
 import 'package:flutter/material.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -20,12 +22,16 @@ class _SearchScreenState extends State<SearchScreen> {
   AutovalidateMode _autoValidateMode = AutovalidateMode.disabled;
   final TextEditingController _searchController = TextEditingController();
   late AppDio dio;
+  late SpoonAcularAppDio spoonDio;
+
   AppLogger logger = AppLogger();
   bool isLoading = false;
 
   @override
   void initState() {
     dio = AppDio(context);
+    spoonDio = SpoonAcularAppDio(context);
+
     logger.init();
     super.initState();
   }
@@ -37,7 +43,7 @@ class _SearchScreenState extends State<SearchScreen> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.transparent,
         elevation: 0,
         leading: InkWell(
           onTap: () {
@@ -171,7 +177,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                     padding: EdgeInsets.only(bottom: 3.0),
                                     child: Icon(
                                       Icons.filter_list,
-                                      color: Color(0xffF8F8F8),
+                                      color: Color(0xFFF7F7F7),
                                       size: 22,
                                     ),
                                   ),
@@ -202,13 +208,14 @@ class _SearchScreenState extends State<SearchScreen> {
     });
 
     var searchtext = _searchController.text;
-    const apiKey = 'd9186e5f351240e094658382be62d948';
+    // const apiKey = 'd9186e5f351240e094658382be62d948';
+    const apiKey = '6fee21631c5c432dba9b34b9070a2d31';
 
     final apiUrl =
-        'https://api.spoonacular.com/recipes/complexSearch?query=$searchtext&apiKey=$apiKey';
+        '${AppUrls.spoonacularBaseUrl}/recipes/complexSearch?query=$searchtext&apiKey=$apiKey';
 
     try {
-      final response = await dio.get(path: apiUrl);
+      final response = await spoonDio.get(path: apiUrl);
 
       if (response.statusCode == 200) {
         setState(() {

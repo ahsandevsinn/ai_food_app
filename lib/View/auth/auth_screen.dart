@@ -45,13 +45,11 @@ class _AuthScreenState extends State<AuthScreen> {
   final _formKeyEmail = GlobalKey<FormState>();
   final _formKeyLoginEmail = GlobalKey<FormState>();
   final _formKeyLoginPassword = GlobalKey<FormState>();
-  final _formKeyPhone = GlobalKey<FormState>();
   final _formKeyPassword = GlobalKey<FormState>();
   final _formKeyConfirmPassword = GlobalKey<FormState>();
 
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
       TextEditingController();
@@ -94,7 +92,8 @@ class _AuthScreenState extends State<AuthScreen> {
         resizeToAvoidBottomInset: true,
         body: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.only(left: 25, right: 25, bottom: 25, top: 25),
+            padding:
+                const EdgeInsets.only(left: 25, right: 25, bottom: 25, top: 25),
             child: SizedBox(
               height: MediaQuery.of(context).size.height * 0.93,
               child: Column(
@@ -167,7 +166,6 @@ class _AuthScreenState extends State<AuthScreen> {
                                           login = false;
                                           _nameController.text = '';
                                           _emailController.text = '';
-                                          _phoneController.text = '';
                                           _passwordController.text = '';
                                           _confirmPasswordController.text = '';
                                         });
@@ -216,14 +214,15 @@ class _AuthScreenState extends State<AuthScreen> {
                                                 .hasMatch(value);
                                             if (value.isEmpty ||
                                                 value == null) {
-                                              return "Please enter your email or mobile number";
+                                              return "Please enter your email";
                                             }
-                                            if (!isEmailValid && !isMobileValid) {
-                                              return "Please enter a valid email or Number i.e (+1)";
+                                            if (!isEmailValid &&
+                                                !isMobileValid) {
+                                              return "Please enter a valid email";
                                             }
                                             return null;
                                           },
-                                          texthint: "Email or Mobile number",
+                                          texthint: "Email",
                                           hintStyle: TextStyle(
                                               color: AppTheme.appColor),
                                           controller: _loginEmailController),
@@ -306,36 +305,12 @@ class _AuthScreenState extends State<AuthScreen> {
                                           }
                                           return null;
                                         },
-                                        height: 50,
+                                        // height: 50,
                                         texthint: "Enter email",
                                         hintStyle:
                                             TextStyle(color: AppTheme.appColor),
                                         controller: _emailController,
                                       ),
-                                    ),
-                                    Form(
-                                      key: _formKeyPhone,
-                                      autovalidateMode:
-                                          AutovalidateMode.onUserInteraction,
-                                      child: CustomAppFormField(
-                                          validator: (value) {
-                                            if (value == null ||
-                                                value.isEmpty) {
-                                              return 'Please enter your mobile number';
-                                            }
-                                            final isMobileValid = RegExp(
-                                                    r'^\+(?:[0-9] ?){6,14}[0-9]$')
-                                                .hasMatch(value);
-
-                                            if (!isMobileValid) {
-                                              return "Please enter a valid email or Number i.e (+1)";
-                                            }
-                                            return null; // Validation passed
-                                          },
-                                          texthint: "Enter mobile number",
-                                          hintStyle: TextStyle(
-                                              color: AppTheme.appColor),
-                                          controller: _phoneController),
                                     ),
                                     Form(
                                       autovalidateMode:
@@ -401,20 +376,11 @@ class _AuthScreenState extends State<AuthScreen> {
                                     if (_formKeyName.currentState!.validate() &&
                                         _formKeyEmail.currentState!
                                             .validate() &&
-                                        _formKeyPhone.currentState!
-                                            .validate() &&
                                         _formKeyPassword.currentState!
                                             .validate() &&
                                         _formKeyConfirmPassword.currentState!
                                             .validate()) {
                                       SignUp();
-                                      print("name:${_nameController.text}");
-                                      print("Email:${_emailController.text}");
-                                      print(
-                                          "Phone Number:${_phoneController.text}");
-                                      print(
-                                          "Password:${_passwordController.text}");
-                                      //alertDialogError(context);
                                     }
                                   }
                                 }, login == true ? "Sign in" : "Sign Up",
@@ -526,14 +492,16 @@ class _AuthScreenState extends State<AuthScreen> {
       }
       String userId = result.user!.uid.toString();
       String naming = result.user!.displayName.toString();
-      String displayName = "${appleCredential.givenName} ${appleCredential.familyName}";
+      String displayName =
+          "${appleCredential.givenName} ${appleCredential.familyName}";
       bool newUser = result.additionalUserInfo!.isNewUser;
       print(result.user!.email.toString());
       print(result.user!.uid.toString());
       print(result.additionalUserInfo!.username.toString());
-      print("apple_user_data id $userId email ${result.user!.email.toString()} username $displayName");
-      print("apple_user_data fullname ${appleCredential.givenName} ${appleCredential.familyName} newUser $newUser");
-
+      print(
+          "apple_user_data id $userId email ${result.user!.email.toString()} username $displayName");
+      print(
+          "apple_user_data fullname ${appleCredential.givenName} ${appleCredential.familyName} newUser $newUser");
 
       // Check if the user is new or returning
       // if (result.additionalUserInfo != null && result.additionalUserInfo!.isNewUser) {
@@ -571,7 +539,6 @@ class _AuthScreenState extends State<AuthScreen> {
     Map<String, dynamic> params = {
       "name": _nameController.text,
       "email": _emailController.text,
-      "phone": _phoneController.text,
       "password": _passwordController.text,
       "password_confirmation": _confirmPasswordController.text,
     };
@@ -641,6 +608,9 @@ class _AuthScreenState extends State<AuthScreen> {
       _isLoading = true;
     });
     var response;
+    List<String> dietaryRestrictionsList = [];
+    List<String> allergiesList = [];
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     const int responseCode200 = 200; // For successful request.
     const int responseCode400 = 400; // For Bad Request.
     const int responseCode401 = 401; // For Unauthorized access.
@@ -693,8 +663,19 @@ class _AuthScreenState extends State<AuthScreen> {
           });
           var token = responseData['data']['token'];
           var name = responseData['data']['user']['name'];
-          print("username_is $name");
-          SharedPreferences prefs = await SharedPreferences.getInstance();
+          var dietary_restrictions =
+              responseData['data']['user']['dietary_restrictions'];
+          var allergies = responseData['data']['user']['allergies'];
+          for (var data0 in dietary_restrictions) {
+            dietaryRestrictionsList.add('${data0['id']}:${data0['name']}');
+          }
+          for (var data0 in allergies) {
+            allergiesList.add('${data0['id']}:${data0['name']}');
+          }
+          prefs.setStringList(
+              PrefKey.dataonBoardScreenAllergies, allergiesList);
+          prefs.setStringList(PrefKey.dataonBoardScreenDietryRestriction,
+              dietaryRestrictionsList);
 
           prefs.setString(PrefKey.authorization, token ?? '');
           prefs.setString(PrefKey.name, name ?? '');
@@ -711,7 +692,10 @@ class _AuthScreenState extends State<AuthScreen> {
   }
 
   //apple sign in
-  void appleLogin({required String userId, required bool isNewUser, required String name}) async {
+  void appleLogin(
+      {required String userId,
+      required bool isNewUser,
+      required String name}) async {
     setState(() {
       _appleLoading = true;
     });
@@ -760,7 +744,7 @@ class _AuthScreenState extends State<AuthScreen> {
           showSnackBar(context, "${responseData["message"]}");
           return;
         } else {
-          if(isNewUser){
+          if (isNewUser) {
             pushReplacement(context, const UserProfileScreen());
           } else {
             pushReplacement(context, BottomNavView());

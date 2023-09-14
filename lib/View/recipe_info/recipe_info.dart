@@ -123,24 +123,22 @@ class _RecipeInfoState extends State<RecipeInfo>
                                             .recipeData["extendedIngredients"],
                                       )));
                             },
-                            child: Hero(
-                              tag: "hero-shopping",
-                              transitionOnUserGestures: true,
-                              child: Card(
-                                elevation: 6,
-                                shadowColor: AppTheme.appColor,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(25)),
-                                child: Container(
-                                    height: 45,
-                                    width: 45,
-                                    decoration: BoxDecoration(
-                                        color: AppTheme.appColor,
-                                        borderRadius:
-                                            BorderRadius.circular(25)),
+                            child: Card(
+                              elevation: 6,
+                              shadowColor: AppTheme.appColor,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(25)),
+                              child: Container(
+                                  height: 45,
+                                  width: 45,
+                                  decoration: BoxDecoration(
+                                      color: AppTheme.appColor,
+                                      borderRadius: BorderRadius.circular(25)),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(10.0),
                                     child: Image.asset(
-                                        "assets/images/shop_bag.png")),
-                              ),
+                                        "assets/images/Shopping.png",),
+                                  ), ),
                             ),
                           ),
                           const SizedBox(width: 10),
@@ -156,7 +154,10 @@ class _RecipeInfoState extends State<RecipeInfo>
                                   decoration: BoxDecoration(
                                       color: AppTheme.appColor,
                                       borderRadius: BorderRadius.circular(25)),
-                                  child: Image.asset("assets/images/fav.png")),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: Image.asset("assets/images/Heart.png"),
+                                  )),
                             ),
                           ),
                         ],
@@ -197,38 +198,42 @@ class _RecipeInfoState extends State<RecipeInfo>
                 Positioned(
                   top: 10,
                   left: 60,
-                  child: Card(
-                    elevation: 20,
-                    shadowColor: Colors.black.withOpacity(0.1),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20)),
-                    child: Container(
-                      height: 250,
-                      width: 70.w,
-                      decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.15),
-                            spreadRadius: 3,
-                            blurRadius: 1,
-                            offset: const Offset(8,
-                                8), // This controls the vertical offset (bottom)
+                  child: Hero(
+                    tag: "hero-shopping",
+                    transitionOnUserGestures: true,
+                    child: Card(
+                      elevation: 20,
+                      shadowColor: Colors.black.withOpacity(0.1),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20)),
+                      child: Container(
+                        height: 250,
+                        width: 70.w,
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.15),
+                              spreadRadius: 3,
+                              blurRadius: 1,
+                              offset: const Offset(8,
+                                  8), // This controls the vertical offset (bottom)
+                            ),
+                          ],
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: CachedNetworkImage(
+                            progressIndicatorBuilder: (context, url, progress) {
+                              return Center(
+                                child: CircularProgressIndicator(
+                                  color: AppTheme.appColor,
+                                ),
+                              );
+                            },
+                            imageUrl: "${widget.recipeData["image"]}",
+                            fit: BoxFit.cover,
                           ),
-                        ],
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
-                        child: CachedNetworkImage(
-                          progressIndicatorBuilder: (context, url, progress) {
-                            return Center(
-                              child: CircularProgressIndicator(
-                                color: AppTheme.appColor,
-                              ),
-                            );
-                          },
-                          imageUrl: "${widget.recipeData["image"]}",
-                          fit: BoxFit.cover,
                         ),
                       ),
                     ),

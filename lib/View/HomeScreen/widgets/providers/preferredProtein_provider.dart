@@ -27,18 +27,7 @@ class PreferredProteinProvider extends ChangeNotifier {
   List<RecipesParameterClass> get proteinRecipesParameters =>
       _proteinRecipesParameters;
 
-  List<RecipesParameterClass> preferredProteinRecipe = [
-    // RecipesParameterClass(parameter: 'Fish'),
-    // RecipesParameterClass(parameter: 'Seafood'),
-    // RecipesParameterClass(parameter: 'Lean beef'),
-    // RecipesParameterClass(parameter: 'Skim milk'),
-    // RecipesParameterClass(parameter: 'Skim yogurt'),
-    // RecipesParameterClass(parameter: 'Eggs'),
-    // RecipesParameterClass(parameter: 'Lean pork'),
-    // RecipesParameterClass(parameter: 'Low-fat cheese'),
-    // RecipesParameterClass(parameter: 'Beans'),
-    // RecipesParameterClass(parameter: 'Skinless, white meat - poultry'),
-  ];
+  List<RecipesParameterClass> preferredProteinRecipe = [];
 
   void showProteinParameterDetails(context, String parameter) {
     if (parameter == "Preferred Protein") {

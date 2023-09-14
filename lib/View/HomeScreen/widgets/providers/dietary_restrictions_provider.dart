@@ -27,19 +27,7 @@ class DietaryRestrictionsProvider extends ChangeNotifier {
   List<RecipesParameterClass> get dietaryRestrictionsRecipesParameters =>
       _dietaryRestrictionsRecipesParameters;
 
-  List<RecipesParameterClass> preferredDietaryRestrictionsParametersRecipe = [
-    // RecipesParameterClass(parameter: 'Gluten Free'),
-    // RecipesParameterClass(parameter: 'Ketogenic'),
-    // RecipesParameterClass(parameter: 'Vegetarian'),
-    // RecipesParameterClass(parameter: 'Lacto-Vegetarian'),
-    // RecipesParameterClass(parameter: 'Ovo-Vegetarian'),
-    // RecipesParameterClass(parameter: 'Vegan'),
-    // RecipesParameterClass(parameter: 'Pescetarian'),
-    // RecipesParameterClass(parameter: 'Paleo'),
-    // RecipesParameterClass(parameter: 'Primal'),
-    // RecipesParameterClass(parameter: 'Low FODMAP'),
-    // RecipesParameterClass(parameter: 'Whole30'),
-  ];
+  List<RecipesParameterClass> preferredDietaryRestrictionsParametersRecipe = [];
 
   void showDietaryRestrictionsParameterDetails(context, String parameter) {
     if (parameter == "Dietary Restrictions") {
@@ -77,7 +65,8 @@ class DietaryRestrictionsProvider extends ChangeNotifier {
   }
 
   void addNextPage(BuildContext context) {
-    _dietaryRestrictionsRecipesParameters.addAll(preferredDietaryRestrictionsParametersRecipe);
+    _dietaryRestrictionsRecipesParameters
+        .addAll(preferredDietaryRestrictionsParametersRecipe);
     var newScreen = RecipesSelection(
       parameter: "Dietary Restrictions",
       recipesParameters: preferredDietaryRestrictionsParametersRecipe,
