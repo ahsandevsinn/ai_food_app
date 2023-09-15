@@ -589,7 +589,7 @@ class _AuthScreenState extends State<AuthScreen> {
           SharedPreferences prefs = await SharedPreferences.getInstance();
 
           prefs.setString(PrefKey.authorization, token ?? '');
-          prefs.setString(PrefKey.name, name ?? '');
+          prefs.setString(PrefKey.userName, name ?? '');
           pushReplacement(context, const UserProfileScreen());
         }
       }
@@ -616,7 +616,6 @@ class _AuthScreenState extends State<AuthScreen> {
     const int responseCode401 = 401; // For Unauthorized access.
     const int responseCode404 = 404; // For For data not found
     const int responseCode500 = 500; // Internal server error.
-
     Map<String, dynamic> params = {
       "email": _loginEmailController.text,
       "password": _loginPasswordController.text,
@@ -663,23 +662,21 @@ class _AuthScreenState extends State<AuthScreen> {
           });
           var token = responseData['data']['token'];
           var name = responseData['data']['user']['name'];
-          var dietary_restrictions =
-              responseData['data']['user']['dietary_restrictions'];
+          var DOB = responseData['data']['user']['DOB'];
+          var dietary_restrictions = responseData['data']['user']['dietary_restrictions'];
           var allergies = responseData['data']['user']['allergies'];
           for (var data0 in dietary_restrictions) {
-            dietaryRestrictionsList.add('${data0['id']}:${data0['name']}');
+            dietaryRestrictionsList.addAll({'${data0['id']}:${data0['name']}'});
           }
           for (var data0 in allergies) {
-            allergiesList.add('${data0['id']}:${data0['name']}');
+            allergiesList.addAll({'${data0['id']}:${data0['name']}'});
           }
-          prefs.setStringList(
-              PrefKey.dataonBoardScreenAllergies, allergiesList);
-          prefs.setStringList(PrefKey.dataonBoardScreenDietryRestriction,
-              dietaryRestrictionsList);
-
+          prefs.setStringList(PrefKey.dataonBoardScreenAllergies, allergiesList);
+          prefs.setStringList(PrefKey.dataonBoardScreenDietryRestriction, dietaryRestrictionsList);
+          prefs.setString(PrefKey.dateOfBirth, DOB);
           prefs.setString(PrefKey.authorization, token ?? '');
-          prefs.setString(PrefKey.name, name ?? '');
-          pushReplacement(context, BottomNavView());
+          prefs.setString(PrefKey.userName, name ?? '');
+          pushReplacement(context, BottomNavView(type: 0,allergies: allergiesList,dietaryRestrictions: dietaryRestrictionsList,));
         }
       }
     } catch (e) {
@@ -757,7 +754,7 @@ class _AuthScreenState extends State<AuthScreen> {
           SharedPreferences prefs = await SharedPreferences.getInstance();
 
           prefs.setString(PrefKey.authorization, token ?? '');
-          prefs.setString(PrefKey.name, name ?? '');
+          prefs.setString(PrefKey.userName, name ?? '');
           showSnackBar(context, "${responseData["message"]}");
         }
       }

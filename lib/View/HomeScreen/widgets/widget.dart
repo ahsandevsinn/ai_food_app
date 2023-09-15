@@ -16,8 +16,11 @@ class CustomRecipesSelection extends StatelessWidget {
         width: width,
         height: 55,
         decoration: BoxDecoration(
-          // color: Colors.redAccent,
-            borderRadius: BorderRadius.circular(5),
+            borderRadius: const BorderRadius.only(topLeft: Radius.circular(5),
+              topRight: Radius.circular(5),
+              bottomLeft: Radius.circular(0),
+              bottomRight: Radius.circular(0),
+            ),
             border: Border.all(color: AppTheme.appColor,width: 2)
         ),
         child: Padding(

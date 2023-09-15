@@ -8,6 +8,7 @@ import 'package:ai_food/View/HomeScreen/widgets/providers/kitchenResources_provi
 import 'package:ai_food/View/HomeScreen/widgets/providers/preferredProtein_provider.dart';
 import 'package:ai_food/View/HomeScreen/widgets/providers/regionalDelicacy_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
 class RecipesSelection extends StatefulWidget {
@@ -46,13 +47,22 @@ class _RecipesSelectionState extends State<RecipesSelection> {
     return Scaffold(
       backgroundColor: AppTheme.appColor,
       appBar: AppBar(
+        toolbarHeight: 90,
         elevation: 0,
         backgroundColor: AppTheme.appColor,
-        leading: IconButton(
-          icon: const Icon(Icons.close, size: 40),
-          onPressed: () {
+        leading: GestureDetector(
+          onTap: (){
             Navigator.of(context).pop();
           },
+          child: Container(
+            padding: const EdgeInsets.only(left: 20, right: 10),
+            child: SvgPicture.asset(
+              "assets/images/Cancel.svg",
+              color: AppTheme.whiteColor,
+              width: 10,
+              height: 10,
+            ),
+          ),
         ),
         bottom: PreferredSize(
           preferredSize:
@@ -88,68 +98,48 @@ class _RecipesSelectionState extends State<RecipesSelection> {
       ),
       body: Center(
         child: Padding(
-          padding: const EdgeInsets.only(left: 20.0, top: 24, right: 20.0),
+          padding: const EdgeInsets.only(left: 20.0,right: 20.0),
           child: SingleChildScrollView(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Align(
-                  alignment: Alignment.center,
-                  child: allListsProviders(),
-                ),
-                const SizedBox(height: 50),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 30.0),
-                  child: Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Container(
-                      width: 60,
-                      height: 60,
-                      decoration: BoxDecoration(
-                        color: AppTheme.whiteColor,
-                        borderRadius: BorderRadius.circular(100),
-                      ),
-                      child: Center(
-                        child: IconButton(
-                          icon: Icon(
-                            Icons.arrow_forward,
-                            size: 30,
-                            color: AppTheme.appColor,
-                          ),
-                          onPressed: () {
-                            if (widget.parameter == "Allergies") {
-                              Provider.of<DietaryRestrictionsProvider>(
-                                      context,
-                                      listen: false)
-                                  .addNextPage(context);
-                            } else if (widget.parameter ==
-                                "Dietary Restrictions") {
-                              Provider.of<PreferredProteinProvider>(context,
-                                      listen: false)
-                                  .addNextPage(context);
-                            } else if (widget.parameter ==
-                                "Preferred Protein") {
-                              Provider.of<RegionalDelicacyProvider>(context,
-                                      listen: false)
-                                  .addNextPage(context);
-                            } else if (widget.parameter ==
-                                "Regional Delicacy") {
-                              Provider.of<KitchenResourcesProvider>(context,
-                                      listen: false)
-                                  .addNextPage(context);
-                            } else if (widget.parameter ==
-                                "Kitchen Resources") {
-                              Navigator.of(context).pop();
-                            }
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+                const SizedBox(height: 20),
+                allListsProviders(),
+                const SizedBox(height: 100),
               ],
             ),
           ),
+        ),
+      ),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 18.0, right: 10),
+        child: FloatingActionButton(
+          backgroundColor: AppTheme.whiteColor,
+          onPressed: () {
+            if (widget.parameter == "Allergies") {
+              Provider.of<DietaryRestrictionsProvider>(context, listen: false)
+                  .addNextPage(context);
+            } else if (widget.parameter == "Dietary Restrictions") {
+              Provider.of<PreferredProteinProvider>(context, listen: false)
+                  .addNextPage(context);
+            } else if (widget.parameter == "Preferred Protein") {
+              Provider.of<RegionalDelicacyProvider>(context, listen: false)
+                  .addNextPage(context);
+            } else if (widget.parameter == "Regional Delicacy") {
+              Provider.of<KitchenResourcesProvider>(context, listen: false)
+                  .addNextPage(context);
+            } else if (widget.parameter == "Kitchen Resources") {
+              Navigator.of(context).pop();
+            }
+          },
+          child: Icon(
+            Icons.arrow_forward,
+            color: AppTheme.appColor,
+            size: 40,
+          ),
+          // child: SvgPicture.asset("assets/images/Next.svg",
+          //     color: AppTheme.appColor,
+          //     width: 30, height: 30,
+          // ),
         ),
       ),
     );

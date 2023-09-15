@@ -10,6 +10,7 @@ import 'package:ai_food/config/app_urls.dart';
 import 'package:ai_food/config/dio/app_dio.dart';
 import 'package:ai_food/config/dio/spoonacular_app_dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -45,26 +46,27 @@ class _SearchScreenState extends State<SearchScreen> {
         automaticallyImplyLeading: false,
         backgroundColor: Colors.transparent,
         elevation: 0,
+        toolbarHeight: 65,
+        leadingWidth: 60,
         leading: InkWell(
           onTap: () {
             Navigator.pop(context);
           },
           child: Padding(
             padding: const EdgeInsets.only(
-              left: 20.0,
-              bottom: 10,
-              top: 10,
+              left: 15.0,
+              top: 20,
             ),
             child: Container(
-                height: 20,
-                width: 20,
+                height: 25,
+                width: 25,
                 decoration: BoxDecoration(
                     color: AppTheme.appColor,
-                    borderRadius: BorderRadius.circular(20)),
+                    borderRadius: BorderRadius.circular(100)),
                 child: Padding(
-                  padding: EdgeInsets.only(left: 8.0),
+                  padding: const EdgeInsets.only(left: 8.0),
                   child: Icon(Icons.arrow_back_ios,
-                      size: 20, color: AppTheme.whiteColor),
+                      size: 25, color: AppTheme.whiteColor),
                 )),
           ),
         ),
@@ -76,7 +78,7 @@ class _SearchScreenState extends State<SearchScreen> {
               ),
             )
           : Padding(
-              padding: const EdgeInsets.all(15.0),
+              padding: const EdgeInsets.only(left: 15.0, right: 15.0, bottom: 15.0, top: 15),
               child: Column(
                 children: [
                   Container(
@@ -96,7 +98,7 @@ class _SearchScreenState extends State<SearchScreen> {
                             child: TextFormField(
                               onFieldSubmitted: (value) {
                                 print("search_value $value");
-                                getFood();
+                                getFood(context);
                               },
                               textInputAction: TextInputAction.search,
                               controller: _searchController,
@@ -126,30 +128,36 @@ class _SearchScreenState extends State<SearchScreen> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            FocusScope.of(context)
-                                .requestFocus(new FocusNode());
-                            getFood();
+                            FocusScope.of(context).requestFocus(FocusNode());
+                            getFood(context);
                           },
-                          child: Container(
-                            width: 60,
-                            height: 50,
-                            decoration: const BoxDecoration(
-                              color: Color(0xffb38ade),
-                              borderRadius: BorderRadius.only(
-                                  topRight: Radius.circular(100),
-                                  bottomRight: Radius.circular(100)),
-                            ),
-                            child: const Icon(
-                              Icons.search_outlined,
-                              size: 35,
-                              color: Color(0xffFFFFFF),
-                            ),
+                          child: Stack(
+                            children: [
+                              Container(
+                                width: 60,
+                                height: 50,
+                                decoration: const BoxDecoration(
+                                  color: Color(0xFFB38ADE),
+                                  borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(100),
+                                      bottomRight: Radius.circular(100)),
+                                ),
+                              ),
+                              Align(
+                                alignment: Alignment.center,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 14.0),
+                                  child: SvgPicture.asset("assets/images/Search.svg",
+                                      width: 30, height: 30),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 24,
                   ),
                   Row(
@@ -201,15 +209,15 @@ class _SearchScreenState extends State<SearchScreen> {
 
   // Define a boolean variable to track the loading state
 
-  Future<void> getFood() async {
+  Future<void> getFood(context) async {
     // Set isLoading to true when the API call starts
     setState(() {
       isLoading = true;
     });
 
     var searchtext = _searchController.text;
-    // const apiKey = 'd9186e5f351240e094658382be62d948';
-    const apiKey = '6fee21631c5c432dba9b34b9070a2d31';
+    // const apiKey = '6fee21631c5c432dba9b34b9070a2d31';
+    const apiKey = '56806fa3f874403c8794d4b7e491c937';
 
     final apiUrl =
         '${AppUrls.spoonacularBaseUrl}/recipes/complexSearch?query=$searchtext&apiKey=$apiKey';
@@ -232,7 +240,7 @@ class _SearchScreenState extends State<SearchScreen> {
           ),
         );
 
-        _searchController.clear();
+        // _searchController.clear();
       } else {
         print('API request failed with status code: ${response.statusCode}');
       }

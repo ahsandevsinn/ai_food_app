@@ -182,7 +182,7 @@ void login({required String userId, context, required bool isNewUser, required S
         SharedPreferences prefs = await SharedPreferences.getInstance();
 
         prefs.setString(PrefKey.authorization, token ?? '');
-        prefs.setString(PrefKey.name, name ?? '');
+        prefs.setString(PrefKey.userName, name ?? '');
         showSnackBar(context, "${responseData["message"]}");
       }
     }

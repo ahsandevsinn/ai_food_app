@@ -68,8 +68,28 @@ class PreferredProteinProvider extends ChangeNotifier {
       parameter: "Preferred Protein",
       recipesParameters: preferredProteinRecipe,
     );
+    // Navigator.of(context).pushReplacement(
+    //   MaterialPageRoute(builder: (_) => newScreen),
+    // );
     Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (_) => newScreen),
+      PageRouteBuilder(
+        pageBuilder: (_, __, ___) => newScreen,
+        transitionsBuilder: (_, animation, __, child) {
+          return SlideTransition(
+            position: Tween<Offset>(
+              begin: const Offset(1.0, 0.0),
+              end: Offset.zero,
+            ).animate(
+              CurvedAnimation(
+                parent: animation,
+                curve: Curves.easeInOut, // You can adjust the curve as needed
+              ),
+            ),
+            child: child,
+          );
+        },
+        transitionDuration: Duration(milliseconds: 500), // Adjust this duration
+      ),
     );
     notifyListeners();
   }

@@ -14,12 +14,10 @@ import 'package:sizer/sizer.dart';
 import 'set_password_screen.dart';
 
 class OTPScreen extends StatefulWidget {
-  final otp;
   final email;
 
   const OTPScreen({
     super.key,
-    this.otp,
     this.email,
   });
 
@@ -29,8 +27,6 @@ class OTPScreen extends StatefulWidget {
 
 class _OTPScreenState extends State<OTPScreen> {
   final TextEditingController _smsCodeController = TextEditingController();
-  bool _verificationInProgress = false;
-  String? verificationIdCheck;
   late AppDio dio;
   AppLogger logger = AppLogger();
   var responseData;
@@ -122,7 +118,7 @@ class _OTPScreenState extends State<OTPScreen> {
                           ),
                         )
                       : AppButton.appButton("Continue", onTap: () {
-                          verfyOTP(code: widget.otp);
+                          verfyOTP();
                         },
                           width: 43.w,
                           height: 5.5.h,
@@ -145,29 +141,41 @@ class _OTPScreenState extends State<OTPScreen> {
     _smsCodeController.text = code;
   }
 
-  void verfyOTP({code}) async {
+  void verfyOTP() async {
     setState(() {
       isLoading = true;
     });
 
     Map<String, dynamic> params = {
       "email": widget.email,
-      "OTP": widget.otp,
+      "OTP": _smsCodeController.text
     };
 
     final response = await dio.post(path: AppUrls.verifyUrl, data: params);
 
     if (response.statusCode == 200) {
       print("response_data_is  ${response.data}");
-      setState(() {
-        isLoading = false;
-      });
-      pushReplacement(
+
+       if (responseData["status"] == false) {
+          setState(() {
+            isLoading = false;
+          });
+          showSnackBar(context, "${responseData["message"]}");
+          return;
+        } else {
+          print("responseData${responseData}");
+          setState(() {
+            isLoading = false;
+          });
+          pushReplacement(
           context,
           SetPasswordScreen(
             email: widget.email,
-            otp: code,
+            otp: _smsCodeController,
           ));
+          showSnackBar(context, "${responseData["message"]}");
+        }
+     
     } else {
       if (response.statusCode == 402) {
         setState(() {

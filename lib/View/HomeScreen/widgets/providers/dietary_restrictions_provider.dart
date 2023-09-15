@@ -71,8 +71,28 @@ class DietaryRestrictionsProvider extends ChangeNotifier {
       parameter: "Dietary Restrictions",
       recipesParameters: preferredDietaryRestrictionsParametersRecipe,
     );
+    // Navigator.of(context).pushReplacement(
+    //   CupertinoPageRoute(builder: (_) => newScreen),
+    // );
     Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (_) => newScreen),
+      PageRouteBuilder(
+        pageBuilder: (_, __, ___) => newScreen,
+        transitionsBuilder: (_, animation, __, child) {
+          return SlideTransition(
+            position: Tween<Offset>(
+              begin: const Offset(1.0, 0.0),
+              end: Offset.zero,
+            ).animate(
+              CurvedAnimation(
+                parent: animation,
+                curve: Curves.easeInOut,
+              ),
+            ),
+            child: child,
+          );
+        },
+        transitionDuration: const Duration(milliseconds: 500),
+      ),
     );
     notifyListeners();
   }

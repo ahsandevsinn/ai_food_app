@@ -30,7 +30,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final _formKey = GlobalKey<FormState>();
   bool isLoading = false;
 
- 
   @override
   void setState(fn) {
     if (mounted) {
@@ -202,7 +201,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         pushReplacement(
             context,
             OTPScreen(
-              otp: responseData["data"]["OTP"],
               email: text,
             ));
       }

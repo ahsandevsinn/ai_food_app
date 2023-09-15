@@ -2,6 +2,7 @@ import 'package:ai_food/Constants/app_logger.dart';
 import 'package:ai_food/View/HomeScreen/widgets/providers/allergies_provider.dart';
 import 'package:ai_food/View/HomeScreen/widgets/providers/chat_bot_provider.dart';
 import 'package:ai_food/View/HomeScreen/widgets/providers/dietary_restrictions_provider.dart';
+import 'package:ai_food/View/HomeScreen/widgets/providers/food_style_provider.dart';
 import 'package:ai_food/View/HomeScreen/widgets/providers/kitchenResources_provider.dart';
 import 'package:ai_food/View/HomeScreen/widgets/providers/preferredProtein_provider.dart';
 import 'package:ai_food/View/HomeScreen/widgets/providers/regionalDelicacy_provider.dart';
@@ -33,7 +34,8 @@ class MyApp extends StatelessWidget {
         providers: [
           ChangeNotifierProvider<GoogleSignInProvider>(
               create: (_) =>
-                  GoogleSignInProvider()), // Your GoogleSignInProvider
+                  GoogleSignInProvider()),
+          ChangeNotifierProvider<FoodStyleProvider>(create: (_) => FoodStyleProvider()),
           ChangeNotifierProvider<AllergiesProvider>(
               create: (_) => AllergiesProvider()),
           ChangeNotifierProvider<DietaryRestrictionsProvider>(

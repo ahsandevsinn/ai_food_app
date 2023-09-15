@@ -17,6 +17,7 @@ import 'package:ai_food/config/dio/spoonacular_app_dio.dart';
 import 'package:ai_food/config/keys/pref_keys.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -55,34 +56,65 @@ class _HomeScreenState extends State<HomeScreen> {
   var responseData;
   int type = 0;
   bool isLoading = false;
-
   @override
   void initState() {
     print("type$type");
     dio = AppDio(context);
     spoondio = SpoonAcularAppDio(context);
-
     logger.init();
     getUserCredentials();
     setRecipesParameters();
-
     if (widget.type == 1) {
       type = widget.type;
     } else {
-      print("type$type");
-
-      getSuggestedRecipes(
-        allergies: widget.allergies ?? "",
-        dietaryRestrictions: widget.dietaryRestrictions ?? "",
-      );
+      LoadingDataFromSharedPreffromProfile();
     }
+
     super.initState();
+  }
+
+  void LoadingDataFromSharedPreffromProfile() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? value;
+    String? value2;
+    List<String> finalValue = [];
+    List<String> finalValue2 = [];
+    List<String>? storedData =
+        prefs.getStringList(PrefKey.dataonBoardScreenAllergies);
+    List<String>? storedData2 =
+        prefs.getStringList(PrefKey.dataonBoardScreenDietryRestriction);
+    if (storedData != null && storedData2 != null) {
+      for (String entry in storedData) {
+        String result = entry.replaceAll(RegExp(r'^MapEntry\(|\)'), '');
+        List<String> parts = result.split(':');
+        if (parts.length == 2) {
+          String key = parts[0].trim();
+          value = parts[1].trim();
+          finalValue.add(value);
+        }
+      }
+      for (String entry in storedData2) {
+        String result = entry.replaceAll(RegExp(r'^MapEntry\(|\)'), '');
+        List<String> parts = result.split(':');
+        if (parts.length == 2) {
+          String key = parts[0].trim();
+          value2 = parts[1].trim();
+          finalValue2.add(value2);
+        }
+      }
+    }
+    print("value_is ${finalValue} data ${finalValue2}");
+    getSuggestedRecipes(
+      allergies: finalValue.isEmpty ? widget.allergies : finalValue,
+      dietaryRestrictions:
+          finalValue2.isEmpty ? widget.dietaryRestrictions : finalValue2,
+    );
   }
 
   void getUserCredentials() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString(PrefKey.authorization);
-    String? name = prefs.getString(PrefKey.name);
+    String? name = prefs.getString(PrefKey.userName);
     print("home_token $token");
     print("home_name $name");
   }
@@ -107,12 +139,11 @@ class _HomeScreenState extends State<HomeScreen> {
         elevation: 0,
         title: GestureDetector(
           onTap: () {
-            if(type == 1){
+            if (type == 1) {
               pushReplacement(context, const SearchScreen());
             } else {
               push(context, const SearchScreen());
             }
-
           },
           child: Container(
             width: width,
@@ -132,20 +163,30 @@ class _HomeScreenState extends State<HomeScreen> {
                         fontSize: 15, fontWeight: FontWeight.w500),
                   ),
                 ),
-                Container(
-                  width: 60,
-                  height: 50,
-                  decoration: const BoxDecoration(
-                    color: Color(0xFFB38ADE),
-                    borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(100),
-                        bottomRight: Radius.circular(100)),
-                  ),
-                  child: const Icon(
-                    Icons.search_outlined,
-                    size: 35,
-                    color: Color(0xffFFFFFF),
-                  ),
+                Stack(
+                  children: [
+                    Container(
+                      width: 60,
+                      height: 50,
+                      decoration: const BoxDecoration(
+                        color: Color(0xFFB38ADE),
+                        borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(100),
+                            bottomRight: Radius.circular(100)),
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 14.0),
+                        child: SvgPicture.asset(
+                          "assets/images/Search.svg",
+                          width: 30,
+                          height: 30,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -234,14 +275,12 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         type == 0
                             ? responseData == null
-                                // ? SizedBox()
                                 ? Container(
                                     height: 500,
+                                    padding: const EdgeInsets.symmetric(horizontal: 10),
                                     width: MediaQuery.of(context).size.width,
                                     child: Center(
-                                      child: CircularProgressIndicator(
-                                        color: AppTheme.appColor,
-                                      ),
+                                      child: CircularProgressIndicator(color: AppTheme.appColor),
                                     ),
                                   )
                                 : GridView.builder(
@@ -450,8 +489,8 @@ class _HomeScreenState extends State<HomeScreen> {
   getSearchResult(id) async {
     print("kjbjfejfbjefbefljeblf");
 
-    // const apiKey = 'd9186e5f351240e094658382be62d948';
-    const apiKey = '6fee21631c5c432dba9b34b9070a2d31';
+    const apiKey = 'd9186e5f351240e094658382be62d948';
+    // const apiKey = '6fee21631c5c432dba9b34b9070a2d31';
 
     final apiUrl =
         'https://api.spoonacular.com/recipes/$id/information?includeNutrition=&apiKey=$apiKey';
@@ -472,8 +511,8 @@ class _HomeScreenState extends State<HomeScreen> {
   ////////////////////////////////////get suggested recipe////////////////////////////////////////////////////////////////////
 
   getSuggestedRecipes({allergies, dietaryRestrictions}) async {
-    // const apiKey = 'd9186e5f351240e094658382be62d948';
-    const apiKey = '6fee21631c5c432dba9b34b9070a2d31';
+    // const apiKey = '6fee21631c5c432dba9b34b9070a2d31';
+    const apiKey = '56806fa3f874403c8794d4b7e491c937';
 
     final allergiesAre =
         allergies.isNotEmpty ? "${allergies.join(',').toLowerCase()}" : "";
@@ -481,13 +520,13 @@ class _HomeScreenState extends State<HomeScreen> {
         ? "${dietaryRestrictions.join(',').toLowerCase()}"
         : "";
     String apiFinalUrl;
-    if (allergies.isEmpty && dietaryRestrictions.isNotEmpty) {
+    if (allergiesAre.isEmpty && dietaryRestrictionsAre.isNotEmpty) {
       apiFinalUrl =
           '${AppUrls.spoonacularBaseUrl}/recipes/random?number=8&tags=${dietaryRestrictionsAre}&apiKey=$apiKey';
-    } else if (allergies.isNotEmpty && dietaryRestrictions.isEmpty) {
+    } else if (allergiesAre.isNotEmpty && dietaryRestrictionsAre.isEmpty) {
       apiFinalUrl =
           'https://api.spoonacular.com/recipes/random?number=8&tags=${allergiesAre}&apiKey=$apiKey';
-    } else if (allergies.isNotEmpty && dietaryRestrictions.isNotEmpty) {
+    } else if (allergiesAre.isNotEmpty && dietaryRestrictionsAre.isNotEmpty) {
       apiFinalUrl =
           'https://api.spoonacular.com/recipes/random?number=8&tags=${allergiesAre},${dietaryRestrictionsAre}&apiKey=$apiKey';
     } else {
@@ -571,6 +610,7 @@ class _HomeScreenState extends State<HomeScreen> {
         Provider.of<RegionalDelicacyProvider>(context, listen: false);
     final kitchenProvider =
         Provider.of<KitchenResourcesProvider>(context, listen: false);
+    // const apiKey = '6fee21631c5c432dba9b34b9070a2d31';
     const apiKey = '56806fa3f874403c8794d4b7e491c937';
 
     int currentOffset = widget.offset + 8;
@@ -637,7 +677,7 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       isLoading = true;
     });
-    const apiKey = '56806fa3f874403c8794d4b7e491c937';
+    const apiKey = '6fee21631c5c432dba9b34b9070a2d31';
 
     int currentOffset = widget.offset + 8;
 

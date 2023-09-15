@@ -95,10 +95,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    height: 50,
+                    height: 40,
                     child: TextFormField(
                       cursorColor: AppTheme.appColor,
-                      style: TextStyle(color: AppTheme.appColor),
+                      style: TextStyle(color: AppTheme.appColor, fontWeight: FontWeight.w500),
                       controller: _userNameController,
                       decoration: InputDecoration(
                           isDense: true,
@@ -121,7 +121,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                               fontSize: 16)),
                     ),
                   ),
-                  const SizedBox(height: 10),
+                  // const SizedBox(height: 10),
                   GestureDetector(
                     onTap: () {
                       _selectDate(context);
@@ -145,7 +145,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   Divider(
                     thickness: 1,
                     color: AppTheme.appColor,
-                    endIndent: 40,
                   ),
                   Stack(
                     children: [
@@ -513,7 +512,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
   void getUserName() async {
     final prefs = await SharedPreferences.getInstance();
-    String? userName = prefs.getString(PrefKey.name);
+    String? userName = prefs.getString(PrefKey.userName);
     setState(() {
       _userNameController.text = userName!;
     });

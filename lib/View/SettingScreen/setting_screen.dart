@@ -25,6 +25,12 @@ class SettingScreen extends StatefulWidget {
 }
 
 class _SettingScreenState extends State<SettingScreen> {
+  final _formKeyName = GlobalKey<FormState>();
+  final _formKeyEmail = GlobalKey<FormState>();
+  final _formKeyMessage = GlobalKey<FormState>();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController messageController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -331,23 +337,34 @@ class _SettingScreenState extends State<SettingScreen> {
                       children: [
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                          child: TextFormField(
-                            style: TextStyle(color: AppTheme.whiteColor),
-                            cursorColor: AppTheme.whiteColor,
-                            decoration: InputDecoration(
-                                contentPadding:
-                                    EdgeInsets.only(top: 20, left: 10),
-                                hintStyle: TextStyle(
-                                    color: AppTheme.whiteColor,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w400),
-                                hintText: "jessica hanson",
-                                focusedBorder: UnderlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: AppTheme.whiteColor)),
-                                enabledBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: AppTheme.whiteColor))),
+                          child: Form(
+                            key: _formKeyName,
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            child: TextFormField(
+                              controller: nameController,
+                              validator: ((value) {
+                                if (value == null || value.isEmpty) {
+                                  return "Please Enter Name";
+                                }
+                              }),
+                              style: TextStyle(color: AppTheme.whiteColor),
+                              cursorColor: AppTheme.whiteColor,
+                              decoration: InputDecoration(
+                                  contentPadding:
+                                      EdgeInsets.only(top: 20, left: 10),
+                                  hintStyle: TextStyle(
+                                      color: AppTheme.whiteColor,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w400),
+                                  hintText: "jessica hanson",
+                                  focusedBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: AppTheme.whiteColor)),
+                                  enabledBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: AppTheme.whiteColor))),
+                            ),
                           ),
                         )
                       ],
@@ -357,23 +374,38 @@ class _SettingScreenState extends State<SettingScreen> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                        child: TextFormField(
-                          style: TextStyle(color: AppTheme.whiteColor),
-                          cursorColor: AppTheme.whiteColor,
-                          decoration: InputDecoration(
-                              contentPadding:
-                                  EdgeInsets.only(top: 20, left: 10),
-                              hintStyle: TextStyle(
-                                  color: AppTheme.whiteColor,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w400),
-                              hintText: "jessicahanson@gmail.com",
-                              focusedBorder: UnderlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: AppTheme.whiteColor)),
-                              enabledBorder: UnderlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: AppTheme.whiteColor))),
+                        child: Form(
+                          key: _formKeyEmail,
+                          child: TextFormField(
+                            controller: emailController,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter your email';
+                              }
+                              final emailRegex = RegExp(
+                                  r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$');
+                              if (!emailRegex.hasMatch(value)) {
+                                return 'Invalid Email';
+                              }
+                              return null;
+                            },
+                            style: TextStyle(color: AppTheme.whiteColor),
+                            cursorColor: AppTheme.whiteColor,
+                            decoration: InputDecoration(
+                                contentPadding:
+                                    EdgeInsets.only(top: 20, left: 10),
+                                hintStyle: TextStyle(
+                                    color: AppTheme.whiteColor,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w400),
+                                hintText: "jessicahanson@gmail.com",
+                                focusedBorder: UnderlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: AppTheme.whiteColor)),
+                                enabledBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: AppTheme.whiteColor))),
+                          ),
                         ),
                       )
                     ],
@@ -383,27 +415,44 @@ class _SettingScreenState extends State<SettingScreen> {
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                    child: TextFormField(
-                      maxLines: 4,
-                      style: TextStyle(color: AppTheme.whiteColor),
-                      cursorColor: AppTheme.whiteColor,
-                      decoration: InputDecoration(
-                          contentPadding: EdgeInsets.only(top: 20, left: 10),
-                          hintStyle: TextStyle(
-                              color: AppTheme.whiteColor.withOpacity(0.5)),
-                          hintText: "Your message",
-                          focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                              borderSide: BorderSide(
-                                color: AppTheme.whiteColor,
-                              )),
-                          enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                              borderSide:
-                                  BorderSide(color: AppTheme.whiteColor))),
+                    child: Form(
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      key: _formKeyMessage,
+                      child: TextFormField(
+                        controller: messageController,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Please Enter Message";
+                          } else {
+                            return null;
+                          }
+                        },
+                        maxLines: 4,
+                        style: TextStyle(color: AppTheme.whiteColor),
+                        cursorColor: AppTheme.whiteColor,
+                        decoration: InputDecoration(
+                            contentPadding: EdgeInsets.only(top: 20, left: 10),
+                            hintStyle: TextStyle(
+                                color: AppTheme.whiteColor.withOpacity(0.5)),
+                            hintText: "Your message",
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                borderSide: BorderSide(
+                                  color: AppTheme.whiteColor,
+                                )),
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                borderSide: BorderSide(
+                                  color: AppTheme.whiteColor,
+                                )),
+                            enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                borderSide:
+                                    BorderSide(color: AppTheme.whiteColor))),
+                      ),
                     ),
                   ),
-                  const SizedBox(
+                  SizedBox(
                     height: 30,
                   ),
                   Center(
@@ -414,6 +463,11 @@ class _SettingScreenState extends State<SettingScreen> {
                         height: 50,
                         width: 180,
                         backgroundColor: AppTheme.whiteColor, onTap: () {
+                      if (_formKeyName.currentState!.validate() &&
+                          _formKeyEmail.currentState!.validate() &&
+                          _formKeyMessage.currentState!.validate()) {
+                        Navigator.pop(context);
+                      }
                       // push(context, ForgotPasswordScreen());
                       // push(context, const ForgotPasswordPage());
                     }),
@@ -429,9 +483,10 @@ class _SettingScreenState extends State<SettingScreen> {
       },
     );
   }
+
   Future<void> logout(context) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  await prefs.remove(PrefKey.authorization);
-  await Authentication.signOut(context: context);
-}
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove(PrefKey.authorization);
+    await Authentication.signOut(context: context);
+  }
 }
