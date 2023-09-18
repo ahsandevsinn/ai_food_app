@@ -54,9 +54,10 @@ class _BottomNavViewState extends State<BottomNavView> {
               query: widget.query,
             )
           : HomeScreen(
-              dietaryRestrictions: widget.dietaryRestrictions,
-              allergies: widget.allergies,
-              searchType: 0,),
+              // dietaryRestrictions: widget.dietaryRestrictions,
+              // allergies: widget.allergies,
+              searchType: 0,
+            ),
       const FavouriteScreen(),
       const AskMaidaScreen(),
       const SettingScreen(),

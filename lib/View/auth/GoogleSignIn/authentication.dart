@@ -87,6 +87,8 @@ class Authentication {
           bool newUser = userCredential.additionalUserInfo!.isNewUser;
           String? displayName = user?.displayName;
           print("This is the UID: ${user!.uid} newuser $newUser name $displayName");
+
+          print("getting_user_date of birth ${user} credentials ${credential}");
           // Check if the user already exists
           login(userId: user.uid, context: context, isNewUser: newUser, name: displayName!);
           // if (userCredential.additionalUserInfo!.isNewUser) {
@@ -132,7 +134,8 @@ class Authentication {
         await googleSignIn.signOut();
       }
       await FirebaseAuth.instance.signOut();
-      push(context, const AuthScreen());
+      Navigator.of(context).pop();
+      pushReplacement(context, const AuthScreen());
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         Authentication.customSnackBar(
@@ -145,6 +148,9 @@ class Authentication {
 
 void login({required String userId, context, required bool isNewUser, required String name}) async {
   var response;
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  List<String> dietaryRestrictionsList = [];
+  List<String> allergiesList = [];
   const int responseCode200 = 200; // For successful request.
   const int responseCode400 = 400; // For Bad Request.
   const int responseCode401 = 401; // For Unauthorized access.
@@ -173,16 +179,28 @@ void login({required String userId, context, required bool isNewUser, required S
         showSnackBar(context, "${responseData["message"]}");
         return;
       } else {
+
+        var token = responseData['data']['token'];
+        // var DOB = responseData['data']['user']['DOB'];
+        var dietary_restrictions = responseData['data']['user']['dietary_restrictions'];
+        var allergies = responseData['data']['user']['allergies'];
+        for (var data0 in dietary_restrictions) {
+          dietaryRestrictionsList.addAll({'${data0['id']}:${data0['name']}'});
+        }
+        for (var data0 in allergies) {
+          allergiesList.addAll({'${data0['id']}:${data0['name']}'});
+        }
+        prefs.setStringList(PrefKey.dataonBoardScreenAllergies, allergiesList);
+        prefs.setStringList(PrefKey.dataonBoardScreenDietryRestriction, dietaryRestrictionsList);
+        // prefs.setString(PrefKey.dateOfBirth, DOB);
+        prefs.setString(PrefKey.authorization, token ?? '');
+        prefs.setString(PrefKey.userName, name ?? '');
+
         if(isNewUser){
           pushReplacement(context, const UserProfileScreen());
         } else {
-          pushReplacement(context, BottomNavView());
+          pushReplacement(context, BottomNavView(type: 0));
         }
-        var token = responseData['data']['token'];
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-
-        prefs.setString(PrefKey.authorization, token ?? '');
-        prefs.setString(PrefKey.userName, name ?? '');
         showSnackBar(context, "${responseData["message"]}");
       }
     }

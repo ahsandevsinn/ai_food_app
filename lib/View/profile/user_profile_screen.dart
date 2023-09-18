@@ -298,19 +298,27 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     const int responseCode401 = 401; // For Unauthorized access.
     const int responseCode404 = 404; // For For data not found
     const int responseCode500 = 500; // Internal server error.
-    for (var data in addAllergies.entries) {
-      String key = "allergies[${index}]";
-      String key2 = data.key;
-      dynamic value = data.value;
-      arrangeIndexParam[key] = key2;
-      index++;
+    if(addAllergies.isEmpty){
+      arrangeIndexParam["allergies[0]"] = "0";
+    }else {
+      for (var data in addAllergies.entries) {
+        String key = "allergies[${index}]";
+        String key2 = data.key;
+        dynamic value = data.value;
+        arrangeIndexParam[key] = key2;
+        index++;
+      }
     }
-    for (var data in addDietaryRestrictions.entries) {
-      String key = "dietary_restrictions[${index1}]";
-      String key2 = data.key;
-      dynamic value = data.value;
-      arrangeIndexParam2[key] = key2;
-      index1++;
+    if(addDietaryRestrictions.isEmpty){
+      arrangeIndexParam2["dietary_restrictions[0]"] = "0";
+    }else{
+      for (var data in addDietaryRestrictions.entries) {
+        String key = "dietary_restrictions[${index1}]";
+        String key2 = data.key;
+        dynamic value = data.value;
+        arrangeIndexParam2[key] = key2;
+        index1++;
+      }
     }
     if (selectedDate == null) {
       showSnackBar(context, "select DOB");

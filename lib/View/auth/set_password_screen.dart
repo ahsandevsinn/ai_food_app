@@ -13,7 +13,11 @@ import 'package:sizer/sizer.dart';
 class SetPasswordScreen extends StatefulWidget {
   final email;
   final otp;
-  const SetPasswordScreen({super.key, this.email, this.otp,});
+  const SetPasswordScreen({
+    super.key,
+    this.email,
+    this.otp,
+  });
 
   @override
   State<SetPasswordScreen> createState() => _SetPasswordScreenState();
@@ -55,7 +59,7 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
                   textColor: AppTheme.appColor,
                   fontWeight: FontWeight.w600),
               AppText.appText(
-                "Enter email or number",
+                "Enter email",
                 fontSize: 12.sp,
                 textColor: AppTheme.appColor,
               ),
@@ -189,6 +193,7 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
                         },
                           width: 43.w,
                           height: 5.5.h,
+                          blurContainer: true,
                           border: false,
                           backgroundColor: AppTheme.appColor,
                           textColor: AppTheme.whiteColor,

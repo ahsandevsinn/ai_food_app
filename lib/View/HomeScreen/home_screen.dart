@@ -54,6 +54,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   AppLogger logger = AppLogger();
   var responseData;
+  bool randomData = false;
+  var errorResponse;
   int type = 0;
   bool isLoading = false;
   @override
@@ -105,9 +107,8 @@ class _HomeScreenState extends State<HomeScreen> {
     }
     print("value_is ${finalValue} data ${finalValue2}");
     getSuggestedRecipes(
-      allergies: finalValue.isEmpty ? widget.allergies : finalValue,
-      dietaryRestrictions:
-          finalValue2.isEmpty ? widget.dietaryRestrictions : finalValue2,
+      allergies: finalValue,
+      dietaryRestrictions: finalValue2,
     );
   }
 
@@ -132,6 +133,7 @@ class _HomeScreenState extends State<HomeScreen> {
     print("dietaryRestrictions${widget.dietaryRestrictions}");
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         toolbarHeight: 120,
         backgroundColor: Colors.white,
@@ -275,105 +277,142 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         type == 0
                             ? responseData == null
-                                ? Container(
-                                    height: 500,
-                                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                                    width: MediaQuery.of(context).size.width,
-                                    child: Center(
-                                      child: CircularProgressIndicator(color: AppTheme.appColor),
-                                    ),
-                                  )
-                                : GridView.builder(
-                                    physics:
-                                        const NeverScrollableScrollPhysics(),
-                                    gridDelegate:
-                                        SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 2,
-                                      childAspectRatio: width / (2.26 * 238),
-                                    ),
-                                    shrinkWrap: true,
-                                    itemCount: responseData.length,
-                                    itemBuilder: (context, int index) {
-                                      return GestureDetector(
-                                        onTap: () {
-                                          Navigator.of(context)
-                                              .push(MaterialPageRoute(
-                                            builder: (context) => RecipeInfo(
-                                              recipeData: responseData[index],
-                                            ),
-                                          ));
-                                        },
-                                        child: Container(
-                                          width: width / 2.26,
-                                          height: 238,
-                                          decoration: BoxDecoration(
+                                ? randomData == false
+                                    ? Container(
+                                        height: 500,
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        child: Center(
+                                          child: CircularProgressIndicator(
                                             color: AppTheme.appColor,
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                          ),
-                                          margin: const EdgeInsets.symmetric(
-                                              vertical: 8, horizontal: 8),
-                                          child: Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 12),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Container(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            top: 12, bottom: 8),
-                                                    child: Center(
-                                                      child: ClipRRect(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(10),
-                                                        child:
-                                                            CachedNetworkImage(
-                                                          fit: BoxFit.cover,
-                                                          imageUrl:
-                                                              "${responseData[index]["image"]}",
-                                                          height: 130,
-                                                          width: width,
-                                                          errorWidget: (context,
-                                                                  url, error) =>
-                                                              const Icon(
-                                                                  Icons.error),
-                                                        ),
-                                                      ),
-                                                    )),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          right: 10.0),
-                                                  child: AppText.appText(
-                                                      "${responseData[index]["title"]}",
-                                                      textAlign: TextAlign.left,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      textColor:
-                                                          AppTheme.whiteColor,
-                                                      fontWeight:
-                                                          FontWeight.w800),
-                                                ),
-                                                Text(
-                                                  textAlign: TextAlign.justify,
-                                                  maxLines: 3,
-                                                  "This is Product. This is Product. This is Product. This is Product. This is Product.",
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: TextStyle(
-                                                    color: AppTheme.whiteColor,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
                                           ),
                                         ),
-                                      );
-                                    },
-                                  )
+                                      )
+                                    : Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 20.0),
+                                        child: Container(
+                                          height: 500,
+                                          child: Center(
+                                              child: AppText.appText(
+                                                  "${errorResponse}")),
+                                        ),
+                                      )
+                                : responseData.isEmpty
+                                    ? Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 20.0),
+                                        child: Container(
+                                          height: 500,
+                                          child: Center(
+                                              child: AppText.appText(
+                                                  "No results found according to your profile")),
+                                        ),
+                                      )
+                                    : GridView.builder(
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        gridDelegate:
+                                            SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount: 2,
+                                          childAspectRatio:
+                                              width / (2.26 * 238),
+                                        ),
+                                        shrinkWrap: true,
+                                        itemCount: responseData.length,
+                                        itemBuilder: (context, int index) {
+                                          return GestureDetector(
+                                            onTap: () {
+                                              Navigator.of(context)
+                                                  .push(MaterialPageRoute(
+                                                builder: (context) =>
+                                                    RecipeInfo(
+                                                  recipeData:
+                                                      responseData[index],
+                                                ),
+                                              ));
+                                            },
+                                            child: Container(
+                                              width: width / 2.26,
+                                              height: 238,
+                                              decoration: BoxDecoration(
+                                                color: AppTheme.appColor,
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                              ),
+                                              margin:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 8,
+                                                      horizontal: 8),
+                                              child: Container(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 12),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Container(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .only(
+                                                                top: 12,
+                                                                bottom: 8),
+                                                        child: Center(
+                                                          child: ClipRRect(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        10),
+                                                            child:
+                                                                CachedNetworkImage(
+                                                              fit: BoxFit.cover,
+                                                              imageUrl:
+                                                                  "${responseData[index]["image"]}",
+                                                              height: 130,
+                                                              width: width,
+                                                              errorWidget: (context,
+                                                                      url,
+                                                                      error) =>
+                                                                  const Icon(Icons
+                                                                      .error),
+                                                            ),
+                                                          ),
+                                                        )),
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              right: 10.0),
+                                                      child: AppText.appText(
+                                                          "${responseData[index]["title"]}",
+                                                          textAlign:
+                                                              TextAlign.left,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          textColor: AppTheme
+                                                              .whiteColor,
+                                                          fontWeight:
+                                                              FontWeight.w800),
+                                                    ),
+                                                    Text(
+                                                      textAlign:
+                                                          TextAlign.justify,
+                                                      maxLines: 3,
+                                                      "This is Product. This is Product. This is Product. This is Product. This is Product.",
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      style: TextStyle(
+                                                        color:
+                                                            AppTheme.whiteColor,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      )
                             : widget.data.length == 0
                                 ? Container(
                                     height: MediaQuery.of(context).size.height *
@@ -539,6 +578,12 @@ class _HomeScreenState extends State<HomeScreen> {
       if (response.statusCode == 200) {
         setState(() {
           responseData = response.data["recipes"];
+        });
+      } else if (response.statusCode == 402) {
+        setState(() {
+          randomData = true;
+          errorResponse = response.data["message"];
+          print("l;nkwkdn${response.data["message"]}");
         });
       } else {
         showSnackBar(context, "Something Went Wrong!");

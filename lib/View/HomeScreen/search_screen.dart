@@ -129,7 +129,11 @@ class _SearchScreenState extends State<SearchScreen> {
                         GestureDetector(
                           onTap: () {
                             FocusScope.of(context).requestFocus(FocusNode());
-                            getFood(context);
+                            if(_searchController.text == "" || _searchController.text.isEmpty){
+                              showSnackBar(context, "Please type something.");
+                            } else {
+                              getFood(context);
+                            }
                           },
                           child: Stack(
                             children: [

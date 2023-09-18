@@ -65,7 +65,7 @@ class _ShoppingListState extends State<ShoppingList> {
         return Column(
           children: [
             Container(
-              height: MediaQuery.of(context).size.height - 91.7,
+              height: MediaQuery.of(context).size.height - 104.7,
               // color: Colors.black,
               child: Stack(
                 children: [

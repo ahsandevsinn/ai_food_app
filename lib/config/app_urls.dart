@@ -1,5 +1,5 @@
 class AppUrls {
-  static const String baseUrl = "http://3.16.49.1";
+  static const String baseUrl = "http://3.20.184.62";
   static const String spoonacularBaseUrl = "https://api.spoonacular.com";
   static const String signUpUrl = "/api/register";
   static const String loginUrl = "/api/login";

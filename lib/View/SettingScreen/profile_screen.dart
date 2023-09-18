@@ -7,6 +7,7 @@ import 'package:ai_food/Utils/utils.dart';
 import 'package:ai_food/Utils/widgets/others/app_button.dart';
 import 'package:ai_food/Utils/widgets/others/app_field.dart';
 import 'package:ai_food/Utils/widgets/others/app_text.dart';
+import 'package:ai_food/Utils/widgets/others/errordialogue.dart';
 import 'package:ai_food/config/app_urls.dart';
 import 'package:ai_food/config/dio/app_dio.dart';
 import 'package:ai_food/config/keys/pref_keys.dart';
@@ -283,8 +284,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                         AppText.appText(
                           "Allergies:",
-                          fontSize: 22,
-                          fontWeight: FontWeight.w800,
+                          fontSize: 24,
+                          fontWeight: FontWeight.w600,
                           textColor: AppTheme.appColor,
                         ),
                         const SizedBox(height: 10),
@@ -320,8 +321,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         const SizedBox(height: 30),
                         AppText.appText(
                           "Dietary restrictions:",
-                          fontSize: 22,
-                          fontWeight: FontWeight.w800,
+                          fontSize: 24,
+                          fontWeight: FontWeight.w600,
                           textColor: AppTheme.appColor,
                         ),
                         const SizedBox(height: 10),
@@ -549,7 +550,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     setState(() {
 
     });
-    showSnackBar(context, "Data is Loaded from SharedPreference");
+    // showSnackBar(context, "Data is Loaded from SharedPreference");
   }
   UpdateSetupProfileOnUpdateAPI() async {
     var response;
@@ -564,24 +565,32 @@ class _ProfileScreenState extends State<ProfileScreen> {
     const int responseCode500 = 500; // Internal server error.
 
     //here creates map like allergies[0]: 4,... using for loop to insert the data;
-    for (var data in addAllergies.entries) {
-      String key = "allergies[${index}]";
-      String key2 = data.key;
-      dynamic value = data.value;
-      arrangeIndexParam[key] = key2;
-      index++;
+    if(addAllergies.isEmpty){
+      arrangeIndexParam["allergies[0]"] = "0";
+    }else {
+      for (var data in addAllergies.entries) {
+        String key = "allergies[${index}]";
+        String key2 = data.key;
+        dynamic value = data.value;
+        arrangeIndexParam[key] = key2;
+        index++;
+      }
     }
-    for (var data in addDietaryRestrictions.entries) {
-      String key = "dietary_restrictions[${index1}]";
-      String key2 = data.key;
-      dynamic value = data.value;
-      arrangeIndexParam2[key] = key2;
-      index1++;
+    if(addDietaryRestrictions.isEmpty){
+      arrangeIndexParam2["dietary_restrictions[0]"] = "0";
+    }else{
+      for (var data in addDietaryRestrictions.entries) {
+        String key = "dietary_restrictions[${index1}]";
+        String key2 = data.key;
+        dynamic value = data.value;
+        arrangeIndexParam2[key] = key2;
+        index1++;
+      }
     }
     //----------------------//
     //check if username is empty or not
     if (_userNameController.text.isEmpty) {
-      showSnackBar(context, "field cannot be empty");
+      // showSnackBar(context, "field cannot be empty");
       setState(() {
         checkAPI = false;
       });
@@ -628,13 +637,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
             setState(() {
               checkAPI = false;
             });
-            showSnackBar(context, "${responseData["message"]}");
+            alertDialogError(context: context, message: responseData["message"]);
             // print("Something Went Wrong: ${responseData["message"]}");
           } else {
             setState(() {
               checkAPI = false;
             });
             print("everything is alright");
+            Navigator.of(context).pop();
           }
           break;
         default:
@@ -659,7 +669,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     selectedDate == null?prefs.setString(PrefKey.dateOfBirth, selectedDateFromPref!):prefs.setString(PrefKey.dateOfBirth, DateFormat('MM-dd-yyyy').format(selectedDate!));
     prefs.setStringList(PrefKey.dataonBoardScreenAllergies, allergies);
     prefs.setStringList(PrefKey.dataonBoardScreenDietryRestriction, dietryRestriction);
-    showSnackBar(context, "Data is saved in SharedPreference");
+    // showSnackBar(context, "Data is saved in SharedPreference");
   }
 }
 
@@ -692,7 +702,7 @@ class CustomContainer extends StatelessWidget {
           text,
           textColor: textColor,
           fontSize: 16,
-          fontWeight: FontWeight.w500,
+          fontWeight: FontWeight.w400,
         ),
       ),
     );

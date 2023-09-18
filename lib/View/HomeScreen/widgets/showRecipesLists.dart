@@ -136,10 +136,6 @@ class _RecipesSelectionState extends State<RecipesSelection> {
             color: AppTheme.appColor,
             size: 40,
           ),
-          // child: SvgPicture.asset("assets/images/Next.svg",
-          //     color: AppTheme.appColor,
-          //     width: 30, height: 30,
-          // ),
         ),
       ),
     );

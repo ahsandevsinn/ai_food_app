@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 
 class Customcard extends StatefulWidget {
   final childWidget;
-  const Customcard({super.key, required this.childWidget});
+  final double? padding;
+  const Customcard({super.key, required this.childWidget, this.padding});
 
   @override
   State<Customcard> createState() => _CustomcardState();
@@ -38,7 +39,7 @@ class _CustomcardState extends State<Customcard> {
           ],
         ),
         child: Padding(
-          padding: EdgeInsets.all(20.0),
+          padding: EdgeInsets.all(widget.padding ?? 20.0),
           child: widget.childWidget,
         ),
       ),

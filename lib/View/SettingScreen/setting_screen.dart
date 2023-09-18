@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:ai_food/Utils/resources/res/app_theme.dart';
+import 'package:ai_food/Utils/utils.dart';
 import 'package:ai_food/Utils/widgets/others/app_button.dart';
 import 'package:ai_food/Utils/widgets/others/app_text.dart';
 import 'package:ai_food/Utils/widgets/others/custom_app_bar.dart';
@@ -31,19 +32,20 @@ class _SettingScreenState extends State<SettingScreen> {
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController messageController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar.appBar(
-        backgroundColor: AppTheme.whiteColor,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
         centerTitle: true,
-        elevation: 5,
-        titleText: "Settings",
-        titleTextStyle: TextStyle(
-            fontFamily: "Roboto",
-            color: AppTheme.appColor,
-            fontSize: 24,
-            fontWeight: FontWeight.w600),
+        title: Text(
+          "Settings",
+          style: TextStyle(
+              color: AppTheme.appColor,
+              fontWeight: FontWeight.w600,
+              fontSize: 24),
+        ),
       ),
       body: Padding(
         padding: EdgeInsets.only(left: 5.w, right: 5.w),
@@ -66,9 +68,12 @@ class _SettingScreenState extends State<SettingScreen> {
             ),
           ),
           Divider(
-            height: 3.h,
+            height: 12,
             color: AppTheme.appColor,
             thickness: 1.5,
+          ),
+          SizedBox(
+            height: 20,
           ),
           GestureDetector(
             onTap: () => Navigator.of(context).push(MaterialPageRoute(
@@ -87,9 +92,12 @@ class _SettingScreenState extends State<SettingScreen> {
             ),
           ),
           Divider(
-            height: 3.h,
+            height: 12,
             color: AppTheme.appColor,
             thickness: 1.5,
+          ),
+          SizedBox(
+            height: 20,
           ),
           GestureDetector(
             onTap: () => Navigator.of(context).push(MaterialPageRoute(
@@ -110,9 +118,12 @@ class _SettingScreenState extends State<SettingScreen> {
             ),
           ),
           Divider(
-            height: 3.h,
+            height: 12,
             color: AppTheme.appColor,
             thickness: 1.5,
+          ),
+          SizedBox(
+            height: 20,
           ),
           GestureDetector(
             onTap: () {
@@ -133,9 +144,12 @@ class _SettingScreenState extends State<SettingScreen> {
             ),
           ),
           Divider(
-            height: 3.h,
+            height: 12,
             color: AppTheme.appColor,
             thickness: 1.5,
+          ),
+          SizedBox(
+            height: 20,
           ),
           GestureDetector(
             onTap: () {
@@ -297,7 +311,7 @@ class _SettingScreenState extends State<SettingScreen> {
       builder: (BuildContext context) {
         return Dialog(
           shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
           child: SingleChildScrollView(
             child: Container(
               // width: 100,
@@ -340,7 +354,7 @@ class _SettingScreenState extends State<SettingScreen> {
                           child: Form(
                             key: _formKeyName,
                             autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
+                            AutovalidateMode.onUserInteraction,
                             child: TextFormField(
                               controller: nameController,
                               validator: ((value) {
@@ -352,7 +366,7 @@ class _SettingScreenState extends State<SettingScreen> {
                               cursorColor: AppTheme.whiteColor,
                               decoration: InputDecoration(
                                   contentPadding:
-                                      EdgeInsets.only(top: 20, left: 10),
+                                  EdgeInsets.only(top: 20, left: 10),
                                   hintStyle: TextStyle(
                                       color: AppTheme.whiteColor,
                                       fontSize: 16,
@@ -393,7 +407,7 @@ class _SettingScreenState extends State<SettingScreen> {
                             cursorColor: AppTheme.whiteColor,
                             decoration: InputDecoration(
                                 contentPadding:
-                                    EdgeInsets.only(top: 20, left: 10),
+                                EdgeInsets.only(top: 20, left: 10),
                                 hintStyle: TextStyle(
                                     color: AppTheme.whiteColor,
                                     fontSize: 16,
@@ -401,7 +415,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                 hintText: "jessicahanson@gmail.com",
                                 focusedBorder: UnderlineInputBorder(
                                     borderSide:
-                                        BorderSide(color: AppTheme.whiteColor)),
+                                    BorderSide(color: AppTheme.whiteColor)),
                                 enabledBorder: UnderlineInputBorder(
                                     borderSide: BorderSide(
                                         color: AppTheme.whiteColor))),
@@ -448,7 +462,7 @@ class _SettingScreenState extends State<SettingScreen> {
                             enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8),
                                 borderSide:
-                                    BorderSide(color: AppTheme.whiteColor))),
+                                BorderSide(color: AppTheme.whiteColor))),
                       ),
                     ),
                   ),
@@ -463,14 +477,14 @@ class _SettingScreenState extends State<SettingScreen> {
                         height: 50,
                         width: 180,
                         backgroundColor: AppTheme.whiteColor, onTap: () {
-                      if (_formKeyName.currentState!.validate() &&
-                          _formKeyEmail.currentState!.validate() &&
-                          _formKeyMessage.currentState!.validate()) {
-                        Navigator.pop(context);
-                      }
-                      // push(context, ForgotPasswordScreen());
-                      // push(context, const ForgotPasswordPage());
-                    }),
+                          if (_formKeyName.currentState!.validate() &&
+                              _formKeyEmail.currentState!.validate() &&
+                              _formKeyMessage.currentState!.validate()) {
+                            Navigator.pop(context);
+                          }
+                          // push(context, ForgotPasswordScreen());
+                          // push(context, const ForgotPasswordPage());
+                        }),
                   ),
                   const SizedBox(
                     height: 30,
