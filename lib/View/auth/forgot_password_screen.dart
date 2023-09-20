@@ -111,7 +111,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                             child: CustomAppFormField(
                               texthint: "Email",
                               hintStyle: TextStyle(
-                                  color: AppTheme.appColor.withOpacity(0.8),
+                                  color: AppTheme.appColor.withOpacity(0.6),
                                   fontSize: 16,
                                   fontWeight: FontWeight.w400),
                               controller: _textController,
@@ -152,8 +152,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                     forgetPassword(text: inputText);
                                   }
                                 },
-                                    width: 43.w,
-                                    height: 5.5.h,
+                                    width: 44.w,
+                                    height: 40,
                                     border: false,
                                     blurContainer: true,
                                     backgroundColor: AppTheme.appColor,

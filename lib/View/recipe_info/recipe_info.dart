@@ -5,6 +5,7 @@ import 'package:ai_food/config/keys/pref_keys.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -136,8 +137,10 @@ class _RecipeInfoState extends State<RecipeInfo>
                                       borderRadius: BorderRadius.circular(25)),
                                   child: Padding(
                                     padding: const EdgeInsets.all(10.0),
-                                    child: Image.asset(
-                                        "assets/images/Shopping.png",),
+                                    child: SvgPicture.asset(
+                                      "assets/images/Shopping icon.svg",
+                                      color: AppTheme.whiteColor,
+                                    ),
                                   ), ),
                             ),
                           ),
@@ -156,7 +159,10 @@ class _RecipeInfoState extends State<RecipeInfo>
                                       borderRadius: BorderRadius.circular(25)),
                                   child: Padding(
                                     padding: const EdgeInsets.all(10.0),
-                                    child: Image.asset("assets/images/Heart.png"),
+                                    child: SvgPicture.asset(
+                                      "assets/images/Favorite Icon.svg",
+                                      color: AppTheme.whiteColor,
+                                    ),
                                   )),
                             ),
                           ),

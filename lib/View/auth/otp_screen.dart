@@ -46,7 +46,7 @@ class _OTPScreenState extends State<OTPScreen> {
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.only(left: 20, right: 20, top: 80),
+          padding: const EdgeInsets.only(left: 20, right: 20, top: 105),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -73,7 +73,7 @@ class _OTPScreenState extends State<OTPScreen> {
                       OtpTextField(
                         handleControllers: _handleControllers,
                         textStyle:
-                            TextStyle(fontSize: 18, color: AppTheme.appColor),
+                            TextStyle(fontSize: 18, color: AppTheme.appColor, fontWeight: FontWeight.bold),
                         numberOfFields: 6,
                         // margin: const EdgeInsets.only(left: 15, top: 15),
                         showFieldAsBox: false,
@@ -112,7 +112,7 @@ class _OTPScreenState extends State<OTPScreen> {
                                     underLine: true))),
                       ),
                       const SizedBox(
-                        height: 160,
+                        height: 180,
                       ),
                       isLoading == true
                           ? Center(
@@ -122,28 +122,11 @@ class _OTPScreenState extends State<OTPScreen> {
                               ),
                             )
                           : Container(
-                              // decoration: BoxDecoration(
-                              //   boxShadow: [
-                              //     BoxShadow(
-                              //       color: const Color(0xff000000)
-                              //           .withOpacity(0.25),
-                              //       blurRadius: 4.0,
-                              //       spreadRadius: 0.0,
-                              //       offset: const Offset(0.0, 4.0),
-                              //     ),
-                              //   ],
-                              //   borderRadius: const BorderRadius.only(
-                              //     topRight: Radius.circular(100.0),
-                              //     topLeft: Radius.circular(100.0),
-                              //     bottomLeft: Radius.circular(100.0),
-                              //     bottomRight: Radius.circular(100.0),
-                              //   ),
-                              // ),
                               child: AppButton.appButton("Continue", onTap: () {
                                 verfyOTP();
                               },
-                                  width: 43.w,
-                                  height: 5.5.h,
+                                  width: 44.w,
+                                  height: 40,
                                   border: false,
                                   blurContainer: true,
                                   backgroundColor: AppTheme.appColor,

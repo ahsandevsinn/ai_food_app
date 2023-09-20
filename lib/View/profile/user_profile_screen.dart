@@ -11,6 +11,7 @@ import 'package:ai_food/config/keys/pref_keys.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sizer/sizer.dart';
 
 class UserProfileScreen extends StatefulWidget {
   const UserProfileScreen({Key? key}) : super(key: key);
@@ -49,7 +50,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             primaryColor: AppTheme.appColor, // Change the primary color
             colorScheme: ColorScheme.light(
                 primary: AppTheme.appColor), // Change overall color scheme
-            buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
+            buttonTheme: const ButtonThemeData(textTheme: ButtonTextTheme.primary),
           ),
           child: child!,
         );
@@ -128,22 +129,20 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     },
                     child: Container(
                       width: MediaQuery.of(context).size.width - 90,
-                      child: Row(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(left: 12.0, top: 4),
-                            child: AppText.appText(
-                                "DOB: ${selectedDate == null ? "MM-DD-YYYY" : DateFormat('MM-dd-yyyy').format(selectedDate!)}",
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                                textColor: AppTheme.appColor),
-                          ),
-                        ],
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 12.0, top: 4),
+                        child: AppText.appText(
+                            "DOB: ${selectedDate == null ? "MM-DD-YYYY" : DateFormat('MM-dd-yyyy').format(selectedDate!)}",
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            textColor: AppTheme.appColor),
                       ),
                     ),
                   ),
-                  Divider(
-                    thickness: 1,
+                  Container(
+                    margin: const EdgeInsets.only(top: 2),
+                    width: double.infinity,
+                    height: 1,
                     color: AppTheme.appColor,
                   ),
                   Stack(
@@ -156,7 +155,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                           ),
                           AppText.appText(
                             "Allergies:",
-                            fontSize: 22,
+                            fontSize: 24,
                             fontWeight: FontWeight.w600,
                             textColor: AppTheme.appColor,
                           ),
@@ -193,7 +192,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                           const SizedBox(height: 30),
                           AppText.appText(
                             "Dietary restrictions:",
-                            fontSize: 22,
+                            fontSize: 24,
                             fontWeight: FontWeight.w600,
                             textColor: AppTheme.appColor,
                           ),
@@ -267,11 +266,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                             allergiesList, dietaryRestrictionsList);
                         await UpdateSetupProfileOnUpdateAPI();
                       },
-                      fontSize: 20,
-                      fontWeight: FontWeight.w800,
+                      fontSize: 24,
+                      fontWeight: FontWeight.w600,
                       textColor: Colors.white,
-                      height: 50,
-                      width: 180,
+                      width: 200,
+                      height: 48,
                       backgroundColor: AppTheme.appColor,
                     ),
                   )

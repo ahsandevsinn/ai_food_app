@@ -1,3 +1,5 @@
+import 'package:cached_network_image/cached_network_image.dart';
+
 import '../../Utils/resources/res/app_theme.dart';
 import 'package:flutter/material.dart';
 import '../../Utils/widgets/others/app_text.dart';
@@ -72,10 +74,26 @@ class _ShoppingListState extends State<ShoppingList> {
                   Container(
                     height: 210,
                     width: screenWidth,
-                    decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image: NetworkImage("${widget.image}"),
-                            fit: BoxFit.cover)),
+                    // decoration: BoxDecoration(
+                    //     image: DecorationImage(
+                    //         image: NetworkImage("${widget.image}"),
+                    //         fit: BoxFit.cover)),
+                    child: CachedNetworkImage(
+                      progressIndicatorBuilder: (context, url, progress) {
+                        return Center(
+                          child: CircularProgressIndicator(
+                            color: AppTheme.appColor,
+                          ),
+                        );
+                      },
+                      imageUrl: widget.image,
+                      fit: BoxFit.cover,
+                      errorWidget: (context, url, error) =>
+                          const Padding(
+                            padding: EdgeInsets.only(bottom: 60.0),
+                            child: Icon(Icons.error),
+                          ),
+                    ),
                   ),
                   Positioned(
                     top: 150,

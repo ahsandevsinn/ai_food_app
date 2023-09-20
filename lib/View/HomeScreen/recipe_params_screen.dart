@@ -21,6 +21,7 @@ import 'package:ai_food/config/keys/pref_keys.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sizer/sizer.dart';
 import '../../Constants/app_logger.dart';
 
 class RecipeParamScreen extends StatefulWidget {
@@ -363,8 +364,8 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                             fontSize: 20,
                             fontWeight: FontWeight.w600,
                             textColor: Colors.white,
-                            height: 50,
-                            width: 180,
+                            width: 44.w,
+                            height: 40,
                             backgroundColor: AppTheme.appColor,
                             onTap: () async {
                               await generateRecipe(
@@ -491,7 +492,8 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
     final kitchenProvider =
         Provider.of<KitchenResourcesProvider>(context, listen: false);
     // const apiKey = 'd9186e5f351240e094658382be62d948';
-    const apiKey = '6fee21631c5c432dba9b34b9070a2d31';
+    // const apiKey = '6fee21631c5c432dba9b34b9070a2d31';
+    const apiKey = 'd9186e5f351240e094658382be62d948';
     final style = foodStyleProvider.foodStyle.isNotEmpty
         ? "&cuisine=${foodStyleProvider.foodStyle.toString().substring(1, foodStyleProvider.foodStyle.toString().length - 1)}"
         : "";

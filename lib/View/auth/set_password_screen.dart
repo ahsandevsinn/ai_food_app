@@ -2,6 +2,7 @@ import 'package:ai_food/Constants/app_logger.dart';
 import 'package:ai_food/Utils/resources/res/app_theme.dart';
 import 'package:ai_food/Utils/utils.dart';
 import 'package:ai_food/Utils/widgets/others/app_button.dart';
+import 'package:ai_food/Utils/widgets/others/app_field.dart';
 import 'package:ai_food/Utils/widgets/others/app_text.dart';
 import 'package:ai_food/Utils/widgets/others/custom_card.dart';
 import 'package:ai_food/View/auth/auth_screen.dart';
@@ -50,7 +51,7 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.only(left: 25, right: 25, top: 70),
+          padding: const EdgeInsets.only(left: 25, right: 25, top: 105),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -59,8 +60,9 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
                   textColor: AppTheme.appColor,
                   fontWeight: FontWeight.w600),
               AppText.appText(
-                "Enter email",
-                fontSize: 12.sp,
+                "Set new password",
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
                 textColor: AppTheme.appColor,
               ),
               const SizedBox(
@@ -72,111 +74,47 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
                   const SizedBox(
                     height: 80,
                   ),
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(left: 10, right: 10, top: 10),
-                    child: Form(
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                      key: _formKeyPassword,
-                      child: TextFormField(
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter your password';
-                          } else if (value.length < 8) {
-                            return "password length should atleast 8";
-                          }
-                          return null; // Validation passed
-                        },
-                        obscureText: passwordvisible,
-                        controller: _passwordController,
-                        cursorColor: AppTheme.appColor,
-                        style: TextStyle(color: AppTheme.appColor),
-                        decoration: InputDecoration(
-                            suffix: InkWell(
-                                onTap: () {
-                                  setState(() {
-                                    passwordvisible = !passwordvisible;
-                                  });
-                                },
-                                child: Icon(
-                                  passwordvisible == false
-                                      ? Icons.visibility
-                                      : Icons.visibility_off,
-                                  color: AppTheme.appColor,
-                                )),
-                            contentPadding: const EdgeInsets.only(left: 10),
-                            enabledBorder: UnderlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: AppTheme.appColor)),
-                            disabledBorder: const UnderlineInputBorder(
-                                borderSide: BorderSide.none),
-                            focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                              color: AppTheme.appColor,
-                            )),
-                            border: UnderlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: AppTheme.appColor)),
-                            hintText: "Enter new password",
-                            hintStyle: TextStyle(color: AppTheme.appColor)),
-                      ),
+
+                  Form(
+                    autovalidateMode:
+                    AutovalidateMode.onUserInteraction,
+                    key: _formKeyPassword,
+                    child: CustomAppPasswordfield(
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your password';
+                        } else if (value.length < 8) {
+                          return "password length should atleast 8";
+                        }
+                        return null; // Validation passed
+                      },
+                      texthint: "Enter new password",
+                      controller: _passwordController,
                     ),
                   ),
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(left: 10, right: 10, top: 10),
-                    child: Form(
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                      key: _formKeyConfirmPassword,
-                      child: TextFormField(
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter your confirm Password';
-                          } else if (value.length < 8) {
-                            return "password length should atleast 8";
-                          } else if (_passwordController.text != value) {
-                            return "password does not match";
-                          }
-                          return null; // Validation passed
-                        },
-                        obscureText: confirmPasswordvisible,
-                        controller: _confirmPasswordController,
-                        cursorColor: AppTheme.appColor,
-                        style: TextStyle(color: AppTheme.appColor),
-                        decoration: InputDecoration(
-                            suffix: InkWell(
-                                onTap: () {
-                                  setState(() {
-                                    confirmPasswordvisible =
-                                        !confirmPasswordvisible;
-                                  });
-                                },
-                                child: Icon(
-                                  confirmPasswordvisible == false
-                                      ? Icons.visibility
-                                      : Icons.visibility_off,
-                                  color: AppTheme.appColor,
-                                )),
-                            contentPadding: const EdgeInsets.only(left: 10),
-                            enabledBorder: UnderlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: AppTheme.appColor)),
-                            disabledBorder: const UnderlineInputBorder(
-                                borderSide: BorderSide.none),
-                            focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                              color: AppTheme.appColor,
-                            )),
-                            border: UnderlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: AppTheme.appColor)),
-                            hintText: "Confirm password",
-                            hintStyle: TextStyle(color: AppTheme.appColor)),
-                      ),
+                  const SizedBox(height: 15),
+                  Form(
+                    autovalidateMode:
+                    AutovalidateMode.onUserInteraction,
+                    key: _formKeyConfirmPassword,
+                    child: CustomAppPasswordfield(
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your confirm Password';
+                        } else if (value.length < 8) {
+                          return "password length should atleast 8";
+                        } else if (_passwordController.text !=
+                            value) {
+                          return "password does not match";
+                        }
+                        return null; // Validation passed
+                      },
+                      texthint: "Confirm password",
+                      controller: _confirmPasswordController,
                     ),
                   ),
                   const SizedBox(
-                    height: 140,
+                    height: 170,
                   ),
                   _isLoading == true
                       ? Center(
@@ -191,8 +129,8 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
                             resetPassword();
                           }
                         },
-                          width: 43.w,
-                          height: 5.5.h,
+                      width: 44.w,
+                      height: 40,
                           blurContainer: true,
                           border: false,
                           backgroundColor: AppTheme.appColor,
@@ -273,7 +211,7 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
           setState(() {
             _isLoading = false;
           });
-          pushReplacement(context, AuthScreen());
+          pushReplacement(context, const AuthScreen());
           showSnackBar(context, "${responseData["message"]}");
         }
       }

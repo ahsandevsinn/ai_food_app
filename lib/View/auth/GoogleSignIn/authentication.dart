@@ -181,7 +181,7 @@ void login({required String userId, context, required bool isNewUser, required S
       } else {
 
         var token = responseData['data']['token'];
-        // var DOB = responseData['data']['user']['DOB'];
+        var DOB = responseData['data']['user']['DOB'];
         var dietary_restrictions = responseData['data']['user']['dietary_restrictions'];
         var allergies = responseData['data']['user']['allergies'];
         for (var data0 in dietary_restrictions) {
@@ -192,7 +192,7 @@ void login({required String userId, context, required bool isNewUser, required S
         }
         prefs.setStringList(PrefKey.dataonBoardScreenAllergies, allergiesList);
         prefs.setStringList(PrefKey.dataonBoardScreenDietryRestriction, dietaryRestrictionsList);
-        // prefs.setString(PrefKey.dateOfBirth, DOB);
+        prefs.setString(PrefKey.dateOfBirth, DOB);
         prefs.setString(PrefKey.authorization, token ?? '');
         prefs.setString(PrefKey.userName, name ?? '');
 

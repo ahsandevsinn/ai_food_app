@@ -135,62 +135,65 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        toolbarHeight: 120,
+        toolbarHeight: 100,
         backgroundColor: Colors.white,
         automaticallyImplyLeading: false,
         elevation: 0,
-        title: GestureDetector(
-          onTap: () {
-            if (type == 1) {
-              pushReplacement(context, const SearchScreen());
-            } else {
-              push(context, const SearchScreen());
-            }
-          },
-          child: Container(
-            width: width,
-            height: 50,
-            decoration: BoxDecoration(
-              color: const Color(0xffd9c4ef),
-              borderRadius: BorderRadius.circular(100),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 20.0),
-                  child: Text(
-                    "${widget.query ?? "Search"}",
-                    style: const TextStyle(
-                        fontSize: 15, fontWeight: FontWeight.w500),
-                  ),
-                ),
-                Stack(
-                  children: [
-                    Container(
-                      width: 60,
-                      height: 50,
-                      decoration: const BoxDecoration(
-                        color: Color(0xFFB38ADE),
-                        borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(100),
-                            bottomRight: Radius.circular(100)),
-                      ),
+        title: Padding(
+          padding: const EdgeInsets.only(top: 28.0),
+          child: GestureDetector(
+            onTap: () {
+              if (type == 1) {
+                pushReplacement(context, const SearchScreen());
+              } else {
+                push(context, const SearchScreen());
+              }
+            },
+            child: Container(
+              width: width,
+              height: 50,
+              decoration: BoxDecoration(
+                color: const Color(0xffd9c4ef),
+                borderRadius: BorderRadius.circular(100),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20.0),
+                    child: Text(
+                      "${widget.query ?? "Search"}",
+                      style: const TextStyle(
+                          fontSize: 15, fontWeight: FontWeight.w500),
                     ),
-                    Align(
-                      alignment: Alignment.center,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 14.0),
-                        child: SvgPicture.asset(
-                          "assets/images/Search.svg",
-                          width: 30,
-                          height: 30,
+                  ),
+                  Stack(
+                    children: [
+                      Container(
+                        width: 60,
+                        height: 50,
+                        decoration: const BoxDecoration(
+                          color: Color(0xFFB38ADE),
+                          borderRadius: BorderRadius.only(
+                              topRight: Radius.circular(100),
+                              bottomRight: Radius.circular(100)),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                      Align(
+                        alignment: Alignment.center,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 14.0),
+                          child: SvgPicture.asset(
+                            "assets/images/Search.svg",
+                            width: 30,
+                            height: 30,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -551,7 +554,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   getSuggestedRecipes({allergies, dietaryRestrictions}) async {
     // const apiKey = '6fee21631c5c432dba9b34b9070a2d31';
-    const apiKey = '56806fa3f874403c8794d4b7e491c937';
+    // const apiKey = '56806fa3f874403c8794d4b7e491c937';
+    const apiKey = 'd9186e5f351240e094658382be62d948';
 
     final allergiesAre =
         allergies.isNotEmpty ? "${allergies.join(',').toLowerCase()}" : "";
@@ -656,7 +660,8 @@ class _HomeScreenState extends State<HomeScreen> {
     final kitchenProvider =
         Provider.of<KitchenResourcesProvider>(context, listen: false);
     // const apiKey = '6fee21631c5c432dba9b34b9070a2d31';
-    const apiKey = '56806fa3f874403c8794d4b7e491c937';
+    // const apiKey = '56806fa3f874403c8794d4b7e491c937';
+    const apiKey = 'd9186e5f351240e094658382be62d948';
 
     int currentOffset = widget.offset + 8;
 
@@ -722,7 +727,8 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       isLoading = true;
     });
-    const apiKey = '6fee21631c5c432dba9b34b9070a2d31';
+    // const apiKey = '6fee21631c5c432dba9b34b9070a2d31';
+    const apiKey = 'd9186e5f351240e094658382be62d948';
 
     int currentOffset = widget.offset + 8;
 
