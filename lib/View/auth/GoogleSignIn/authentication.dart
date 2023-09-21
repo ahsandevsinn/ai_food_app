@@ -90,7 +90,7 @@ class Authentication {
 
           print("getting_user_date of birth ${user} credentials ${credential}");
           // Check if the user already exists
-          login(userId: user.uid, context: context, isNewUser: newUser, name: displayName!);
+          login(userId: user.uid, context: context, isNewUser: newUser, name: displayName ?? "");
           // if (userCredential.additionalUserInfo!.isNewUser) {
           //   login(userId: user.uid, context: context, isNewUser: userCredential.additionalUserInfo!.isNewUser);
           // } else {
@@ -181,6 +181,7 @@ void login({required String userId, context, required bool isNewUser, required S
       } else {
 
         var token = responseData['data']['token'];
+        var username = responseData['data']['user']['name'];
         var DOB = responseData['data']['user']['DOB'];
         var dietary_restrictions = responseData['data']['user']['dietary_restrictions'];
         var allergies = responseData['data']['user']['allergies'];
@@ -192,20 +193,22 @@ void login({required String userId, context, required bool isNewUser, required S
         }
         prefs.setStringList(PrefKey.dataonBoardScreenAllergies, allergiesList);
         prefs.setStringList(PrefKey.dataonBoardScreenDietryRestriction, dietaryRestrictionsList);
-        prefs.setString(PrefKey.dateOfBirth, DOB);
         prefs.setString(PrefKey.authorization, token ?? '');
-        prefs.setString(PrefKey.userName, name ?? '');
+        prefs.setString(PrefKey.userName, username ?? name);
 
         if(isNewUser){
           pushReplacement(context, const UserProfileScreen());
         } else {
-          pushReplacement(context, BottomNavView(type: 0));
+          pushReplacement(context, BottomNavView(type: 0,
+            allergies: allergiesList,
+            dietaryRestrictions: dietaryRestrictionsList,));
         }
+        prefs.setString(PrefKey.dateOfBirth, DOB);
         showSnackBar(context, "${responseData["message"]}");
       }
     }
   } catch (e) {
     print("Something went Wrong ${e}");
-    showSnackBar(context, "Something went Wrong.");
+    // showSnackBar(context, "Something went Wrong.");
   }
 }

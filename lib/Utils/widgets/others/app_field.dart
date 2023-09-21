@@ -8,6 +8,7 @@ class CustomAppFormField extends StatefulWidget {
   final fontweight;
   final bool containerBorderCondition;
   final String texthint;
+  final errorText;
   final TextEditingController? controller;
   final FormFieldValidator? validator;
   final ValueChanged<String>? onChanged;
@@ -24,7 +25,12 @@ class CustomAppFormField extends StatefulWidget {
   final Widget? suffixIcon;
   final Color? prefixIconColor;
   final Color? suffixIconColor;
+  final Color? cursorColor;
   final TextStyle? hintStyle;
+  final style;
+  final errorStyle;
+  final errorBorder;
+  final focusedErrorBorder;
 
   CustomAppFormField({
     Key? key,
@@ -51,6 +57,11 @@ class CustomAppFormField extends StatefulWidget {
     this.fontweight,
     this.fontsize,
     this.hintStyle,
+    this.errorText,
+    this.style,
+    this.errorStyle,
+    this.errorBorder,
+    this.focusedErrorBorder, this.cursorColor,
   }) : super(key: key);
 
   @override
@@ -75,12 +86,16 @@ class _CustomAppFormFieldState extends State<CustomAppFormField> {
           obscureText: widget.obscureText,
           validator: widget.validator,
           controller: widget.controller,
-          cursorColor: AppTheme.appColor,
+          cursorColor: widget.cursorColor,
           style: TextStyle(
               color: AppTheme.appColor,
               fontSize: widget.fontsize,
               fontWeight: widget.fontweight),
           decoration: InputDecoration(
+              errorText: widget.errorText,
+              errorStyle: widget.errorStyle,
+              errorBorder: widget.errorBorder,
+              focusedErrorBorder: widget.focusedErrorBorder,
               isDense: true,
               prefixIconColor: widget.prefixIconColor,
               suffixIconColor: widget.suffixIconColor,
@@ -92,17 +107,15 @@ class _CustomAppFormFieldState extends State<CustomAppFormField> {
               enabledBorder: UnderlineInputBorder(
                   borderSide: BorderSide(color: AppTheme.appColor)),
               disabledBorder:
-                  const UnderlineInputBorder(borderSide: BorderSide.none),
+              const UnderlineInputBorder(borderSide: BorderSide.none),
               focusedBorder: UnderlineInputBorder(
                   borderSide: BorderSide(
-                color: AppTheme.appColor,
-              )),
+                    color: AppTheme.appColor,
+                  )),
               border: UnderlineInputBorder(
                   borderSide: BorderSide(color: AppTheme.appColor)),
               hintText: "${widget.texthint}",
-              hintStyle: widget.hintStyle
-              
-              ),
+              hintStyle: widget.hintStyle),
         ));
   }
 }
@@ -112,6 +125,7 @@ class CustomAppPasswordfield extends StatefulWidget {
   final double? width;
   final bool containerBorderCondition;
   final String texthint;
+  final errorText;
   final TextEditingController? controller;
   final FormFieldValidator? validator;
   final ValueChanged<String>? onChanged;
@@ -127,28 +141,41 @@ class CustomAppPasswordfield extends StatefulWidget {
   final Widget? suffixIcon;
   final Color? prefixIconColor;
   final Color? suffixIconColor;
+  final Color? cursorColor;
+  final hintStyle;
+  final style;
+  final errorStyle;
+  final errorBorder;
+  final focusedErrorBorder;
 
   CustomAppPasswordfield(
       {Key? key,
-      this.containerBorderCondition = false,
-      required this.texthint,
-      required this.controller,
-      this.validator,
-      this.height,
-      this.width,
-      this.onChanged,
-      this.onTap,
-      this.onTapOutside,
-      this.onEditingComplete,
-      this.onFieldSubmitted,
-      this.cursorHeight,
-      this.textAlign = TextAlign.start,
-      this.prefix,
-      this.suffix,
-      this.prefixIcon,
-      this.suffixIcon,
-      this.prefixIconColor,
-      this.suffixIconColor})
+        this.containerBorderCondition = false,
+        required this.texthint,
+        required this.controller,
+        this.validator,
+        this.height,
+        this.width,
+        this.onChanged,
+        this.onTap,
+        this.onTapOutside,
+        this.onEditingComplete,
+        this.onFieldSubmitted,
+        this.cursorHeight,
+        this.textAlign = TextAlign.start,
+        this.prefix,
+        this.suffix,
+        this.prefixIcon,
+        this.suffixIcon,
+        this.prefixIconColor,
+        this.suffixIconColor,
+        this.errorText,
+        this.hintStyle,
+        this.cursorColor,
+        this.style,
+        this.errorStyle,
+        this.errorBorder,
+        this.focusedErrorBorder})
       : super(key: key);
 
   @override
@@ -168,62 +195,64 @@ class _CustomAppPasswordfieldState extends State<CustomAppPasswordfield> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        // height: 60,
-        // color: Colors.red,
+      // height: 60,
+      // color: Colors.red,
         child: TextFormField(
-      textAlignVertical: TextAlignVertical.center,
-      onChanged: widget.onChanged,
-      onTap: widget.onTap,
-      onTapOutside: widget.onTapOutside,
-      onFieldSubmitted: widget.onFieldSubmitted,
-      cursorHeight: widget.cursorHeight,
-      textAlign: widget.textAlign,
-      key: widget.key,
-      obscureText: _obscureText,
-      validator: widget.validator,
-      controller: widget.controller,
-      cursorColor: AppTheme.appColor,
-      style: TextStyle(color: AppTheme.appColor),
-      decoration: InputDecoration(
-          prefixIconColor: widget.prefixIconColor,
-          suffixIconColor: widget.suffixIconColor,
-          prefix: widget.prefix,
-          suffix: widget.suffix,
-          prefixIcon: widget.prefixIcon,
-          contentPadding: const EdgeInsets.only(
-            top: 20,
-            left: 5,
-          ),
-          enabledBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: AppTheme.appColor)),
-          disabledBorder:
-              const UnderlineInputBorder(borderSide: BorderSide.none),
-          focusedBorder: UnderlineInputBorder(
-              borderSide: BorderSide(
-            color: AppTheme.appColor,
-          )),
-          border: UnderlineInputBorder(
-              borderSide: BorderSide(color: AppTheme.appColor)),
-          hintText: widget.texthint,
-          hintStyle: TextStyle(fontSize: 16,
-            fontWeight: FontWeight.w400,
-            color: AppTheme.appColor.withOpacity(0.6),),
-          suffixIcon: InkWell(
-            onTap: () {
-              setState(() {
-                _obscureText = !_obscureText;
-              });
-            },
-            child: Padding(
-              padding: EdgeInsets.only(top: 13),
-              child: Icon(
-                _obscureText
-                    ? Icons.visibility_off_outlined
-                    : Icons.visibility_outlined,
-                color: AppTheme.appColor,
+          textAlignVertical: TextAlignVertical.center,
+          onChanged: widget.onChanged,
+          onTap: widget.onTap,
+          onTapOutside: widget.onTapOutside,
+          onFieldSubmitted: widget.onFieldSubmitted,
+          cursorHeight: widget.cursorHeight,
+          textAlign: widget.textAlign,
+          key: widget.key,
+          obscureText: _obscureText,
+          validator: widget.validator,
+          controller: widget.controller,
+          cursorColor: widget.cursorColor,
+          style: widget.style,
+          decoration: InputDecoration(
+              errorText: widget.errorText,
+              errorStyle: widget.errorStyle,
+              errorBorder: widget.errorBorder,
+              focusedErrorBorder: widget.focusedErrorBorder,
+              prefixIconColor: widget.prefixIconColor,
+              suffixIconColor: widget.suffixIconColor,
+              prefix: widget.prefix,
+              suffix: widget.suffix,
+              prefixIcon: widget.prefixIcon,
+              contentPadding: const EdgeInsets.only(
+                top: 20,
+                left: 5,
               ),
-            ),
-          )),
-    ));
+              enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: AppTheme.appColor)),
+              disabledBorder:
+              const UnderlineInputBorder(borderSide: BorderSide.none),
+              focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: AppTheme.appColor,
+                  )),
+              border: UnderlineInputBorder(
+                  borderSide: BorderSide(color: AppTheme.appColor)),
+              hintText: widget.texthint,
+              hintStyle: widget.hintStyle,
+              suffixIcon: InkWell(
+                onTap: () {
+                  setState(() {
+                    _obscureText = !_obscureText;
+                  });
+                },
+                child: Padding(
+                  padding: EdgeInsets.only(top: 13),
+                  child: Icon(
+                    _obscureText
+                        ? Icons.visibility_off_outlined
+                        : Icons.visibility_outlined,
+                    color: AppTheme.appColor,
+                  ),
+                ),
+              )),
+        ));
   }
 }

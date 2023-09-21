@@ -1,26 +1,30 @@
+import 'package:ai_food/Utils/resources/res/app_theme.dart';
+import 'package:ai_food/Utils/widgets/others/app_button.dart';
+import 'package:ai_food/Utils/widgets/others/app_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-
-import '../../Utils/resources/res/app_theme.dart';
 import 'package:flutter/material.dart';
-import '../../Utils/widgets/others/app_text.dart';
+import 'package:flutter/rendering.dart';
 
 class ShoppingList extends StatefulWidget {
   final ingredient;
   final String image;
   final name;
   const ShoppingList(
-      {super.key, this.ingredient, required this.image, this.name});
+      {super.key, required this.image, this.ingredient, this.name});
 
   @override
   State<ShoppingList> createState() => _ShoppingListState();
 }
 
 class _ShoppingListState extends State<ShoppingList> {
+  bool offer = true;
+
   @override
   Widget build(BuildContext context) {
-    print("kejfbjkfbe${widget.ingredient.length}");
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: AppTheme.whiteColor,
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -59,25 +63,16 @@ class _ShoppingListState extends State<ShoppingList> {
         ),
         centerTitle: true,
       ),
-      body: LayoutBuilder(
-          builder: (BuildContext context, BoxConstraints constraints) {
-        var screenHeight = constraints.maxHeight;
-        var screenWidth = constraints.maxWidth;
-
-        return Column(
+      body: SingleChildScrollView(
+        child: Column(
           children: [
             Container(
-              height: MediaQuery.of(context).size.height - 104.7,
-              // color: Colors.black,
+              height: 340,
               child: Stack(
                 children: [
                   Container(
-                    height: 210,
+                    height: 240,
                     width: screenWidth,
-                    // decoration: BoxDecoration(
-                    //     image: DecorationImage(
-                    //         image: NetworkImage("${widget.image}"),
-                    //         fit: BoxFit.cover)),
                     child: CachedNetworkImage(
                       progressIndicatorBuilder: (context, url, progress) {
                         return Center(
@@ -88,23 +83,23 @@ class _ShoppingListState extends State<ShoppingList> {
                       },
                       imageUrl: widget.image,
                       fit: BoxFit.cover,
-                      errorWidget: (context, url, error) =>
-                          const Padding(
-                            padding: EdgeInsets.only(bottom: 60.0),
-                            child: Icon(Icons.error),
-                          ),
+                      errorWidget: (context, url, error) => const Padding(
+                        padding: EdgeInsets.only(bottom: 60.0),
+                        child: Icon(Icons.error),
+                      ),
                     ),
                   ),
                   Positioned(
-                    top: 150,
+                    top: 180,
                     child: Container(
+                      height: 240,
                       width: screenWidth,
                       decoration: BoxDecoration(
-                          border:
-                              Border.all(color: AppTheme.appColor, width: 2),
-                          borderRadius: const BorderRadius.only(
-                              topRight: Radius.circular(70)),
-                          color: AppTheme.whiteColor),
+                        color: Colors.white,
+                        border: Border.all(color: AppTheme.appColor, width: 2),
+                        borderRadius: const BorderRadius.only(
+                            topRight: Radius.circular(70)),
+                      ),
                       child: Padding(
                         padding: const EdgeInsets.only(
                             left: 20.0, top: 25, right: 40),
@@ -133,62 +128,6 @@ class _ShoppingListState extends State<ShoppingList> {
                             const SizedBox(
                               height: 30,
                             ),
-                            Container(
-                              height: screenHeight - 305,
-                              child: SingleChildScrollView(
-                                physics: const ScrollPhysics(),
-                                child: Column(
-                                  children: List.generate(
-                                    widget.ingredient.length,
-                                    (index) {
-                                      return Column(
-                                        children: [
-                                          Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            children: [
-                                              Expanded(
-                                                child: Container(
-                                                  child: Text(
-                                                    capitalize(
-                                                        widget.ingredient[index]
-                                                            ["originalName"]),
-                                                    style: TextStyle(
-                                                        fontSize: 18,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        color:
-                                                            AppTheme.appColor),
-                                                    textAlign:
-                                                        TextAlign.justify,
-                                                    softWrap: true,
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          const SizedBox(
-                                            height: 5,
-                                          ),
-                                          Container(
-                                            width: MediaQuery.of(context)
-                                                .size
-                                                .width,
-                                            height: 2,
-                                            color: AppTheme.appColor,
-                                          ),
-                                          const SizedBox(
-                                            height: 25,
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  ),
-                                ),
-                              ),
-                            )
                           ],
                         ),
                       ),
@@ -196,15 +135,73 @@ class _ShoppingListState extends State<ShoppingList> {
                   )
                 ],
               ),
-            )
+            ),
+            offerColumn()
           ],
-        );
-      }),
+        ),
+      ),
     );
   }
 
   String capitalize(String input) {
     if (input.isEmpty) return input;
     return input[0].toUpperCase() + input.substring(1);
+  }
+
+  offerColumn() {
+    final screenWidth = MediaQuery.of(context).size.width;
+    return Padding(
+      padding: const EdgeInsets.only(left: 20.0, right: 20, top: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            width: screenWidth,
+            child: ListView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: widget.ingredient.length,
+              shrinkWrap: true,
+              itemBuilder: (context, index) {
+                return Column(
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Container(
+                          child: Expanded(
+                            child: Text(
+                              capitalize(
+                                  widget.ingredient[index]["originalName"]),
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                  color: AppTheme.appColor),
+                              textAlign: TextAlign.justify,
+                              softWrap: true,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 2,
+                      color: AppTheme.appColor,
+                    ),
+                    const SizedBox(
+                      height: 25,
+                    ),
+                  ],
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    ); // Add a large empty space for scrolling
   }
 }

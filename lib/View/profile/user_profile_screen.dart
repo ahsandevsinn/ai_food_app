@@ -9,6 +9,7 @@ import 'package:ai_food/config/app_urls.dart';
 import 'package:ai_food/config/dio/app_dio.dart';
 import 'package:ai_food/config/keys/pref_keys.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
@@ -81,13 +82,12 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              padding: const EdgeInsets.only(top: 23),
-              width: MediaQuery.of(context).size.width,
-              child: const Image(
-                image: AssetImage(
-                  AppAssetsImage.profile_text_background,
-                ),
-                fit: BoxFit.cover,
+              height: 220,
+              width: double.infinity,
+              margin: const EdgeInsets.only(top: 23),
+              child: SvgPicture.asset(
+                AppAssetsImage.profile_updated_image,
+                // color: AppTheme.whiteColor,
               ),
             ),
             Padding(

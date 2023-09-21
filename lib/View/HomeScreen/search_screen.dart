@@ -24,6 +24,8 @@ class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController _searchController = TextEditingController();
   late AppDio dio;
   late SpoonAcularAppDio spoonDio;
+  bool randomData = false;
+  var errorResponse;
 
   AppLogger logger = AppLogger();
   bool isLoading = false;
@@ -107,7 +109,7 @@ class _SearchScreenState extends State<SearchScreen> {
                               controller: _searchController,
                               autofocus: true,
                               cursorColor: AppTheme.appColor,
-                              style: TextStyle(color: AppTheme.appColor),
+                              style: TextStyle(color: AppTheme.whiteColor),
                               decoration: InputDecoration.collapsed(
                                 hintText: 'Search',
                                 hintStyle: TextStyle(
@@ -208,6 +210,16 @@ class _SearchScreenState extends State<SearchScreen> {
                       ),
                     ],
                   ),
+                  randomData == true
+                      ? Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Container(
+                      height: 500,
+                      child: Center(
+                          child: AppText.appText("${errorResponse}")),
+                    ),
+                  )
+                      : SizedBox()
                 ],
               ),
             ),
@@ -223,9 +235,9 @@ class _SearchScreenState extends State<SearchScreen> {
     });
 
     var searchtext = _searchController.text;
-    // const apiKey = '6fee21631c5c432dba9b34b9070a2d31';
+    const apiKey = '6fee21631c5c432dba9b34b9070a2d31';
     // const apiKey = '56806fa3f874403c8794d4b7e491c937';
-    const apiKey = 'd9186e5f351240e094658382be62d948';
+    // const apiKey = 'd9186e5f351240e094658382be62d948';
 
     final apiUrl =
         '${AppUrls.spoonacularBaseUrl}/recipes/complexSearch?query=$searchtext&apiKey=$apiKey';
@@ -249,6 +261,13 @@ class _SearchScreenState extends State<SearchScreen> {
         );
 
         // _searchController.clear();
+      }else if (response.statusCode == 402) {
+        setState(() {
+          isLoading = false;
+          randomData = true;
+          errorResponse = response.data["message"];
+          print("l;nkwkdn${response.data["message"]}");
+        });
       } else {
         print('API request failed with status code: ${response.statusCode}');
       }

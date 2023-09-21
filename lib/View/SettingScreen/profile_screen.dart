@@ -12,6 +12,7 @@ import 'package:ai_food/config/app_urls.dart';
 import 'package:ai_food/config/dio/app_dio.dart';
 import 'package:ai_food/config/keys/pref_keys.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
@@ -146,18 +147,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
               const SizedBox(
                 height: 20,
               ),
-              Flexible(
-                fit: FlexFit.loose,
-                child: Container(
-                  height: 220,
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage(
-                        AppAssetsImage.profile_text_background,
-                      ),
-                      fit: BoxFit.fill,
-                    ),
-                  ),
+              SizedBox(
+                height: 220,
+                width: double.infinity,
+                child: SvgPicture.asset(
+                  AppAssetsImage.profile_updated_image,
+                  // color: AppTheme.whiteColor,
                 ),
               ),
               const SizedBox(height: 40),
@@ -239,7 +234,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           updatedvalueM == ""
                                               ? "Measuring Unit"
                                               : updatedvalueM,
-                                          fontSize: 18,
+                                          fontSize: 11.sp,
                                           fontWeight: FontWeight.w500,
                                           textColor: AppTheme.appColor),
                                     ),
@@ -366,7 +361,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ],
                     ),
                     Positioned(
-                      top: 8.4.h,
+                      top: 9.1.h,
                       right: 0,
                       child: measuringUnit
                           ? customMeasuringUnit()

@@ -58,6 +58,11 @@ class _AuthScreenState extends State<AuthScreen> {
   final TextEditingController _loginPasswordController =
       TextEditingController();
 
+  String errormessageLoginsPassword = "";
+  String errormessageLoginsEmail = "";
+  bool hintTextColorCondition = false;
+  bool hintTextColor2Condition = false;
+
   //sign in with apple code
   String generateNonce([int length = 32]) {
     const charset =
@@ -205,27 +210,60 @@ class _AuthScreenState extends State<AuthScreen> {
                                   children: [
                                     Form(
                                       key: _formKeyLoginEmail,
-                                      autovalidateMode:
-                                          AutovalidateMode.onUserInteraction,
+                                      // autovalidateMode:
+                                      //     AutovalidateMode.onUserInteraction,
                                       child: CustomAppFormField(
-                                          validator: (value) {
-                                            final isEmailValid = RegExp(
-                                                    r'^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+\.[a-z]')
-                                                .hasMatch(value);
-                                            final isMobileValid = RegExp(
-                                                    r'^\+(?:[0-9] ?){6,14}[0-9]$')
-                                                .hasMatch(value);
-                                            if (value.isEmpty ||
-                                                value == null) {
-                                              return "Please enter your email";
-                                            }
-                                            if (!isEmailValid &&
-                                                !isMobileValid) {
-                                              return "Please enter a valid email";
-                                            }
-                                            return null;
-                                          },
+                                          // validator: (value) {
+                                          //   final isEmailValid = RegExp(
+                                          //           r'^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+\.[a-z]')
+                                          //       .hasMatch(value);
+                                          //   final isMobileValid = RegExp(
+                                          //           r'^\+(?:[0-9] ?){6,14}[0-9]$')
+                                          //       .hasMatch(value);
+                                          //   if (value.isEmpty ||
+                                          //       value == null) {
+                                          //     return "Please enter your email";
+                                          //   }
+                                          //   if (!isEmailValid &&
+                                          //       !isMobileValid) {
+                                          //     return "Please enter a valid email";
+                                          //   }
+                                          //   return null;
+                                          // },
+                                          onChanged: (value) {
+                                            setState(() {
+                                              hintTextColor2Condition = false;
+                                              errormessageLoginsEmail = "";
+
+                                            });},
+
+                                          errorText: errormessageLoginsEmail,
+                                          errorStyle: TextStyle(
+                                            color: hintTextColor2Condition == false
+                                                ? AppTheme.appColor
+                                                : Colors.red,
+                                          ),
+                                          focusedErrorBorder:
+                                          UnderlineInputBorder(
+                                              borderSide: BorderSide(
+                                                color: hintTextColor2Condition == false
+                                                    ? AppTheme.appColor
+                                                    : Colors.red,
+                                              )),
+                                          errorBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color:
+                                              hintTextColor2Condition == false
+                                                  ? AppTheme.appColor
+                                                  : Colors.red,
+                                            ),
+                                          ),
+
                                           texthint: "Enter email",
+                                          cursorColor:
+                                          hintTextColor2Condition == false
+                                              ? AppTheme.appColor
+                                              : Colors.red,
                                           hintStyle: TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.w400,
@@ -236,18 +274,60 @@ class _AuthScreenState extends State<AuthScreen> {
                                     ),
                                     Form(
                                       key: _formKeyLoginPassword,
-                                      autovalidateMode:
-                                          AutovalidateMode.onUserInteraction,
+                                      // autovalidateMode:
+                                      //     AutovalidateMode.onUserInteraction,
                                       child: CustomAppPasswordfield(
-                                        validator: (value) {
-                                          if (value.isEmpty) {
-                                            return "Please enter a valid password";
-                                          } else if (value.length < 8) {
-                                            return "password length should be at least 8 characters";
-                                          }
-                                          return null;
+                                        // validator: (value) {
+                                        //   if (value.isEmpty) {
+                                        //     return "Please enter a valid password";
+                                        //   } else if (value.length < 8) {
+                                        //     return "password length should be at least 8 characters";
+                                        //   }
+                                        //   return null;
+                                        // },
+                                        onChanged: (value) {
+                                          setState(() {
+                                            hintTextColorCondition = false;
+                                            errormessageLoginsPassword = "";
+
+                                          });
                                         },
+                                        errorText: errormessageLoginsPassword,
+                                        errorStyle: TextStyle(
+                                          color: hintTextColorCondition == false
+                                              ? AppTheme.appColor
+                                              : Colors.red,
+                                        ),
+                                        focusedErrorBorder:
+                                        UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: hintTextColorCondition == false
+                                                  ? AppTheme.appColor
+                                                  : Colors.red,
+                                            )),
+                                        errorBorder: UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color:
+                                            hintTextColorCondition == false
+                                                ? AppTheme.appColor
+                                                : Colors.red,
+                                          ),
+                                        ),
                                         texthint: "Password",
+                                        style: TextStyle(
+                                            color:
+                                            hintTextColorCondition == false
+                                                ? AppTheme.appColor
+                                                : Colors.red),
+                                        cursorColor:
+                                        hintTextColorCondition == false
+                                            ? AppTheme.appColor
+                                            : Colors.red,
+                                        hintStyle: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w400,
+                                            color: AppTheme.appColor
+                                                .withOpacity(0.6)),
                                         controller: _loginPasswordController,
                                       ),
                                     ),
@@ -292,6 +372,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                           },
                                           height: 50,
                                           texthint: "Enter full name",
+                                          cursorColor: AppTheme.appColor,
                                           hintStyle: TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.w400,
@@ -318,6 +399,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                         },
                                         // height: 50,
                                         texthint: "Enter email",
+                                        cursorColor: AppTheme.appColor,
                                         hintStyle: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w400,
@@ -341,6 +423,14 @@ class _AuthScreenState extends State<AuthScreen> {
                                           return null; // Validation passed
                                         },
                                         texthint: "Enter password",
+                                        style: TextStyle(
+                                            color: AppTheme.appColor),
+                                        cursorColor: AppTheme.appColor,
+                                        hintStyle: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w400,
+                                            color: AppTheme.appColor
+                                                .withOpacity(0.6)),
                                         controller: _passwordController,
                                       ),
                                     ),
@@ -352,8 +442,6 @@ class _AuthScreenState extends State<AuthScreen> {
                                         validator: (value) {
                                           if (value == null || value.isEmpty) {
                                             return 'Please enter your confirm Password';
-                                          } else if (value.length < 8) {
-                                            return "password should be at least 8 characters";
                                           } else if (_passwordController.text !=
                                               value) {
                                             return "password does not match";
@@ -361,6 +449,16 @@ class _AuthScreenState extends State<AuthScreen> {
                                           return null; // Validation passed
                                         },
                                         texthint: "Confirm password",
+                                        style: TextStyle(
+                                            color: AppTheme.appColor),
+                                        cursorColor:
+                                        AppTheme.appColor,
+
+                                        hintStyle: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w400,
+                                            color: AppTheme.appColor
+                                                .withOpacity(0.6)),
                                         controller: _confirmPasswordController,
                                       ),
                                     ),
@@ -440,43 +538,48 @@ class _AuthScreenState extends State<AuthScreen> {
                       const GoogleSignInButton(),
                     ],
                   ),
-                  InkWell(
-                    onTap: () {
-                      if (login == true) {
-                        setState(() {
-                          login = false;
-                        });
-                      } else if (login == false) {
-                        setState(() {
-                          login = true;
-                        });
-                      }
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        AppText.appText(
-                            login == true
-                                ? "Don't have an Account? "
-                                : "Already have an Account? ",
-                            textColor: AppTheme.appColor,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w400),
-                        Column(
+                  Center(
+                    child: SizedBox(
+                      width: 210,
+                      child: InkWell(
+                        onTap: () {
+                          if (login == true) {
+                            setState(() {
+                              login = false;
+                            });
+                          } else if (login == false) {
+                            setState(() {
+                              login = true;
+                            });
+                          }
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            AppText.appText(login == true ? "Sign Up" : "Sign In",
+                            AppText.appText(
+                                login == true
+                                    ? "Don't have an Account? "
+                                    : "Already have an Account? ",
                                 textColor: AppTheme.appColor,
                                 fontSize: 12,
-                                fontWeight: FontWeight.w600,
+                                fontWeight: FontWeight.w400),
+                            Column(
+                              children: [
+                                AppText.appText(login == true ? "Sign Up" : "Sign In",
+                                    textColor: AppTheme.appColor,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w600,
+                                    ),
+                                Container(
+                                  height: 1,
+                                  width: 45,
+                                  color: AppTheme.appColor,
                                 ),
-                            Container(
-                              height: 1,
-                              width: 45,
-                              color: AppTheme.appColor,
+                              ],
                             ),
                           ],
                         ),
-                      ],
+                      ),
                     ),
                   )
                 ],
@@ -677,7 +780,33 @@ class _AuthScreenState extends State<AuthScreen> {
           setState(() {
             _isLoading = false;
           });
-          alertDialogError(context: context, message: responseData["message"]);
+          String responsemessage = responseData["message"];
+          print("jidmaosmdo${responsemessage}");
+          String errormessageconst = "The selected email is invalid.";
+          if (responsemessage == errormessageconst) {
+            setState(() {
+              errormessageLoginsEmail = responseData["messsage"] ?? "Invalid email";
+              hintTextColor2Condition = true;
+            });
+            // alertDialogError(
+            //     context: context, message: responseData["message"]);
+          }
+          String errormessageconst2 = "Invalid password";
+          if (responsemessage == errormessageconst2) {
+            setState(() {
+              errormessageLoginsPassword = responseData["messsage"] ?? "Invalid password";
+              hintTextColorCondition = true;
+
+            });
+          }
+          String errormessageconst3 = "The password field is required.";
+          if (responsemessage == errormessageconst3) {
+            setState(() {
+              errormessageLoginsPassword = responseData["messsage"] ?? "Password field is Empty";
+              hintTextColorCondition = true;
+
+            });
+          }
           return;
         } else {
           print("responseData${responseData}");
@@ -785,6 +914,7 @@ class _AuthScreenState extends State<AuthScreen> {
 
           // print("name_is_here ${responseData['data']['user']['name']}");
           var DOB = responseData['data']['user']['DOB'];
+          var username = responseData['data']['user']['name'];
           var dietary_restrictions =
               responseData['data']['user']['dietary_restrictions'];
           var allergies = responseData['data']['user']['allergies'];
@@ -794,19 +924,22 @@ class _AuthScreenState extends State<AuthScreen> {
           for (var data0 in allergies) {
             allergiesList.addAll({'${data0['id']}:${data0['name']}'});
           }
-          prefs.setStringList(
-              PrefKey.dataonBoardScreenAllergies, allergiesList);
-          prefs.setStringList(PrefKey.dataonBoardScreenDietryRestriction,
-              dietaryRestrictionsList);
-          prefs.setString(PrefKey.dateOfBirth, DOB);
+          prefs.setStringList(PrefKey.dataonBoardScreenAllergies, allergiesList);
+          prefs.setStringList(PrefKey.dataonBoardScreenDietryRestriction, dietaryRestrictionsList);
           prefs.setString(PrefKey.authorization, token ?? '');
-          prefs.setString(PrefKey.userName, name ?? '');
+
 
           if (isNewUser) {
             pushReplacement(context, const UserProfileScreen());
           } else {
-            pushReplacement(context, BottomNavView());
+            pushReplacement(context, BottomNavView(
+              type: 0,
+              allergies: allergiesList,
+              dietaryRestrictions: dietaryRestrictionsList,
+            ));
           }
+          prefs.setString(PrefKey.userName, username ?? name);
+          prefs.setString(PrefKey.dateOfBirth, DOB ?? "");
           print("responseData${responseData}");
           setState(() {
             _appleLoading = false;
@@ -824,7 +957,7 @@ class _AuthScreenState extends State<AuthScreen> {
         _appleLoading = false;
       });
       print("Something went Wrong ${e}");
-      showSnackBar(context, "Something went Wrong.");
+      // showSnackBar(context, "Something went Wrong.");
     }
   }
 
