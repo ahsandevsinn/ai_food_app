@@ -28,7 +28,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   //initializing Global variables for DIO package
   late AppDio dio;
   AppLogger logger = AppLogger();
-  String myName = "Howdy Sir!";
+  String myName = "Enter name";
 
   //final data stores and sent to UpdateAPI
   final _userNameController = TextEditingController();
@@ -320,12 +320,12 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       }
     }
     if (selectedDate == null) {
-      showSnackBar(context, "select DOB");
+      showSnackBar(context, "Enter your date of birth");
       setState(() {
         checkAPI = false;
       });
     } else if (_userNameController.text.isEmpty) {
-      showSnackBar(context, "field cannot be empty");
+      showSnackBar(context, "Enter your name");
       setState(() {
         checkAPI = false;
       });
@@ -397,45 +397,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           break;
       }
 
-      // if (response.statusCode == responseCode400) {
-      //   setState(() {
-      //     checkAPI =false;
-      //   });
-      //   print("Bad Request.");
-      // } else if (response.statusCode == responseCode401) {
-      //   setState(() {
-      //     checkAPI =false;
-      //   });
-      //   print("Unauthorized access.");
-      // } else if (response.statusCode == responseCode404) {
-      //   setState(() {
-      //     checkAPI =false;
-      //   });
-      //   print(
-      //       "The requested resource could not be found but may be available again in the future. Subsequent requests by the client are permissible.");
-      // } else if (response.statusCode == responseCode500) {
-      //   setState(() {
-      //     checkAPI =false;
-      //   });
-      //   print("Internal server error.");
-      // } else if (response.statusCode == responseCode200) {
-      //   if(responseData["status"] == false){
-      //     setState(() {
-      //       checkAPI =false;
-      //     });
-      //     print("Something Went Wrong: ${responseData["message"]}");
-      //   } else {
-      //     print("every thing is alright");
-      //
-      //     // pushReplacement(
-      //     //     context,
-      //     //     BottomNavView(
-      //     //       allergies: addAllergies,
-      //     //       dietaryRestrictions: addDietaryRestrictions,
-      //     //     ));
-      //   }
-      //
-      // }
     } catch (e) {
       setState(() {
         checkAPI = false;

@@ -635,8 +635,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             setState(() {
               checkAPI = false;
             });
-            alertDialogError(context: context, message: responseData["message"]);
-            // print("Something Went Wrong: ${responseData["message"]}");
+            showSnackBar(context, "Enter your name");
           } else {
             setState(() {
               checkAPI = false;

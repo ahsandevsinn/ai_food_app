@@ -85,9 +85,9 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
                         child: CustomAppPasswordfield(
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Please enter your password';
+                              return 'Enter your password';
                             } else if (value.length < 8) {
-                              return "password length should atleast 8";
+                              return "Password length should be at least 8 characters";
                             }
                             return null; // Validation passed
                           },
@@ -111,9 +111,9 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
                         child: CustomAppPasswordfield(
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Please enter your confirm Password';
+                              return 'Enter your confirm password';
                             } else if (_passwordController.text != value) {
-                              return "password does not match";
+                              return "Password does not match";
                             }
                             return null; // Validation passed
                           },

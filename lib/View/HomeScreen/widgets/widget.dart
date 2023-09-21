@@ -24,7 +24,7 @@ class CustomRecipesSelection extends StatelessWidget {
             border: Border.all(color: AppTheme.appColor,width: 2)
         ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          padding: const EdgeInsets.symmetric(horizontal: 15.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

@@ -44,9 +44,11 @@ class _SearchScreenState extends State<SearchScreen> {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
+      backgroundColor: Colors.white,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.white,
         elevation: 0,
         toolbarHeight: 65,
         leadingWidth: 60,
@@ -236,8 +238,9 @@ class _SearchScreenState extends State<SearchScreen> {
 
     var searchtext = _searchController.text;
     // const apiKey = '6fee21631c5c432dba9b34b9070a2d31';
+    const apiKey = 'e833a1c1f6b6485086fd40c54e29de7c';
     // const apiKey = '56806fa3f874403c8794d4b7e491c937';
-    const apiKey = 'd9186e5f351240e094658382be62d948';
+    // const apiKey = 'd9186e5f351240e094658382be62d948';
 
     final apiUrl =
         '${AppUrls.spoonacularBaseUrl}/recipes/complexSearch?query=$searchtext&apiKey=$apiKey';

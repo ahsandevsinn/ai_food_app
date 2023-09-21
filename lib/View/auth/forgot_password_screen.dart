@@ -108,36 +108,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       children: [
                         Padding(
                           padding: const EdgeInsets.only(top: 120.0),
-                          // child: Form(
-                          //   autovalidateMode:
-                          //       AutovalidateMode.onUserInteraction,
-                          //   key: _formKey,
-                          //   child: CustomAppFormField(
-                          //     texthint: "Email",
-                          //     hintStyle: TextStyle(
-                          //         color: AppTheme.appColor.withOpacity(0.6),
-                          //         fontSize: 16,
-                          //         fontWeight: FontWeight.w400),
-                          //     controller: _textController,
-                          //     validator: (value) {
-                          //       final isEmailValid = RegExp(
-                          //               r'^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+\.[a-z]')
-                          //           .hasMatch(value);
-                          //
-                          //       if (value.isEmpty || value == null) {
-                          //         return "Please enter your email";
-                          //       }
-                          //       if (!isEmailValid) {
-                          //         return "Please enter a valid email";
-                          //       }
-                          //       return null;
-                          //     },
-                          //   ),
-                          // ),
                           child: Form(
                             key: _formKey,
-                            // autovalidateMode:
-                            //     AutovalidateMode.onUserInteraction,
                             child: CustomAppFormField(
                                 onChanged: (value) {
                                   setState(() {
@@ -256,7 +228,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         return;
       } else {
         print("responseData${responseData["data"]["OTP"]}");
-        showSnackBar(context, "Password reset OTP has been sent to your email");
+        showSnackBar(context, "Reset password OTP has been sent to your email");
         setState(() {
           isLoading = false;
         });
