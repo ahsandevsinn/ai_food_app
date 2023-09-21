@@ -234,9 +234,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ? InkWell(
                                       onTap: () async {
                                         if (widget.searchType == 1) {
-                                          await reGenerateRecipe();
+                                          await reGenerateRecipe(context);
                                         } else {
-                                          await reGenerateRecipeQuery();
+                                          await reGenerateRecipeQuery(context);
                                         }
                                       },
                                       child: Container(
@@ -309,7 +309,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           height: 500,
                                           child: Center(
                                               child: AppText.appText(
-                                                  "No results found. Please try adjusting your search parameters.")),
+                                                  "No results found. Please try adjusting your profile parameters.")),
                                         ),
                                       )
                                     : GridView.builder(
@@ -423,11 +423,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                     width: MediaQuery.of(context).size.width,
                                     child: const Center(
                                       child: Text(
-                                        "Don't find any Result",
+                                        "No results found. Please try adjusting your search parameters.",
                                         textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                        ),
                                       ),
                                     ),
                                   )
@@ -531,8 +528,8 @@ class _HomeScreenState extends State<HomeScreen> {
   getSearchResult(id) async {
     print("kjbjfejfbjefbefljeblf");
 
-    const apiKey = 'd9186e5f351240e094658382be62d948';
-    // const apiKey = '6fee21631c5c432dba9b34b9070a2d31';
+    // const apiKey = 'd9186e5f351240e094658382be62d948';
+    const apiKey = '6fee21631c5c432dba9b34b9070a2d31';
 
     final apiUrl =
         'https://api.spoonacular.com/recipes/$id/information?includeNutrition=&apiKey=$apiKey';
@@ -553,9 +550,9 @@ class _HomeScreenState extends State<HomeScreen> {
   ////////////////////////////////////get suggested recipe////////////////////////////////////////////////////////////////////
 
   getSuggestedRecipes({allergies, dietaryRestrictions}) async {
-    const apiKey = '6fee21631c5c432dba9b34b9070a2d31';
+    // const apiKey = '6fee21631c5c432dba9b34b9070a2d31';
     // const apiKey = '56806fa3f874403c8794d4b7e491c937';
-    // const apiKey = 'd9186e5f351240e094658382be62d948';
+    const apiKey = 'd9186e5f351240e094658382be62d948';
 
     final allergiesAre =
         allergies.isNotEmpty ? "${allergies.join(',').toLowerCase()}" : "";
@@ -645,7 +642,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
 //////////////////////////////
 //Here is the function for regenrating recipes
-  Future reGenerateRecipe() async {
+  Future reGenerateRecipe(context) async {
     setState(() {
       isLoading = true;
     });
@@ -659,14 +656,14 @@ class _HomeScreenState extends State<HomeScreen> {
         Provider.of<RegionalDelicacyProvider>(context, listen: false);
     final kitchenProvider =
         Provider.of<KitchenResourcesProvider>(context, listen: false);
-    const apiKey = '6fee21631c5c432dba9b34b9070a2d31';
+    // const apiKey = '6fee21631c5c432dba9b34b9070a2d31';
     // const apiKey = '56806fa3f874403c8794d4b7e491c937';
-    // const apiKey = 'd9186e5f351240e094658382be62d948';
+    const apiKey = 'd9186e5f351240e094658382be62d948';
 
     int currentOffset = widget.offset + 8;
 
     final style = widget.foodStyle.isNotEmpty
-        ? "&cuisine=${widget.foodStyle.toString().substring(1, widget.foodStyle.toString().length - 1)}"
+        ? "&cuisine=${widget.foodStyle}"
         : "";
     final kitchenResources = kitchenProvider.addKitchenResources.isNotEmpty
         ? "&equipment=${kitchenProvider.addKitchenResources.toString().substring(1, kitchenProvider.addKitchenResources.toString().length - 1)}"
@@ -694,16 +691,26 @@ class _HomeScreenState extends State<HomeScreen> {
     if (response.statusCode == 200) {
       print("response_data_is  ${response.data}");
 
-      pushReplacement(
-          context,
-          BottomNavView(
-            type: 1,
-            data: response.data["results"],
-            offset: currentOffset,
-            totalResults: response.data["totalResults"],
-            foodStyle: widget.foodStyle,
-            searchType: 1,
-          ));
+      // pushReplacement(
+      //     context,
+      //     BottomNavView(
+      //       type: 1,
+      //       data: response.data["results"],
+      //       offset: currentOffset,
+      //       totalResults: response.data["totalResults"],
+      //       foodStyle: widget.foodStyle,
+      //       searchType: 1,
+      //     ));
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
+        return BottomNavView(
+          type: 1,
+          data: response.data["results"],
+          offset: currentOffset,
+          totalResults: response.data["totalResults"],
+          foodStyle: widget.foodStyle,
+          searchType: 1,
+        );
+      }));
       setState(() {
         isLoading = false;
       });
@@ -723,12 +730,12 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  Future reGenerateRecipeQuery() async {
+  Future reGenerateRecipeQuery(context) async {
     setState(() {
       isLoading = true;
     });
-    // const apiKey = '6fee21631c5c432dba9b34b9070a2d31';
-    const apiKey = 'd9186e5f351240e094658382be62d948';
+    const apiKey = '6fee21631c5c432dba9b34b9070a2d31';
+    // const apiKey = 'd9186e5f351240e094658382be62d948';
 
     int currentOffset = widget.offset + 8;
 
@@ -740,16 +747,27 @@ class _HomeScreenState extends State<HomeScreen> {
     if (response.statusCode == 200) {
       print("response_data_is  ${response.data}");
 
-      pushReplacement(
-          context,
-          BottomNavView(
-            type: 1,
-            data: response.data["results"],
-            offset: currentOffset,
-            totalResults: response.data["totalResults"],
-            query: widget.query,
-            searchType: 0,
-          ));
+      // pushReplacement(
+      //     context,
+      //     BottomNavView(
+      //       type: 1,
+      //       data: response.data["results"],
+      //       offset: currentOffset,
+      //       totalResults: response.data["totalResults"],
+      //       query: widget.query,
+      //       searchType: 0,
+      //     )
+      //     );
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
+        return BottomNavView(
+          type: 1,
+          data: response.data["results"],
+          offset: currentOffset,
+          totalResults: response.data["totalResults"],
+          query: widget.query,
+          searchType: 0,
+        );
+      }));
       setState(() {
         isLoading = false;
       });

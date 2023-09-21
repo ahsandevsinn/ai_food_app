@@ -30,6 +30,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final _formKey = GlobalKey<FormState>();
   bool isLoading = false;
 
+  String errormessageLoginsEmail = "";
+  bool hintTextColorCondition = false;
+  bool hintTextColor2Condition = false;
+
   @override
   void setState(fn) {
     if (mounted) {
@@ -104,31 +108,78 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       children: [
                         Padding(
                           padding: const EdgeInsets.only(top: 120.0),
+                          // child: Form(
+                          //   autovalidateMode:
+                          //       AutovalidateMode.onUserInteraction,
+                          //   key: _formKey,
+                          //   child: CustomAppFormField(
+                          //     texthint: "Email",
+                          //     hintStyle: TextStyle(
+                          //         color: AppTheme.appColor.withOpacity(0.6),
+                          //         fontSize: 16,
+                          //         fontWeight: FontWeight.w400),
+                          //     controller: _textController,
+                          //     validator: (value) {
+                          //       final isEmailValid = RegExp(
+                          //               r'^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+\.[a-z]')
+                          //           .hasMatch(value);
+                          //
+                          //       if (value.isEmpty || value == null) {
+                          //         return "Please enter your email";
+                          //       }
+                          //       if (!isEmailValid) {
+                          //         return "Please enter a valid email";
+                          //       }
+                          //       return null;
+                          //     },
+                          //   ),
+                          // ),
                           child: Form(
-                            autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
                             key: _formKey,
+                            // autovalidateMode:
+                            //     AutovalidateMode.onUserInteraction,
                             child: CustomAppFormField(
-                              texthint: "Email",
-                              hintStyle: TextStyle(
-                                  color: AppTheme.appColor.withOpacity(0.6),
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w400),
-                              controller: _textController,
-                              validator: (value) {
-                                final isEmailValid = RegExp(
-                                        r'^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+\.[a-z]')
-                                    .hasMatch(value);
+                                onChanged: (value) {
+                                  setState(() {
+                                    hintTextColor2Condition = false;
+                                    errormessageLoginsEmail = "";
 
-                                if (value.isEmpty || value == null) {
-                                  return "Please enter your email";
-                                }
-                                if (!isEmailValid) {
-                                  return "Please enter a valid email";
-                                }
-                                return null;
-                              },
-                            ),
+                                  });},
+
+                                errorText: errormessageLoginsEmail,
+                                errorStyle: TextStyle(
+                                  color: hintTextColor2Condition == false
+                                      ? AppTheme.appColor
+                                      : Colors.red,
+                                ),
+                                focusedErrorBorder:
+                                UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: hintTextColor2Condition == false
+                                          ? AppTheme.appColor
+                                          : Colors.red,
+                                    )),
+                                errorBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color:
+                                    hintTextColor2Condition == false
+                                        ? AppTheme.appColor
+                                        : Colors.red,
+                                  ),
+                                ),
+
+                                texthint: "Enter email",
+                                cursorColor:
+                                hintTextColor2Condition == false
+                                    ? AppTheme.appColor
+                                    : Colors.red,
+                                hintStyle: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                  color: AppTheme.appColor
+                                      .withOpacity(0.6),
+                                ),
+                                controller: _textController),
                           ),
                         ),
                         _verificationInProgress || isLoading == true
@@ -191,7 +242,17 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         setState(() {
           isLoading = false;
         });
-        showSnackBar(context, "${responseData["message"]}");
+        String responsemessage = responseData["message"];
+        print("jidmaosmdo${responsemessage}");
+        String errormessageconst = "The selected email is invalid.";
+        String errormessageconst2 = "The email must be a valid email address.";
+        if (responsemessage == errormessageconst || responsemessage == errormessageconst2) {
+          setState(() {
+            errormessageLoginsEmail = responseData["messsage"] ?? "Invalid email";
+            hintTextColor2Condition = true;
+          });
+        }
+        // showSnackBar(context, "${responseData["message"]}");
         return;
       } else {
         print("responseData${responseData["data"]["OTP"]}");

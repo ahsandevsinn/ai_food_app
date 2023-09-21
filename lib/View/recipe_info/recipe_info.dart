@@ -271,7 +271,8 @@ class _RecipeInfoState extends State<RecipeInfo>
                                 const SizedBox(
                                   width: 10,
                                 ),
-                                AppText.appText("${widget.recipeData["readyInMinutes"]} minutes",
+                                AppText.appText(
+                                    "${widget.recipeData["readyInMinutes"]} minutes",
                                     textColor: AppTheme.appColor,
                                     fontSize: 16,
                                     fontWeight: FontWeight.w500)
@@ -282,12 +283,15 @@ class _RecipeInfoState extends State<RecipeInfo>
                             ),
                             Row(
                               children: [
-                                SvgPicture.asset("assets/images/Persons Icon.svg",
-                                    width: 20, height: 20),
+                                SvgPicture.asset(
+                                    "assets/images/Persons Icon.svg",
+                                    width: 20,
+                                    height: 20),
                                 const SizedBox(
                                   width: 5,
                                 ),
-                                AppText.appText("${widget.recipeData["servings"]} Person",
+                                AppText.appText(
+                                    "${widget.recipeData["servings"]} persons",
                                     textColor: AppTheme.appColor,
                                     fontSize: 16,
                                     fontWeight: FontWeight.w500)
@@ -302,12 +306,15 @@ class _RecipeInfoState extends State<RecipeInfo>
               ),
             ),
             SizedBox(
-              height: 700,
+              height: 300,
               child: Column(
                 children: [
                   TabBar(
+                    indicator: UnderlineTabIndicator(
+                        borderSide:
+                        BorderSide(width: 3.0, color: AppTheme.appColor),
+                        insets: EdgeInsets.symmetric(horizontal: 30.0)),
                     indicatorColor: AppTheme.appColor,
-                    indicatorSize: TabBarIndicatorSize.label,
                     indicatorWeight: 3,
                     labelColor: AppTheme.appColor,
                     unselectedLabelColor: const Color(0xffd9c4ef),
@@ -320,7 +327,7 @@ class _RecipeInfoState extends State<RecipeInfo>
                       controller: _tabController,
                       children: [
                         ListView.builder(
-                          physics: ScrollPhysics(),
+                          physics: const ScrollPhysics(),
                           shrinkWrap: true,
                           itemCount: widget
                               .recipeData["analyzedInstructions"].isEmpty
@@ -379,7 +386,7 @@ class _RecipeInfoState extends State<RecipeInfo>
                           },
                         ),
                         ListView.builder(
-                          physics: ScrollPhysics(),
+                          physics: const ScrollPhysics(),
                           shrinkWrap: true,
                           itemCount: ingredient.length,
                           itemBuilder: (context, index) {
@@ -419,7 +426,8 @@ class _RecipeInfoState extends State<RecipeInfo>
                                                 Container(
                                                   width: screenWidth * 0.55,
                                                   child: Text(
-                                                    "${ingredient[index]["originalName"]}",
+                                                    capitalize(ingredient[index]
+                                                    ["originalName"]),
                                                     textAlign:
                                                     TextAlign.justify,
                                                     softWrap: true,
@@ -491,5 +499,10 @@ class _RecipeInfoState extends State<RecipeInfo>
         ),
       ),
     );
+  }
+
+  String capitalize(String input) {
+    if (input.isEmpty) return input;
+    return input[0].toUpperCase() + input.substring(1);
   }
 }

@@ -69,49 +69,69 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
                 height: 60,
               ),
               Customcard(
-                  childWidget: Column(
+                  childWidget: Stack(
                 children: [
                   const SizedBox(
                     height: 80,
                   ),
 
-                  Form(
-                    autovalidateMode:
-                    AutovalidateMode.onUserInteraction,
-                    key: _formKeyPassword,
-                    child: CustomAppPasswordfield(
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your password';
-                        } else if (value.length < 8) {
-                          return "password length should atleast 8";
-                        }
-                        return null; // Validation passed
-                      },
-                      texthint: "Enter new password",
-                      controller: _passwordController,
-                    ),
-                  ),
-                  const SizedBox(height: 15),
-                  Form(
-                    autovalidateMode:
-                    AutovalidateMode.onUserInteraction,
-                    key: _formKeyConfirmPassword,
-                    child: CustomAppPasswordfield(
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your confirm Password';
-                        } else if (value.length < 8) {
-                          return "password length should atleast 8";
-                        } else if (_passwordController.text !=
-                            value) {
-                          return "password does not match";
-                        }
-                        return null; // Validation passed
-                      },
-                      texthint: "Confirm password",
-                      controller: _confirmPasswordController,
-                    ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Form(
+                        autovalidateMode:
+                        AutovalidateMode.onUserInteraction,
+                        key: _formKeyPassword,
+                        child: CustomAppPasswordfield(
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter your password';
+                            } else if (value.length < 8) {
+                              return "password length should atleast 8";
+                            }
+                            return null; // Validation passed
+                          },
+                          style: TextStyle(
+                              color: AppTheme.appColor),
+                          cursorColor:
+                          AppTheme.appColor,
+                          hintStyle: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
+                              color: AppTheme.appColor
+                                  .withOpacity(0.6)),
+                          texthint: "Enter new password",
+                          controller: _passwordController,
+                        ),
+                      ),
+                      Form(
+                        autovalidateMode:
+                        AutovalidateMode.onUserInteraction,
+                        key: _formKeyConfirmPassword,
+                        child: CustomAppPasswordfield(
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter your confirm Password';
+                            } else if (_passwordController.text != value) {
+                              return "password does not match";
+                            }
+                            return null; // Validation passed
+                          },
+                          style: TextStyle(
+                              color: AppTheme.appColor),
+                          cursorColor:
+                          AppTheme.appColor,
+                          hintStyle: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
+                              color: AppTheme.appColor
+                                  .withOpacity(0.6)),
+                          texthint: "Confirm password",
+                          controller: _confirmPasswordController,
+                        ),
+                      ),
+                      const SizedBox(height: 50),
+                    ],
                   ),
                   const SizedBox(
                     height: 170,
@@ -122,21 +142,24 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
                             color: AppTheme.appColor,
                           ),
                         )
-                      : AppButton.appButton("Confirm", onTap: () {
-                          if (_formKeyPassword.currentState!.validate() &&
-                              _formKeyConfirmPassword.currentState!
-                                  .validate()) {
-                            resetPassword();
-                          }
-                        },
-                      width: 44.w,
-                      height: 40,
-                          blurContainer: true,
-                          border: false,
-                          backgroundColor: AppTheme.appColor,
-                          textColor: AppTheme.whiteColor,
-                          fontSize: 12.sp,
-                          fontWeight: FontWeight.w600)
+                      : Align(
+                    alignment: Alignment.bottomCenter,
+                        child: AppButton.appButton("Confirm", onTap: () {
+                            if (_formKeyPassword.currentState!.validate() &&
+                                _formKeyConfirmPassword.currentState!
+                                    .validate()) {
+                              resetPassword();
+                            }
+                          },
+                        width: 44.w,
+                        height: 40,
+                            blurContainer: true,
+                            border: false,
+                            backgroundColor: AppTheme.appColor,
+                            textColor: AppTheme.whiteColor,
+                            fontSize: 12.sp,
+                            fontWeight: FontWeight.w600),
+                      )
                 ],
               )),
             ],

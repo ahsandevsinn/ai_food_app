@@ -210,26 +210,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                   children: [
                                     Form(
                                       key: _formKeyLoginEmail,
-                                      // autovalidateMode:
-                                      //     AutovalidateMode.onUserInteraction,
                                       child: CustomAppFormField(
-                                          // validator: (value) {
-                                          //   final isEmailValid = RegExp(
-                                          //           r'^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+\.[a-z]')
-                                          //       .hasMatch(value);
-                                          //   final isMobileValid = RegExp(
-                                          //           r'^\+(?:[0-9] ?){6,14}[0-9]$')
-                                          //       .hasMatch(value);
-                                          //   if (value.isEmpty ||
-                                          //       value == null) {
-                                          //     return "Please enter your email";
-                                          //   }
-                                          //   if (!isEmailValid &&
-                                          //       !isMobileValid) {
-                                          //     return "Please enter a valid email";
-                                          //   }
-                                          //   return null;
-                                          // },
                                           onChanged: (value) {
                                             setState(() {
                                               hintTextColor2Condition = false;
@@ -274,17 +255,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                     ),
                                     Form(
                                       key: _formKeyLoginPassword,
-                                      // autovalidateMode:
-                                      //     AutovalidateMode.onUserInteraction,
                                       child: CustomAppPasswordfield(
-                                        // validator: (value) {
-                                        //   if (value.isEmpty) {
-                                        //     return "Please enter a valid password";
-                                        //   } else if (value.length < 8) {
-                                        //     return "password length should be at least 8 characters";
-                                        //   }
-                                        //   return null;
-                                        // },
                                         onChanged: (value) {
                                           setState(() {
                                             hintTextColorCondition = false;
@@ -330,9 +301,6 @@ class _AuthScreenState extends State<AuthScreen> {
                                                 .withOpacity(0.6)),
                                         controller: _loginPasswordController,
                                       ),
-                                    ),
-                                    const SizedBox(
-                                      height: 10,
                                     ),
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.end,
@@ -393,7 +361,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                           final emailRegex = RegExp(
                                               r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$');
                                           if (!emailRegex.hasMatch(value)) {
-                                            return 'Invalid Email';
+                                            return 'Enter valid email';
                                           }
                                           return null;
                                         },
@@ -418,7 +386,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                           if (value == null || value.isEmpty) {
                                             return 'Please enter your password';
                                           } else if (value.length < 8) {
-                                            return "password should be at least 8 characters";
+                                            return "Password length should be at least 8 characters";
                                           }
                                           return null; // Validation passed
                                         },
@@ -441,10 +409,10 @@ class _AuthScreenState extends State<AuthScreen> {
                                       child: CustomAppPasswordfield(
                                         validator: (value) {
                                           if (value == null || value.isEmpty) {
-                                            return 'Please enter your confirm Password';
+                                            return 'Please enter your confirm password';
                                           } else if (_passwordController.text !=
                                               value) {
-                                            return "password does not match";
+                                            return "Password does not match";
                                           }
                                           return null; // Validation passed
                                         },
@@ -783,7 +751,8 @@ class _AuthScreenState extends State<AuthScreen> {
           String responsemessage = responseData["message"];
           print("jidmaosmdo${responsemessage}");
           String errormessageconst = "The selected email is invalid.";
-          if (responsemessage == errormessageconst) {
+          String errormessageconst4 = "The email must be a valid email address.";
+          if (responsemessage == errormessageconst || responsemessage == errormessageconst4) {
             setState(() {
               errormessageLoginsEmail = responseData["messsage"] ?? "Invalid email";
               hintTextColor2Condition = true;
