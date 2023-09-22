@@ -7,7 +7,6 @@ import 'package:ai_food/Utils/utils.dart';
 import 'package:ai_food/Utils/widgets/others/app_button.dart';
 import 'package:ai_food/Utils/widgets/others/app_field.dart';
 import 'package:ai_food/Utils/widgets/others/app_text.dart';
-import 'package:ai_food/Utils/widgets/others/errordialogue.dart';
 import 'package:ai_food/config/app_urls.dart';
 import 'package:ai_food/config/dio/app_dio.dart';
 import 'package:ai_food/config/keys/pref_keys.dart';
@@ -360,13 +359,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                       ],
                     ),
-                    Positioned(
-                      top: 9.1.h,
-                      right: 0,
-                      child: measuringUnit
-                          ? customMeasuringUnit()
-                          : const SizedBox.shrink(),
-                    ),
+                    measuringUnit
+                        ? Align(alignment: Alignment.topRight,child: Padding(
+                          padding: const EdgeInsets.only(top: 77),
+                          child: customMeasuringUnit(),
+                        ))
+                        : const SizedBox.shrink(),
                   ],
                 ),
               ),
@@ -487,62 +485,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString(PrefKey.unit, updatedvalueM);
   }
-  // loadselectParamsfromAPI() async {
-  //   var response;
-  //   const int responseCode200 = 200; // For successful request.
-  //   const int responseCode400 = 400; // For Bad Request.
-  //   const int responseCode401 = 401; // For Unauthorized access.
-  //   const int responseCode404 = 404; // For For data not found
-  //   const int responseCode500 = 500; // Internal server error.
-  //   try {
-  //     response = await dio.get(
-  //         path: AppUrls.searchParameterUrl,  queryParameters: {"search": 0});
-  //     var responseData = response.data;
-  //     switch (response.statusCode) {
-  //       case responseCode400:
-  //         print("Bad Request.");
-  //         break;
-  //       case responseCode401:
-  //         print("Unauthorized access.");
-  //         break;
-  //       case responseCode404:
-  //         print("The requested resource could not be found but may be available again in the future. Subsequent requests by the client are permissible.");
-  //         break;
-  //       case responseCode500:
-  //         print("Internal server error.");
-  //         break;
-  //       case responseCode200:
-  //         if (responseData["status"] == false) {
-  //           showSnackBar(context, "${responseData["message"]}");
-  //         } else {
-  //           var data = responseData["data"]["allergies"];
-  //           var data2 = responseData["data"]["dietaryRestrictions"];
-  //           //this condition is to make sure that if server didn;t work or server don't load the data.
-  //           if (data == null &&data2 == null ) {
-  //             showSnackBar(context, "Something went wrong reload the page");
-  //           }
-  //           //-----------------//
-  //           //when data is loaded
-  //           else {
-  //             setState(() {
-  //               allergies = data;
-  //               dietaryRestrictions = data2;
-  //             });
-  //           }
-  //           showSnackBar(context, "selection Loaded from API");
-  //           //----------------------//
-  //
-  //         }
-  //         break;
-  //       default:
-  //       // Handle other response codes here if needed.
-  //         break;
-  //     }
-  //   } catch (e) {
-  //     showSnackBar(context, "Reload the page ${e}");
-  //   }
-  // }
-
   LoadingSelectedDataFromSetupProfileScreen() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {

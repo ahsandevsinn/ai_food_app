@@ -503,9 +503,9 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
     final kitchenProvider =
         Provider.of<KitchenResourcesProvider>(context, listen: false);
     // const apiKey = '56806fa3f874403c8794d4b7e491c937';
-    const apiKey = 'e833a1c1f6b6485086fd40c54e29de7c';
+    // const apiKey = 'e833a1c1f6b6485086fd40c54e29de7c';
     // const apiKey = '6fee21631c5c432dba9b34b9070a2d31';
-    // const apiKey = 'd9186e5f351240e094658382be62d948';
+    const apiKey = 'd9186e5f351240e094658382be62d948';
     final style = foodStyleProvider.foodStyle.isNotEmpty
         ? "&cuisine=${foodStyleProvider.foodStyle}"
         : "";
@@ -539,6 +539,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
             offset: response.data["offset"],
             totalResults: response.data["totalResults"],
             foodStyle: foodStyleProvider.foodStyle,
+            searchList: List.generate(response.data["results"].length, (index) => false),
             searchType: 1,
             data: response.data["results"],
           ));

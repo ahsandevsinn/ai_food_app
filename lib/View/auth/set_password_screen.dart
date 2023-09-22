@@ -51,12 +51,12 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.only(left: 25, right: 25, top: 105),
+          padding: const EdgeInsets.only(left: 25, right: 25, top: 80),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               AppText.appText("Forgot Password",
-                  fontSize: 25.sp,
+                  fontSize: 32,
                   textColor: AppTheme.appColor,
                   fontWeight: FontWeight.w600),
               AppText.appText(
@@ -137,8 +137,9 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
                     height: 170,
                   ),
                   _isLoading == true
-                      ? Center(
-                          child: CircularProgressIndicator(
+                      ? Align(
+                    alignment: Alignment.bottomCenter,
+                    child: CircularProgressIndicator(
                             color: AppTheme.appColor,
                           ),
                         )

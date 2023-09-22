@@ -60,8 +60,9 @@ class _RecipeInfoState extends State<RecipeInfo>
     print("njefbkjbfjk${ingredient.length}");
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.white,
         elevation: 0,
         leading: InkWell(
           onTap: () {
@@ -257,7 +258,7 @@ class _RecipeInfoState extends State<RecipeInfo>
                       ),
                       Positioned(
                         top: 295,
-                        left: 60.w,
+                        left: 58.w,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -269,7 +270,7 @@ class _RecipeInfoState extends State<RecipeInfo>
                                 SvgPicture.asset("assets/images/Timer Icon.svg",
                                     width: 20, height: 20),
                                 const SizedBox(
-                                  width: 10,
+                                  width: 15,
                                 ),
                                 AppText.appText(
                                     "${widget.recipeData["readyInMinutes"]} minutes",
@@ -288,7 +289,7 @@ class _RecipeInfoState extends State<RecipeInfo>
                                     width: 20,
                                     height: 20),
                                 const SizedBox(
-                                  width: 5,
+                                  width: 10,
                                 ),
                                 AppText.appText(
                                     "${widget.recipeData["servings"]} persons",

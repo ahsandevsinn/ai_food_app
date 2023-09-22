@@ -31,8 +31,10 @@ class HomeScreen extends StatefulWidget {
   final foodStyle;
   final searchType;
   var query;
+  final searchList;
   HomeScreen(
       {Key? key,
+      this.searchList,
       this.data,
       this.type,
       this.allergies,
@@ -59,7 +61,8 @@ class _HomeScreenState extends State<HomeScreen> {
   int type = 0;
   bool isLoading = false;
   bool isHiting = false;
-
+  bool recipeInfoLoader = false;
+  List showProgressindicators = [];
   @override
   void initState() {
     print("type$type");
@@ -70,6 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
     setRecipesParameters();
     if (widget.type == 1) {
       type = widget.type;
+      showProgressindicators = widget.searchList;
     } else {
       LoadingDataFromSharedPreffromProfile();
     }
@@ -132,7 +136,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     print("allergies${widget.allergies}");
-    print("dietaryRestrictions${widget.dietaryRestrictions}");
+    print("dietaryRestrictions${showProgressindicators}");
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -314,219 +318,22 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   "No results found. Please try adjusting your profile parameters.")),
                                         ),
                                       )
-                                    : GridView.builder(
-                                        physics:
-                                            const NeverScrollableScrollPhysics(),
-                                        gridDelegate:
-                                            SliverGridDelegateWithFixedCrossAxisCount(
-                                          crossAxisCount: 2,
-                                          childAspectRatio:
-                                              width / (2.26 * 225),
-                                        ),
-                                        shrinkWrap: true,
-                                        itemCount: responseData.length,
-                                        itemBuilder: (context, int index) {
-                                          return Container(
-                                            width: width / 2.26,
-                                            height: 225,
-                                            decoration: BoxDecoration(
-                                              color: AppTheme.appColor,
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                            ),
-                                            margin:
-                                                const EdgeInsets.symmetric(
-                                                    vertical: 8,
-                                                    horizontal: 8),
-                                            child: Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 12),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Container(
-                                                      padding:
-                                                          const EdgeInsets
-                                                              .only(
-                                                              top: 12,
-                                                              bottom: 8),
-                                                      child: Center(
-                                                        child: ClipRRect(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      10),
-                                                          child:
-                                                              CachedNetworkImage(
-                                                            fit: BoxFit.cover,
-                                                            imageUrl:
-                                                                "${responseData[index]["image"]}",
-                                                            height: 130,
-                                                            width: width,
-                                                            errorWidget: (context,
-                                                                    url,
-                                                                    error) =>
-                                                                const Icon(Icons
-                                                                    .error),
-                                                          ),
-                                                        ),
-                                                      )),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            right: 10.0),
-                                                    child: AppText.appText(
-                                                        "${responseData[index]["title"]}",
-                                                        textAlign:
-                                                            TextAlign.left,
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        textColor: AppTheme
-                                                            .whiteColor,
-                                                        fontWeight:
-                                                            FontWeight.w800),
-                                                  ),
-                                                  const SizedBox(height: 14),
-                                                  InkWell(
-                                                    onTap: () {
-                                                      if (isHiting == false) {
-                                                        getSearchResult(
-                                                            "${responseData[index]["id"]}");
-                                                        print(
-                                                            "bjfebbfebfjkebjkfbebfbejbjbekjfbejfjebfjbejbfbekjb");
-                                                      }
-                                                    },
-                                                    child: Container(
-                                                      height: 32,
-                                                      decoration: BoxDecoration(
-                                                        borderRadius: BorderRadius.circular(32),
-                                                        color: AppTheme.whiteColor,
-                                                      ),
-                                                      child: Padding(
-                                                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                                                        child: Row(
-                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                          children: [
-                                                            AppText.appText("See detail", textColor: AppTheme.appColor,
-                                                            fontSize: 14,
-                                                              fontWeight: FontWeight.w500,
-                                                            ),
-                                                            Icon(Icons.arrow_forward_ios, color: AppTheme.appColor,size: 18,)
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                      )
+                                    : gridView(data: responseData)
                             : widget.data.length == 0
                                 ? Container(
                                     height: MediaQuery.of(context).size.height *
                                         0.6,
                                     width: MediaQuery.of(context).size.width,
-                                    child: const Center(
+                                    child: Center(
                                       child: Text(
-                                        "No results found. Please try adjusting your search parameters.",
+                                        widget.searchType == 1
+                                            ? "No results found. Please try adjusting your search parameters."
+                                            :"No results found." ,
                                         textAlign: TextAlign.center,
                                       ),
                                     ),
                                   )
-                                : GridView.builder(
-                                    physics:
-                                        const NeverScrollableScrollPhysics(),
-                                    gridDelegate:
-                                        SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 2,
-                                      childAspectRatio: width / (2.26 * 238),
-                                    ),
-                                    shrinkWrap: true,
-                                    itemCount: widget.data.length,
-                                    itemBuilder: (context, index) {
-                                      return GestureDetector(
-                                        onTap: () {
-                                          getSearchResult(
-                                              "${widget.data[index]["id"]}");
-                                        },
-                                        child: Container(
-                                          width: width / 2.26,
-                                          height: 238,
-                                          decoration: BoxDecoration(
-                                            color: AppTheme.appColor,
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                          ),
-                                          margin: const EdgeInsets.symmetric(
-                                              vertical: 8, horizontal: 8),
-                                          child: Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 12),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Container(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            top: 12, bottom: 8),
-                                                    child: Center(
-                                                      child: ClipRRect(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(10),
-                                                        child:
-                                                            CachedNetworkImage(
-                                                          fit: BoxFit.cover,
-                                                          key: ValueKey<int>(
-                                                              index),
-                                                          imageUrl:
-                                                              "${widget.data[index]["image"]}",
-                                                          height: 130,
-                                                          width: width,
-                                                          errorWidget: (context,
-                                                                  url, error) =>
-                                                              const Icon(
-                                                                  Icons.error),
-                                                        ),
-                                                      ),
-                                                    )),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          right: 10.0),
-                                                  child: AppText.appText(
-                                                      "${widget.data[index]["title"]}",
-                                                      textAlign: TextAlign.left,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      textColor:
-                                                          AppTheme.whiteColor,
-                                                      fontSize: 14,
-                                                      fontWeight:
-                                                          FontWeight.w600),
-                                                ),
-                                                Text(
-                                                  textAlign: TextAlign.justify,
-                                                  maxLines: 3,
-                                                  "This is Product. This is Product. This is Product. This is Product. This is Product.",
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: TextStyle(
-                                                    color: AppTheme.whiteColor,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  )
+                                : gridView(data: widget.data)
                       ]),
                 ),
               ),
@@ -534,15 +341,17 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  getSearchResult(id) async {
+  getSearchResult({id, index}) async {
     print("kjbjfejfbjefbefljeblf");
     setState(() {
       isHiting = true;
+      showProgressindicators[index] = true;
+      print("jbjbdjsbdjbdjsb $showProgressindicators");
     });
-    // const apiKey = 'd9186e5f351240e094658382be62d948';
+    const apiKey = 'd9186e5f351240e094658382be62d948';
     // const apiKey = '6fee21631c5c432dba9b34b9070a2d31';
     // const apiKey = '56806fa3f874403c8794d4b7e491c937';
-    const apiKey = 'e833a1c1f6b6485086fd40c54e29de7c';
+    // const apiKey = 'e833a1c1f6b6485086fd40c54e29de7c';
 
     final apiUrl =
         'https://api.spoonacular.com/recipes/$id/information?includeNutrition=&apiKey=$apiKey';
@@ -553,6 +362,7 @@ class _HomeScreenState extends State<HomeScreen> {
       print("kwbdbkwk${response.data}");
       setState(() {
         isHiting = false;
+        showProgressindicators[index] = false;
         Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => RecipeInfo(
             recipeData: response.data,
@@ -568,8 +378,8 @@ class _HomeScreenState extends State<HomeScreen> {
   getSuggestedRecipes({allergies, dietaryRestrictions}) async {
     // const apiKey = '6fee21631c5c432dba9b34b9070a2d31';
     // const apiKey = '56806fa3f874403c8794d4b7e491c937';
-    // const apiKey = 'd9186e5f351240e094658382be62d948';
-    const apiKey = 'e833a1c1f6b6485086fd40c54e29de7c';
+    const apiKey = 'd9186e5f351240e094658382be62d948';
+    // const apiKey = 'e833a1c1f6b6485086fd40c54e29de7c';
 
     final allergiesAre =
         allergies.isNotEmpty ? "${allergies.join(',').toLowerCase()}" : "";
@@ -596,6 +406,8 @@ class _HomeScreenState extends State<HomeScreen> {
       if (response.statusCode == 200) {
         setState(() {
           responseData = response.data["results"];
+          showProgressindicators =
+              List.generate(responseData.length, (index) => false);
         });
       } else if (response.statusCode == 402) {
         setState(() {
@@ -675,8 +487,8 @@ class _HomeScreenState extends State<HomeScreen> {
         Provider.of<KitchenResourcesProvider>(context, listen: false);
     // const apiKey = '6fee21631c5c432dba9b34b9070a2d31';
     // const apiKey = '56806fa3f874403c8794d4b7e491c937';
-    const apiKey = 'e833a1c1f6b6485086fd40c54e29de7c';
-    // const apiKey = 'd9186e5f351240e094658382be62d948';
+    // const apiKey = 'e833a1c1f6b6485086fd40c54e29de7c';
+    const apiKey = 'd9186e5f351240e094658382be62d948';
 
     int currentOffset = widget.offset + 8;
 
@@ -707,17 +519,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
     if (response.statusCode == 200) {
       print("response_data_is  ${response.data}");
-
-      // pushReplacement(
-      //     context,
-      //     BottomNavView(
-      //       type: 1,
-      //       data: response.data["results"],
-      //       offset: currentOffset,
-      //       totalResults: response.data["totalResults"],
-      //       foodStyle: widget.foodStyle,
-      //       searchType: 1,
-      //     ));
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
         return BottomNavView(
           type: 1,
@@ -725,6 +526,8 @@ class _HomeScreenState extends State<HomeScreen> {
           offset: currentOffset,
           totalResults: response.data["totalResults"],
           foodStyle: widget.foodStyle,
+          searchList:
+              List.generate(response.data["results"].length, (index) => false),
           searchType: 1,
         );
       }));
@@ -752,9 +555,9 @@ class _HomeScreenState extends State<HomeScreen> {
       isLoading = true;
     });
     // const apiKey = '6fee21631c5c432dba9b34b9070a2d31';
-    // const apiKey = 'd9186e5f351240e094658382be62d948';
+    const apiKey = 'd9186e5f351240e094658382be62d948';
     // const apiKey = '56806fa3f874403c8794d4b7e491c937';
-    const apiKey = 'e833a1c1f6b6485086fd40c54e29de7c';
+    // const apiKey = 'e833a1c1f6b6485086fd40c54e29de7c';
 
     int currentOffset = widget.offset + 8;
 
@@ -765,18 +568,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
     if (response.statusCode == 200) {
       print("response_data_is  ${response.data}");
-
-      // pushReplacement(
-      //     context,
-      //     BottomNavView(
-      //       type: 1,
-      //       data: response.data["results"],
-      //       offset: currentOffset,
-      //       totalResults: response.data["totalResults"],
-      //       query: widget.query,
-      //       searchType: 0,
-      //     )
-      //     );
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
         return BottomNavView(
           type: 1,
@@ -785,6 +576,8 @@ class _HomeScreenState extends State<HomeScreen> {
           totalResults: response.data["totalResults"],
           query: widget.query,
           searchType: 0,
+          searchList:
+              List.generate(response.data["results"].length, (index) => false),
         );
       }));
       setState(() {
@@ -804,5 +597,105 @@ class _HomeScreenState extends State<HomeScreen> {
         showSnackBar(context, "${response.statusMessage}");
       }
     }
+  }
+
+  Widget gridView({data}) {
+    final width = MediaQuery.of(context).size.width;
+
+    return GridView.builder(
+      physics: const NeverScrollableScrollPhysics(),
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        childAspectRatio: width / (2.26 * 225),
+      ),
+      shrinkWrap: true,
+      itemCount: data.length,
+      itemBuilder: (context, int index) {
+        return Container(
+          width: width / 2.26,
+          height: 225,
+          decoration: BoxDecoration(
+            color: AppTheme.appColor,
+            borderRadius: BorderRadius.circular(10),
+          ),
+          margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                    padding: const EdgeInsets.only(top: 12, bottom: 8),
+                    child: Center(
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: CachedNetworkImage(
+                          fit: BoxFit.cover,
+                          imageUrl: "${data[index]["image"]}",
+                          height: 130,
+                          width: width,
+                          errorWidget: (context, url, error) =>
+                              const Icon(Icons.error),
+                        ),
+                      ),
+                    )),
+                Padding(
+                  padding: const EdgeInsets.only(right: 10.0),
+                  child: AppText.appText("${data[index]["title"]}",
+                      textAlign: TextAlign.left,
+                      overflow: TextOverflow.ellipsis,
+                      textColor: AppTheme.whiteColor,
+                      fontWeight: FontWeight.w800),
+                ),
+                const SizedBox(height: 14),
+                showProgressindicators[index] == true
+                    ? Center(
+                        child: CircularProgressIndicator(
+                          color: AppTheme.whiteColor,
+                        ),
+                      )
+                    : InkWell(
+                        onTap: () {
+                          if (isHiting == false) {
+                            getSearchResult(
+                                id: "${data[index]["id"]}", index: index);
+                            print(
+                                "bjfebbfebfjkebjkfbebfbejbjbekjfbejfjebfjbejbfbekjb");
+                          }
+                        },
+                        child: Container(
+                          height: 32,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(32),
+                            color: AppTheme.whiteColor,
+                          ),
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 16.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                AppText.appText(
+                                  "See details",
+                                  textColor: AppTheme.appColor,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                                Icon(
+                                  Icons.arrow_forward_ios,
+                                  color: AppTheme.appColor,
+                                  size: 18,
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 }

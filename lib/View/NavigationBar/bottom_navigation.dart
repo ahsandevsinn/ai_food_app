@@ -17,6 +17,7 @@ class BottomNavView extends StatefulWidget {
   final foodStyle;
   final searchType;
   final query;
+  final searchList;
 
   BottomNavView(
       {super.key,
@@ -28,7 +29,8 @@ class BottomNavView extends StatefulWidget {
       this.offset,
       this.query,
       this.searchType,
-      this.totalResults});
+      this.totalResults,
+      this.searchList});
 
   @override
   State<BottomNavView> createState() => _BottomNavViewState();
@@ -52,6 +54,7 @@ class _BottomNavViewState extends State<BottomNavView> {
               foodStyle: widget.foodStyle,
               searchType: widget.searchType,
               query: widget.query,
+              searchList: widget.searchList,
             )
           : HomeScreen(
               // dietaryRestrictions: widget.dietaryRestrictions,

@@ -19,13 +19,10 @@ class _CustomcardState extends State<Customcard> {
         // width: 320,
         height: 450,
         decoration: ShapeDecoration(
-          image: DecorationImage(
+          image: const DecorationImage(
+            opacity: 0.25,
             image: AssetImage('assets/images/logo.png'),
             fit: BoxFit.contain,
-            colorFilter: ColorFilter.mode(
-              Colors.white.withOpacity(0.78), // Adjust the opacity as needed
-              BlendMode.lighten,
-            ),
           ),
           color: Colors.white,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),

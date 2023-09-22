@@ -99,9 +99,8 @@ class _AuthScreenState extends State<AuthScreen> {
         body: SingleChildScrollView(
           child: Padding(
             padding:
-                const EdgeInsets.only(left: 25, right: 25, bottom: 25, top: 25),
+                const EdgeInsets.only(left: 25, right: 25, bottom: 25, top: 45),
             child: SizedBox(
-              height: MediaQuery.of(context).size.height * 0.93,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -125,7 +124,8 @@ class _AuthScreenState extends State<AuthScreen> {
                       ],
                     ),
                   ),
-                  Customcard(
+
+                 SizedBox(height: 30,), Customcard(
                     childWidget: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -493,6 +493,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                   fontWeight: FontWeight.w600)
                         ]),
                   ),
+                  SizedBox(height: 30,),
                   Column(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.end,
