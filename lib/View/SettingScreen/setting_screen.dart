@@ -5,6 +5,12 @@ import 'package:ai_food/Utils/utils.dart';
 import 'package:ai_food/Utils/widgets/others/app_button.dart';
 import 'package:ai_food/Utils/widgets/others/app_text.dart';
 import 'package:ai_food/Utils/widgets/others/custom_app_bar.dart';
+import 'package:ai_food/View/HomeScreen/widgets/providers/allergies_provider.dart';
+import 'package:ai_food/View/HomeScreen/widgets/providers/dietary_restrictions_provider.dart';
+import 'package:ai_food/View/HomeScreen/widgets/providers/food_style_provider.dart';
+import 'package:ai_food/View/HomeScreen/widgets/providers/kitchenResources_provider.dart';
+import 'package:ai_food/View/HomeScreen/widgets/providers/preferredProtein_provider.dart';
+import 'package:ai_food/View/HomeScreen/widgets/providers/regionalDelicacy_provider.dart';
 import 'package:ai_food/View/SettingScreen/privacypolicy_screen.dart';
 import 'package:ai_food/View/SettingScreen/profile_screen.dart';
 import 'package:ai_food/View/SettingScreen/termsofuse_screen.dart';
@@ -16,6 +22,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 
@@ -223,6 +230,17 @@ class _SettingScreenState extends State<SettingScreen> {
   }
 
   showLogOutALert(BuildContext context, {controller}) {
+    final foodStyleProvider = Provider.of<FoodStyleProvider>(context,listen: false);
+    final allergiesProvider =
+    Provider.of<AllergiesProvider>(context, listen: false);
+    final restrictionsProvider =
+    Provider.of<DietaryRestrictionsProvider>(context, listen: false);
+    final proteinProvider =
+    Provider.of<PreferredProteinProvider>(context, listen: false);
+    final delicacyProvider =
+    Provider.of<RegionalDelicacyProvider>(context, listen: false);
+    final kitchenProvider =
+    Provider.of<KitchenResourcesProvider>(context, listen: false);
     return showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -285,6 +303,34 @@ class _SettingScreenState extends State<SettingScreen> {
                         GestureDetector(
                           onTap: () async {
                             await logout(context);
+                            if (allergiesProvider.addAllergies.isNotEmpty ||
+                                restrictionsProvider
+                                    .addDietaryRestrictions.isNotEmpty ||
+                                proteinProvider.addProtein.isNotEmpty ||
+                                kitchenProvider.addKitchenResources.isNotEmpty ||
+                                delicacyProvider.addRegionalDelicacy.isNotEmpty ||
+                                foodStyleProvider.foodStyle.isNotEmpty) {
+                              //  allergies
+                              allergiesProvider.removeAllergyParams();
+                              allergiesProvider.clearAllergiesAllCheckboxStates();
+                              //restrictions
+                              restrictionsProvider.removeDietaryRestrictions();
+                              restrictionsProvider
+                                  .clearDietaryRestrictionsAllCheckboxStates();
+                              //protein
+                              proteinProvider.removePreferredProtein();
+                              proteinProvider.clearProteinAllCheckboxStates();
+                              //delicacy
+                              delicacyProvider.removeRegionalDelicacy();
+                              delicacyProvider
+                                  .clearRegionalDelicacyAllCheckboxStates();
+                              //kitchen
+                              kitchenProvider.removeKitchenResources();
+                              kitchenProvider
+                                  .clearKitchenResourcesAllCheckboxStates();
+                              //food style
+                              foodStyleProvider.clearFoodStyleValue();
+                            }
                           },
                           child: const Text(
                             'Yes',
@@ -528,6 +574,7 @@ class _SettingScreenState extends State<SettingScreen> {
   Future<void> logout(context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove(PrefKey.authorization);
+    await prefs.remove(PrefKey.searchQueryParameter);
     await Authentication.signOut(context: context);
   }
 }

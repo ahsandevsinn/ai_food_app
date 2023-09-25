@@ -385,7 +385,9 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                                   dietary: restrictionsProvider,
                                   regional: delicacyProvider,
                                   kitchen: kitchenProvider);
+                              removeSearchQueryValueFromPref();
                             },
+
                           ),
                         ),
                   // ignore: prefer_const_constructors
@@ -399,6 +401,11 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
         ),
       ),
     );
+  }
+
+  removeSearchQueryValueFromPref() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove(PrefKey.searchQueryParameter);
   }
 
   Widget customFoodStyle() {
@@ -502,10 +509,10 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
         Provider.of<RegionalDelicacyProvider>(context, listen: false);
     final kitchenProvider =
         Provider.of<KitchenResourcesProvider>(context, listen: false);
-    // const apiKey = '56806fa3f874403c8794d4b7e491c937';
+    const apiKey = '56806fa3f874403c8794d4b7e491c937';
     // const apiKey = 'e833a1c1f6b6485086fd40c54e29de7c';
     // const apiKey = '6fee21631c5c432dba9b34b9070a2d31';
-    const apiKey = 'd9186e5f351240e094658382be62d948';
+    // const apiKey = 'd9186e5f351240e094658382be62d948';
     final style = foodStyleProvider.foodStyle.isNotEmpty
         ? "&cuisine=${foodStyleProvider.foodStyle}"
         : "";

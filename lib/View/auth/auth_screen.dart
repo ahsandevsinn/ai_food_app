@@ -125,7 +125,7 @@ class _AuthScreenState extends State<AuthScreen> {
                     ),
                   ),
 
-                 SizedBox(height: 30,), Customcard(
+                 SizedBox(height: 50,), Customcard(
                     childWidget: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -493,7 +493,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                   fontWeight: FontWeight.w600)
                         ]),
                   ),
-                  SizedBox(height: 30,),
+                  SizedBox(height: 50,),
                   Column(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.end,
@@ -506,7 +506,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                   ),
                                 )
                               : Center(
-                                  child: AppButton.appButtonWithLeadingIcon(
+                                  child: AppButton.appButtonWithLeadingImage(
                                     "Continue with Apple",
                                     onTap: () async {
                                       await handleAppleSignIn();
@@ -514,17 +514,19 @@ class _AuthScreenState extends State<AuthScreen> {
                                     fontSize: 20,
                                     fontWeight: FontWeight.w400,
                                     textColor: AppTheme.appColor,
-                                    icons: Icons.apple,
+                                    // icons: Icons.apple,
+                                    imagePath: "assets/images/Apple_icon.svg",
                                     height: 48,
                                   ),
                                 )
                           : const SizedBox.shrink(),
                       const SizedBox(
-                        height: 6,
+                        height: 8,
                       ),
                       const GoogleSignInButton(),
                     ],
                   ),
+                  SizedBox(height: 20,),
                   Center(
                     child: SizedBox(
                       width: 210,

@@ -1,5 +1,6 @@
 class PrefKey {
   static const String authorization = "token";
+  static const String searchQueryParameter = "searchQueryParameter";
   static const String customerReferenceNumber = "CustomerReferenceNumber";
   static const String fcm_token = "Fcm_token";
   static const String onAndOffStatus = "onlineOffline";

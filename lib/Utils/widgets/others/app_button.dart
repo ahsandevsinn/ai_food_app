@@ -1,6 +1,7 @@
 import 'package:ai_food/Utils/resources/res/app_theme.dart';
 import 'package:ai_food/Utils/widgets/others/app_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class AppButton {
   static Widget appButton(String text,
@@ -154,10 +155,14 @@ class AppButton {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Image(
-              image: AssetImage(imagePath!),
-              height: 25,
-            ),
+            // Image(
+            //   // image: AssetImage(imagePath!),
+            //   image:
+              SvgPicture.asset(
+                imagePath!,
+                height: 25,),
+            //   height: 25,
+            // ),
             AppText.appText(text,
                 fontFamily: fontFamily,
                 fontSize: fontSize,

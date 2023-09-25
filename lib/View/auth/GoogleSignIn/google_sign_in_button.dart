@@ -67,7 +67,7 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
                 fontWeight: FontWeight.w400,
                 textColor: AppTheme.appColor,
                 height: 48,
-                imagePath: "assets/images/google_logo.png",
+                imagePath: "assets/images/google_icon.svg",
               ),
             ),
     );

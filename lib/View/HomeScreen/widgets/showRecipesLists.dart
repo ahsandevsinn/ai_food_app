@@ -83,7 +83,7 @@ class _RecipesSelectionState extends State<RecipesSelection> {
                     ),
                   ),
                   const Text(
-                    "Lorem ipsum is just simply dummy text.",
+                    "Select your parameters.",
                     style: TextStyle(
                       fontSize: 16,
                       color: Colors.white,

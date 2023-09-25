@@ -203,8 +203,8 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
     chatsProvider.messageLoading(true);
     // const apiKey = '6fee21631c5c432dba9b34b9070a2d31';
     // const apiKey = 'e833a1c1f6b6485086fd40c54e29de7c';
-    // const apiKey = '56806fa3f874403c8794d4b7e491c937';
-    const apiKey = 'd9186e5f351240e094658382be62d948';
+    const apiKey = '56806fa3f874403c8794d4b7e491c937';
+    // const apiKey = 'd9186e5f351240e094658382be62d948';
     final apiUrl =
         'https://api.spoonacular.com/food/converse?text=${_messageController.text}&apiKey=$apiKey';
     final response = await AppDio(context).get(path: apiUrl);

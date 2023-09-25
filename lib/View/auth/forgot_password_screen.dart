@@ -64,7 +64,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.only(left: 25, right: 25, top: 25),
+          padding: const EdgeInsets.only(left: 25, right: 25, top: 25, bottom: 25),
           child: Column(
             children: [
               Padding(
@@ -172,7 +172,16 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                       r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$');
 
                                   if (_formKey.currentState!.validate()) {
-                                    forgetPassword(text: inputText);
+                                    if(_textController.text.isNotEmpty){
+                                      forgetPassword(text: inputText);
+                                    }
+                                    else{
+                                      setState(() {
+                                        errormessageLoginsEmail= "Enter email";
+                                        hintTextColor2Condition=  true;
+
+                                      });
+                                    }
                                   }
                                 },
                                     width: 44.w,

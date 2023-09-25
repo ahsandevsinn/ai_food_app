@@ -319,13 +319,14 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         index1++;
       }
     }
-    if (selectedDate == null) {
-      showSnackBar(context, "Enter your date of birth");
+    if (_userNameController.text.isEmpty) {
+      showSnackBar(context, "Enter your name");
       setState(() {
         checkAPI = false;
       });
-    } else if (_userNameController.text.isEmpty) {
-      showSnackBar(context, "Enter your name");
+      return;
+    } else if (selectedDate == null) {
+      showSnackBar(context, "Enter your date of birth");
       setState(() {
         checkAPI = false;
       });
@@ -408,12 +409,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   StoreDatainSharedPref(allergies, dietryRestriction) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (_userNameController.text.isEmpty) {
-      showSnackBar(context, "field cannot be empty");
       setState(() {
         checkAPI == false;
       });
     } else if (selectedDate == null) {
-      showSnackBar(context, "select DOB");
       setState(() {
         checkAPI == false;
       });

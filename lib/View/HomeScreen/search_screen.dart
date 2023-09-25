@@ -9,8 +9,10 @@ import 'package:ai_food/View/NavigationBar/bottom_navigation.dart';
 import 'package:ai_food/config/app_urls.dart';
 import 'package:ai_food/config/dio/app_dio.dart';
 import 'package:ai_food/config/dio/spoonacular_app_dio.dart';
+import 'package:ai_food/config/keys/pref_keys.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -36,6 +38,7 @@ class _SearchScreenState extends State<SearchScreen> {
     spoonDio = SpoonAcularAppDio(context);
 
     logger.init();
+    getqueryValueFromSharedPref();
     super.initState();
   }
 
@@ -231,16 +234,20 @@ class _SearchScreenState extends State<SearchScreen> {
   // Define a boolean variable to track the loading state
 
   Future<void> getFood(context) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
     // Set isLoading to true when the API call starts
     setState(() {
       isLoading = true;
     });
 
     var searchtext = _searchController.text;
+    if(searchtext.isNotEmpty){
+      pref.setString(PrefKey.searchQueryParameter, searchtext);
+    }else{}
     // const apiKey = '6fee21631c5c432dba9b34b9070a2d31';
     // const apiKey = 'e833a1c1f6b6485086fd40c54e29de7c';
-    // const apiKey = '56806fa3f874403c8794d4b7e491c937';
-    const apiKey = 'd9186e5f351240e094658382be62d948';
+    const apiKey = '56806fa3f874403c8794d4b7e491c937';
+    // const apiKey = 'd9186e5f351240e094658382be62d948';
 
     final apiUrl =
         '${AppUrls.spoonacularBaseUrl}/recipes/complexSearch?query=$searchtext&apiKey=$apiKey';
@@ -281,4 +288,19 @@ class _SearchScreenState extends State<SearchScreen> {
       // Set isLoading to false when the API call completes (success or failure)
     }
   }
+
+  getqueryValueFromSharedPref() async{
+    final prefs = await SharedPreferences.getInstance();
+    String? query = prefs.getString(PrefKey.searchQueryParameter);
+    if(query!.isEmpty){
+
+    }else{
+      print('aksjdklasjdklajsdkljasdkl');
+      setState(() {
+        _searchController.text = query!;
+      });
+    }
+
+  }
+
 }

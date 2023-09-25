@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:ai_food/Constants/app_logger.dart';
 import 'package:ai_food/Utils/resources/res/app_theme.dart';
 import 'package:ai_food/Utils/utils.dart';
+import 'package:ai_food/config/keys/pref_keys.dart';
 import 'package:ai_food/Utils/widgets/others/app_text.dart';
 import 'package:ai_food/View/HomeScreen/search_screen.dart';
 import 'package:ai_food/View/HomeScreen/widgets/providers/allergies_provider.dart';
@@ -14,7 +15,6 @@ import 'package:ai_food/View/recipe_info/recipe_info.dart';
 import 'package:ai_food/config/app_urls.dart';
 import 'package:ai_food/config/dio/app_dio.dart';
 import 'package:ai_food/config/dio/spoonacular_app_dio.dart';
-import 'package:ai_food/config/keys/pref_keys.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -69,6 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
     dio = AppDio(context);
     spoondio = SpoonAcularAppDio(context);
     logger.init();
+    getqueryValueFromSharedPref();
     getUserCredentials();
     setRecipesParameters();
     if (widget.type == 1) {
@@ -168,7 +169,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   Padding(
                     padding: const EdgeInsets.only(left: 20.0),
                     child: Text(
-                      "${widget.query ?? "Search"}",
+               widget.type == 1 && widget.searchType == 0 ?
+               "${widget.query }": "Search",
                       style: const TextStyle(
                           fontSize: 15, fontWeight: FontWeight.w500),
                     ),
@@ -348,9 +350,9 @@ class _HomeScreenState extends State<HomeScreen> {
       showProgressindicators[index] = true;
       print("jbjbdjsbdjbdjsb $showProgressindicators");
     });
-    const apiKey = 'd9186e5f351240e094658382be62d948';
+    // const apiKey = 'd9186e5f351240e094658382be62d948';
     // const apiKey = '6fee21631c5c432dba9b34b9070a2d31';
-    // const apiKey = '56806fa3f874403c8794d4b7e491c937';
+    const apiKey = '56806fa3f874403c8794d4b7e491c937';
     // const apiKey = 'e833a1c1f6b6485086fd40c54e29de7c';
 
     final apiUrl =
@@ -377,8 +379,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   getSuggestedRecipes({allergies, dietaryRestrictions}) async {
     // const apiKey = '6fee21631c5c432dba9b34b9070a2d31';
-    // const apiKey = '56806fa3f874403c8794d4b7e491c937';
-    const apiKey = 'd9186e5f351240e094658382be62d948';
+    const apiKey = '56806fa3f874403c8794d4b7e491c937';
+    // const apiKey = 'd9186e5f351240e094658382be62d948';
     // const apiKey = 'e833a1c1f6b6485086fd40c54e29de7c';
 
     final allergiesAre =
@@ -486,9 +488,9 @@ class _HomeScreenState extends State<HomeScreen> {
     final kitchenProvider =
         Provider.of<KitchenResourcesProvider>(context, listen: false);
     // const apiKey = '6fee21631c5c432dba9b34b9070a2d31';
-    // const apiKey = '56806fa3f874403c8794d4b7e491c937';
+    const apiKey = '56806fa3f874403c8794d4b7e491c937';
     // const apiKey = 'e833a1c1f6b6485086fd40c54e29de7c';
-    const apiKey = 'd9186e5f351240e094658382be62d948';
+    // const apiKey = 'd9186e5f351240e094658382be62d948';
 
     int currentOffset = widget.offset + 8;
 
@@ -555,8 +557,8 @@ class _HomeScreenState extends State<HomeScreen> {
       isLoading = true;
     });
     // const apiKey = '6fee21631c5c432dba9b34b9070a2d31';
-    const apiKey = 'd9186e5f351240e094658382be62d948';
-    // const apiKey = '56806fa3f874403c8794d4b7e491c937';
+    // const apiKey = 'd9186e5f351240e094658382be62d948';
+    const apiKey = '56806fa3f874403c8794d4b7e491c937';
     // const apiKey = 'e833a1c1f6b6485086fd40c54e29de7c';
 
     int currentOffset = widget.offset + 8;
@@ -698,4 +700,19 @@ class _HomeScreenState extends State<HomeScreen> {
       },
     );
   }
+
+  getqueryValueFromSharedPref() async{
+    final prefs = await SharedPreferences.getInstance();
+    String? query = prefs.getString(PrefKey.searchQueryParameter);
+    if(query!.isEmpty){
+
+    }else{
+      print('aksjdklasjdklajsdkljasdkl');
+      setState(() {
+        widget.query = query!;
+      });
+    }
+
+  }
+
 }

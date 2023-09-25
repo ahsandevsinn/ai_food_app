@@ -21,6 +21,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     Future.delayed(const Duration(seconds: 4), () {
+      removeSearchQueryValueFromPref();
       getUserCredentials(context);
     });
     super.initState();
@@ -89,4 +90,10 @@ if(storedData!=null&&storedData2!=null){
       ),
     );
   }
+
+  removeSearchQueryValueFromPref() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove(PrefKey.searchQueryParameter);
+  }
+
 }
