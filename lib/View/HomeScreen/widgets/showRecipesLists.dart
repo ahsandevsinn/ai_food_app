@@ -115,21 +115,22 @@ class _RecipesSelectionState extends State<RecipesSelection> {
         child: FloatingActionButton(
           backgroundColor: AppTheme.whiteColor,
           onPressed: () {
-            if (widget.parameter == "Allergies") {
-              Provider.of<DietaryRestrictionsProvider>(context, listen: false)
-                  .addNextPage(context);
-            } else if (widget.parameter == "Dietary Restrictions") {
-              Provider.of<PreferredProteinProvider>(context, listen: false)
-                  .addNextPage(context);
-            } else if (widget.parameter == "Preferred Protein") {
-              Provider.of<RegionalDelicacyProvider>(context, listen: false)
-                  .addNextPage(context);
-            } else if (widget.parameter == "Regional Delicacy") {
-              Provider.of<KitchenResourcesProvider>(context, listen: false)
-                  .addNextPage(context);
-            } else if (widget.parameter == "Kitchen Resources") {
-              Navigator.of(context).pop();
-            }
+            Navigator.of(context).pop();
+            // if (widget.parameter == "Allergies") {
+            //   Provider.of<DietaryRestrictionsProvider>(context, listen: false)
+            //       .addNextPage(context);
+            // } else if (widget.parameter == "Dietary Restrictions") {
+            //   Provider.of<PreferredProteinProvider>(context, listen: false)
+            //       .addNextPage(context);
+            // } else if (widget.parameter == "Preferred Protein") {
+            //   Provider.of<RegionalDelicacyProvider>(context, listen: false)
+            //       .addNextPage(context);
+            // } else if (widget.parameter == "Regional Delicacy") {
+            //   Provider.of<KitchenResourcesProvider>(context, listen: false)
+            //       .addNextPage(context);
+            // } else if (widget.parameter == "Kitchen Resources") {
+            //
+            // }
           },
           child: Icon(
             Icons.arrow_forward,
@@ -160,6 +161,7 @@ class _RecipesSelectionState extends State<RecipesSelection> {
                     recipeProvider.toggleAllergiesRecipeState(index);
                     recipeProvider.addAllergiesValue(
                         recipesParams.parameter, index);
+                    // recipeProvider.addAllergieslistIndex(index);
                   } else {
                     recipeProvider.toggleAllergiesRecipeState(index);
                     recipeProvider.removeAllergiesValue(
@@ -213,6 +215,7 @@ class _RecipesSelectionState extends State<RecipesSelection> {
                     recipeProvider.toggleDietaryRestrictionsRecipeState(index);
                     recipeProvider.addDietaryRestrictionsValue(
                         recipesParams.parameter, index);
+                  //  recipeProvider.addDietaryRestrictionslistIndex(index);
                   } else {
                     recipeProvider.toggleDietaryRestrictionsRecipeState(index);
                     recipeProvider.removeDietaryRestrictionsValue(
@@ -264,6 +267,7 @@ class _RecipesSelectionState extends State<RecipesSelection> {
                     recipeProvider.toggleProteinRecipeState(index);
                     recipeProvider.addProteinValue(
                         recipesParams.parameter, index);
+                    //recipeProvider.addProtienlistIndex(index);
                   } else {
                     recipeProvider.toggleProteinRecipeState(index);
                     recipeProvider.removeProteinValue(
@@ -318,6 +322,7 @@ class _RecipesSelectionState extends State<RecipesSelection> {
                     recipeProvider.toggleRegionalDelicacyRecipeState(index);
                     recipeProvider.addRegionalDelicacyValue(
                         recipesParams.parameter, index);
+                //    recipeProvider.addRegionalDelicacylistIndex(index);
                   } else {
                     recipeProvider.toggleRegionalDelicacyRecipeState(index);
                     recipeProvider.removeRegionalDelicacyValue(
@@ -372,6 +377,7 @@ class _RecipesSelectionState extends State<RecipesSelection> {
                     recipeProvider.toggleKitchenResourcesRecipeState(index);
                     recipeProvider.addKitchenResourcesValue(
                         recipesParams.parameter, index);
+                   // recipeProvider.addKitchenResourceslistIndex(index);
                   } else {
                     recipeProvider.toggleKitchenResourcesRecipeState(index);
                     recipeProvider.removeKitchenResourcesValue(

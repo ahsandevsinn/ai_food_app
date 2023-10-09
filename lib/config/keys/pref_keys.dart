@@ -11,8 +11,7 @@ class PrefKey {
   static const String unit = "unit";
   static const String parametersLists = "parameters";
   static const String dataonBoardScreenAllergies = "dataonBoardScreenAllergies";
-  static const String dataonBoardScreenDietryRestriction =
-      "dataonBoardScreenDietryRestriction";
+  static const String dataonBoardScreenDietryRestriction = "dataonBoardScreenDietryRestriction";
   static const String userName = "userName";
   static const String dateOfBirth = "dateOfBirth";
   static const String type = "type";
@@ -23,14 +22,12 @@ class PrefKey {
   static const String fullName = "full_name";
   static const String lat = "latitude";
   static const String long = "longitude";
-
   static const String bankName = "bank_name";
   static const String accountTile = "account_tile";
   static const String sortCode = "sort_code";
   static const String accountNumber = "account_number";
   static const String authorizationStatus = "authorization_status";
   static const String nottifyCount = "notifyCount";
-
   static const String slug = "slug";
   static const String email = "email";
   static const String password = "password";

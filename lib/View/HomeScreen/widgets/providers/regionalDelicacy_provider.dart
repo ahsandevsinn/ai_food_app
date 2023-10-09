@@ -21,6 +21,20 @@ class RegionalDelicacyProvider extends ChangeNotifier {
     notifyListeners();
     return addRegionalDelicacy;
   }
+  // final List<int> _listIndex = [];
+  //
+  // List<int> get listIndex => _listIndex;
+  //
+  // List<int> addRegionalDelicacylistIndex(int index) {
+  //   _listIndex.add(index);
+  //   notifyListeners();
+  //   return listIndex;
+  // }
+  // List<int> removeRegionalDelicacylistIndex(int index) {
+  //   _listIndex.removeAt(index);
+  //   notifyListeners();
+  //   return listIndex;
+  // }
 
   final List<RecipesParameterClass> _regionalDelicacyRecipesParameters = [];
 

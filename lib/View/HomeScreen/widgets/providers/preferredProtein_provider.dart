@@ -21,6 +21,20 @@ class PreferredProteinProvider extends ChangeNotifier {
     notifyListeners();
     return addProtein;
   }
+  // final List<int> _listIndex = [];
+  //
+  // List<int> get listIndex => _listIndex;
+  //
+  // List<int> addProtienlistIndex(int index) {
+  //   _listIndex.add(index);
+  //   notifyListeners();
+  //   return listIndex;
+  // }
+  // List<int> removeProtienlistIndex(int index) {
+  //   _listIndex.removeAt(index);
+  //   notifyListeners();
+  //   return listIndex;
+  // }
 
   final List<RecipesParameterClass> _proteinRecipesParameters = [];
 

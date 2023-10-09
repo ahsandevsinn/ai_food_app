@@ -124,8 +124,10 @@ class _AuthScreenState extends State<AuthScreen> {
                       ],
                     ),
                   ),
-
-                 SizedBox(height: 50,), Customcard(
+                  SizedBox(
+                    height: 50,
+                  ),
+                  Customcard(
                     childWidget: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -493,7 +495,9 @@ class _AuthScreenState extends State<AuthScreen> {
                                   fontWeight: FontWeight.w600)
                         ]),
                   ),
-                  SizedBox(height: 50,),
+                  SizedBox(
+                    height: 50,
+                  ),
                   Column(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.end,
@@ -526,7 +530,9 @@ class _AuthScreenState extends State<AuthScreen> {
                       const GoogleSignInButton(),
                     ],
                   ),
-                  SizedBox(height: 20,),
+                  SizedBox(
+                    height: 20,
+                  ),
                   Center(
                     child: SizedBox(
                       width: 210,
@@ -610,6 +616,8 @@ class _AuthScreenState extends State<AuthScreen> {
       }
       String userId = result.user!.uid.toString();
       String naming = result.user!.displayName.toString();
+      String useremail = result.user!.email.toString();
+
       String displayName =
           "${appleCredential.givenName} ${appleCredential.familyName}";
       bool newUser = result.additionalUserInfo!.isNewUser;
@@ -630,7 +638,11 @@ class _AuthScreenState extends State<AuthScreen> {
       //   print("Returning user signed in with Apple.");
       // }
 
-      appleLogin(userId: userId, name: displayName, isNewUser: newUser);
+      appleLogin(
+          userId: userId,
+          name: displayName,
+          isNewUser: newUser,
+          email: useremail);
       setState(() {
         _appleLoading = true;
       });
@@ -708,6 +720,7 @@ class _AuthScreenState extends State<AuthScreen> {
 
           prefs.setString(PrefKey.authorization, token ?? '');
           prefs.setString(PrefKey.userName, name ?? '');
+          prefs.setString(PrefKey.email, _emailController.text);
           pushReplacement(context, const UserProfileScreen());
         }
       }
@@ -803,14 +816,16 @@ class _AuthScreenState extends State<AuthScreen> {
           }
           return;
         } else {
-          print("responseData${responseData}");
+
           // alertDialogError(context: context, message: responseData["message"]);
           setState(() {
             _isLoading = false;
           });
           var token = responseData['data']['token'];
           var name = responseData['data']['user']['name'];
+          var usermail = responseData['data']['user']['email'];
           var DOB = responseData['data']['user']['DOB'];
+          var measuringUnit = responseData["data"]["user"]["measuring_unit"];
           var dietary_restrictions =
               responseData['data']['user']['dietary_restrictions'];
           var allergies = responseData['data']['user']['allergies'];
@@ -827,6 +842,8 @@ class _AuthScreenState extends State<AuthScreen> {
           prefs.setString(PrefKey.dateOfBirth, DOB);
           prefs.setString(PrefKey.authorization, token ?? '');
           prefs.setString(PrefKey.userName, name ?? '');
+          prefs.setString(PrefKey.email, usermail);
+          prefs.setString(PrefKey.unit, measuringUnit);
           pushReplacement(
               context,
               BottomNavView(
@@ -845,10 +862,36 @@ class _AuthScreenState extends State<AuthScreen> {
     }
   }
 
+  // saveName() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   prefs.setString("name", _nameController.text);
+  // }
+
+  // saveEmail() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   prefs.setString("userEmail", _loginEmailController.text);
+  // }
+
+  // saveUserEmail() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   var data = [
+  //     _nameController.text,
+  //     _emailController.text,
+  //   ];
+  //   prefs.setStringList("user", data);
+  // }
+
+  // getName() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   var data = prefs.getString("name");
+  //   print("getData${data}");
+  // }
+
   //apple sign in
   void appleLogin(
       {required String userId,
       required bool isNewUser,
+      required String email,
       required String name}) async {
     setState(() {
       _appleLoading = true;
@@ -909,6 +952,9 @@ class _AuthScreenState extends State<AuthScreen> {
           // print("name_is_here ${responseData['data']['user']['name']}");
           var DOB = responseData['data']['user']['DOB'];
           var username = responseData['data']['user']['name'];
+          var usermail = responseData['data']['user']['email'];
+          var measuringUnit = responseData['data']['user']['measuring_unit'];
+
           var dietary_restrictions =
               responseData['data']['user']['dietary_restrictions'];
           var allergies = responseData['data']['user']['allergies'];
@@ -937,6 +983,8 @@ class _AuthScreenState extends State<AuthScreen> {
           }
           prefs.setString(PrefKey.userName, username ?? name);
           prefs.setString(PrefKey.dateOfBirth, DOB ?? "");
+          prefs.setString(PrefKey.email, usermail ?? email);
+          prefs.setString(PrefKey.unit, measuringUnit);
           print("responseData${responseData}");
           setState(() {
             _appleLoading = false;

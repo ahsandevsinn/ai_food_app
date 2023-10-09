@@ -6,6 +6,7 @@ import 'package:ai_food/View/HomeScreen/widgets/providers/food_style_provider.da
 import 'package:ai_food/View/HomeScreen/widgets/providers/kitchenResources_provider.dart';
 import 'package:ai_food/View/HomeScreen/widgets/providers/preferredProtein_provider.dart';
 import 'package:ai_food/View/HomeScreen/widgets/providers/regionalDelicacy_provider.dart';
+import 'package:ai_food/View/recipe_info/recipe_info.dart';
 import 'package:ai_food/View/splash_screen.dart';
 import 'package:ai_food/providers/google_signin_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -32,9 +33,9 @@ class MyApp extends StatelessWidget {
       return MultiProvider(
         providers: [
           ChangeNotifierProvider<GoogleSignInProvider>(
-              create: (_) =>
-                  GoogleSignInProvider()),
-          ChangeNotifierProvider<FoodStyleProvider>(create: (_) => FoodStyleProvider()),
+              create: (_) => GoogleSignInProvider()),
+          ChangeNotifierProvider<FoodStyleProvider>(
+              create: (_) => FoodStyleProvider()),
           ChangeNotifierProvider<AllergiesProvider>(
               create: (_) => AllergiesProvider()),
           ChangeNotifierProvider<DietaryRestrictionsProvider>(

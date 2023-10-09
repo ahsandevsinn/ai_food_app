@@ -48,35 +48,44 @@ class _PrivacyPolicyScreenState extends State<PrivacyPolicyScreen> {
           ),
         ),
       ),
-      body: SingleChildScrollView(
-          child: Padding(
-        padding: const EdgeInsets.only(left: 20, right: 20),
-        child: Column(
-          children: [
-            const SizedBox(
-              height: 30,
-            ),
-            Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "Privacy Policy",
-                  style: TextStyle(
-                      color: AppTheme.appColor,
-                      fontSize: 24,
-                      fontWeight: FontWeight.w600),
-                )),
-            const SizedBox(
-              height: 20,
-            ),
-            Text(
+      body: Container(
+        decoration: BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage("assets/images/logo.png"),
+                scale: 0.5,
+                opacity: 0.25)),
+        child: SingleChildScrollView(
+            child: Padding(
+          padding: const EdgeInsets.only(left: 20, right: 20),
+          child: Column(
+            children: [
+              const SizedBox(
+                height: 30,
+              ),
+              Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "Privacy Policy",
+                    style: TextStyle(
+                        color: AppTheme.appColor,
+                        fontSize: 24,
+                        fontWeight: FontWeight.w600),
+                  )),
+              const SizedBox(
+                height: 20,
+              ),
+              Text(
                 "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
                 textAlign: TextAlign.left,
-                style: TextStyle(color: AppTheme.appColor, fontSize: 16, fontWeight: FontWeight.w600),
-                
-                ),
-          ],
-        ),
-      )),
+                style: TextStyle(
+                    color: AppTheme.appColor,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600),
+              ),
+            ],
+          ),
+        )),
+      ),
     );
   }
 }

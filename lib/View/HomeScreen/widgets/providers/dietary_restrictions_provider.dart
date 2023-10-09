@@ -21,6 +21,21 @@ class DietaryRestrictionsProvider extends ChangeNotifier {
     notifyListeners();
     return addDietaryRestrictions;
   }
+  // final List<int> _listIndex = [];
+  //
+  // List<int> get listIndex => _listIndex;
+  //
+  // List<int> addDietaryRestrictionslistIndex(int index) {
+  //   _listIndex.add(index);
+  //   notifyListeners();
+  //   return listIndex;
+  // }
+  // List<int> removeDietaryRestrictionslistIndex(int index) {
+  //   _listIndex.removeAt(index);
+  //   notifyListeners();
+  //   return listIndex;
+  // }
+
 
   final List<RecipesParameterClass> _dietaryRestrictionsRecipesParameters = [];
 
@@ -44,10 +59,20 @@ class DietaryRestrictionsProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+  void showDietaryRestrictionsParameterDetailsload(context, String parameter) {
+    if (parameter == "Dietary Restrictions") {
+      _dietaryRestrictionsRecipesParameters.addAll(preferredDietaryRestrictionsParametersRecipe);
+      notifyListeners();
+    }
+  }
 
   void toggleDietaryRestrictionsRecipeState(int index) {
     _dietaryRestrictionsRecipesParameters[index].isChecked =
         !_dietaryRestrictionsRecipesParameters[index].isChecked;
+    notifyListeners();
+  }
+  void toggleDietaryRestrictionsRecipeStatefalse(int index) {
+    _dietaryRestrictionsRecipesParameters[index].isChecked = false;
     notifyListeners();
   }
 

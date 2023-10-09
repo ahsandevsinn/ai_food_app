@@ -15,7 +15,6 @@ import 'set_password_screen.dart';
 
 class OTPScreen extends StatefulWidget {
   final email;
-
   const OTPScreen({
     super.key,
     this.email,

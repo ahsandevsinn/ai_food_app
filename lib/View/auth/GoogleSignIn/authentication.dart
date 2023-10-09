@@ -30,8 +30,7 @@ class Authentication {
   static Future<FirebaseApp> initializeFirebase({
     required BuildContext context,
   }) async {
-    FirebaseApp firebaseApp =
-    await Firebase.initializeApp();
+    FirebaseApp firebaseApp = await Firebase.initializeApp();
 
     // User? user = FirebaseAuth.instance.currentUser;
     // // print("usr_id ${user?.uid}  ${user.uid}");
@@ -84,19 +83,26 @@ class Authentication {
               await auth.signInWithCredential(credential);
 
           user = userCredential.user;
+          String? userEmail = user?.email;
           bool newUser = userCredential.additionalUserInfo!.isNewUser;
           String? displayName = user?.displayName;
-          print("This is the UID: ${user!.uid} newuser $newUser name $displayName");
+          print(
+              "This is the UID: ${user!.uid} newuser $newUser name $displayName");
 
           print("getting_user_date of birth ${user} credentials ${credential}");
           // Check if the user already exists
-          login(userId: user.uid, context: context, isNewUser: newUser, name: displayName ?? "");
+          login(
+            userId: user.uid,
+            context: context,
+            isNewUser: newUser,
+            name: displayName ?? "",
+            email: userEmail ?? "",
+          );
           // if (userCredential.additionalUserInfo!.isNewUser) {
           //   login(userId: user.uid, context: context, isNewUser: userCredential.additionalUserInfo!.isNewUser);
           // } else {
           //   login(userId: user.uid, context: context, isNewUser: userCredential.additionalUserInfo!.isNewUser);
           // }
-
         } on FirebaseAuthException catch (e) {
           if (e.code == 'account-exists-with-different-credential') {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -146,7 +152,13 @@ class Authentication {
   }
 }
 
-void login({required String userId, context, required bool isNewUser, required String name}) async {
+void login({
+  required String userId,
+  context,
+  required bool isNewUser,
+  required String name,
+  required String email,
+}) async {
   var response;
   SharedPreferences prefs = await SharedPreferences.getInstance();
   List<String> dietaryRestrictionsList = [];
@@ -163,7 +175,7 @@ void login({required String userId, context, required bool isNewUser, required S
   try {
     response = await AppDio(context).post(path: AppUrls.loginUrl, data: params);
     var responseData = response.data;
-    if(response.statusCode == responseCode404) {
+    if (response.statusCode == responseCode404) {
       showSnackBar(context, "${responseData["message"]}");
     } else if (response.statusCode == responseCode400) {
       print(" Bad Request.");
@@ -179,11 +191,13 @@ void login({required String userId, context, required bool isNewUser, required S
         showSnackBar(context, "${responseData["message"]}");
         return;
       } else {
-
         var token = responseData['data']['token'];
         var username = responseData['data']['user']['name'];
+        var usermail = responseData['data']['user']['email'];
         var DOB = responseData['data']['user']['DOB'];
-        var dietary_restrictions = responseData['data']['user']['dietary_restrictions'];
+        var measuringUnit = responseData['data']['user']['measuring_unit'];
+        var dietary_restrictions =
+            responseData['data']['user']['dietary_restrictions'];
         var allergies = responseData['data']['user']['allergies'];
         for (var data0 in dietary_restrictions) {
           dietaryRestrictionsList.addAll({'${data0['id']}:${data0['name']}'});
@@ -192,16 +206,23 @@ void login({required String userId, context, required bool isNewUser, required S
           allergiesList.addAll({'${data0['id']}:${data0['name']}'});
         }
         prefs.setStringList(PrefKey.dataonBoardScreenAllergies, allergiesList);
-        prefs.setStringList(PrefKey.dataonBoardScreenDietryRestriction, dietaryRestrictionsList);
+        prefs.setStringList(PrefKey.dataonBoardScreenDietryRestriction,
+            dietaryRestrictionsList);
         prefs.setString(PrefKey.authorization, token ?? '');
         prefs.setString(PrefKey.userName, username ?? name);
+        prefs.setString(PrefKey.email, usermail ?? email);
+        prefs.setString(PrefKey.unit, measuringUnit);
 
-        if(isNewUser){
+        if (isNewUser) {
           pushReplacement(context, const UserProfileScreen());
         } else {
-          pushReplacement(context, BottomNavView(type: 0,
-            allergies: allergiesList,
-            dietaryRestrictions: dietaryRestrictionsList,));
+          pushReplacement(
+              context,
+              BottomNavView(
+                type: 0,
+                allergies: allergiesList,
+                dietaryRestrictions: dietaryRestrictionsList,
+              ));
         }
         prefs.setString(PrefKey.dateOfBirth, DOB);
         showSnackBar(context, "${responseData["message"]}");

@@ -15,8 +15,22 @@ class AllergiesProvider extends ChangeNotifier {
     notifyListeners();
     return addAllergies;
   }
+ //  final List<int> _listIndex = [];
+ //
+ //  List<int> get listIndex => _listIndex;
+ //
+ //  List<int> addAllergieslistIndex(int index) {
+ //    _listIndex.add(index);
+ //    notifyListeners();
+ //    return listIndex;
+ //  }
+ // List<int> removeAllergieslistIndex(int index) {
+ //    _listIndex.removeAt(index);
+ //    notifyListeners();
+ //    return listIndex;
+ //  }
 
-  List<String> removeAllergiesValue(String allergies, int index) {
+  List<String> removeAllergiesValue(String allergies,int index) {
     _addAllergies.remove(allergies);
     notifyListeners();
     return addAllergies;
@@ -43,12 +57,22 @@ class AllergiesProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+  void showAllergiesParameterDetailsload(context, String parameter) {
+    if (parameter == "Allergies") {
+      _allergiesRecipesParameters.addAll(preferredAllergiesRecipe);
+      notifyListeners();
+    }
+  }
 
   void toggleAllergiesRecipeState(int index) {
-    _allergiesRecipesParameters[index].isChecked =
-        !_allergiesRecipesParameters[index].isChecked;
+    _allergiesRecipesParameters[index].isChecked = !_allergiesRecipesParameters[index].isChecked;
     notifyListeners();
   }
+  void toggleAllergiesRecipeStatefalse(int index) {
+    _allergiesRecipesParameters[index].isChecked = false;
+    notifyListeners();
+  }
+
 
   void clearAllergiesAllCheckboxStates() {
     for (var parameter in _allergiesRecipesParameters) {

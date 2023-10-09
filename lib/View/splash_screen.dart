@@ -83,7 +83,7 @@ if(storedData!=null&&storedData2!=null){
             return SizedBox(
               width: val,
               height: val,
-              child: Image.asset(AppAssetsImages.appLogo),
+              child: Image.asset(AppAssetsImages.appLogo,),
             );
           },
         ),

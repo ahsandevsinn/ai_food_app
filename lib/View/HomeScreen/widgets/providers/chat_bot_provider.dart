@@ -13,7 +13,7 @@ class ChatBotProvider extends ChangeNotifier {
   }
 
   final List<String> _addChatAnswer = [];
-
+  
   List<String> get addChatAnswer => _addChatAnswer;
 
   List<String> addChatsAnswer (String chatsAnswer){
@@ -37,6 +37,7 @@ class ChatBotProvider extends ChangeNotifier {
   List<Widget> get displayChatsWidget => _displayChatsWidget;
 
   List<Widget> displayChatWidgets (Widget chatsWidget){
+
     _displayChatsWidget.add(chatsWidget);
     notifyListeners();
     return _displayChatsWidget;
@@ -48,6 +49,14 @@ class ChatBotProvider extends ChangeNotifier {
 
   void messageLoading(value){
     _isLoading = value;
+    notifyListeners();
+  }
+
+  bool _regenerateLoader = false;
+  bool get regenerateLoader => _regenerateLoader;
+
+  void regenerateLoaderLoading(value){
+    _regenerateLoader = value;
     notifyListeners();
   }
 }

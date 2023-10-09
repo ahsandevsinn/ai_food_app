@@ -2,6 +2,7 @@ import 'package:ai_food/Utils/resources/res/app_theme.dart';
 import 'package:ai_food/View/AskMaida/ask_maida_screen.dart';
 import 'package:ai_food/View/FavouriteScreen/favourite_screen.dart';
 import 'package:ai_food/View/HomeScreen/home_screen.dart';
+import 'package:ai_food/View/HomeScreen/recipe_params_screen.dart';
 import 'package:ai_food/View/HomeScreen/widgets/providers/dietary_restrictions_provider.dart';
 import 'package:ai_food/View/SettingScreen/setting_screen.dart';
 import 'package:flutter/material.dart';
@@ -56,10 +57,10 @@ class _BottomNavViewState extends State<BottomNavView> {
               query: widget.query,
               searchList: widget.searchList,
             )
-          : HomeScreen(
+          : RecipeParamScreen(
               // dietaryRestrictions: widget.dietaryRestrictions,
               // allergies: widget.allergies,
-              searchType: 0,
+              // searchType: 0,
             ),
       const FavouriteScreen(),
       const AskMaidaScreen(),

@@ -21,7 +21,20 @@ class KitchenResourcesProvider extends ChangeNotifier {
     notifyListeners();
     return addKitchenResources;
   }
-
+  // final List<int> _listIndex = [];
+  //
+  // List<int> get listIndex => _listIndex;
+  //
+  // List<int> addKitchenResourceslistIndex(int index) {
+  //   _listIndex.add(index);
+  //   notifyListeners();
+  //   return listIndex;
+  // }
+  // List<int> removeKitchenResourceslistIndex(int index) {
+  //   _listIndex.removeAt(index);
+  //   notifyListeners();
+  //   return listIndex;
+  // }
   final List<RecipesParameterClass> _kitchenResourcesRecipesParameters = [];
 
   List<RecipesParameterClass> get kitchenResourcesRecipesParameters =>
