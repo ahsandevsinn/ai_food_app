@@ -216,6 +216,7 @@ void login({
         if (isNewUser) {
           pushReplacement(context, const UserProfileScreen());
         } else {
+          prefs.setInt(PrefKey.conditiontoLoad, 1);
           pushReplacement(
               context,
               BottomNavView(

@@ -51,6 +51,7 @@ class _SettingScreenState extends State<SettingScreen> {
   var getEmail;
   getDetails() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setInt(PrefKey.conditiontoLoad, 0);
     data = prefs.getString(PrefKey.userName);
     getEmail = prefs.getString(PrefKey.email);
     print("getting_email ${getEmail}");

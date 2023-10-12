@@ -844,6 +844,7 @@ class _AuthScreenState extends State<AuthScreen> {
           prefs.setString(PrefKey.userName, name ?? '');
           prefs.setString(PrefKey.email, usermail);
           prefs.setString(PrefKey.unit, measuringUnit);
+          prefs.setInt(PrefKey.conditiontoLoad, 1);
           pushReplacement(
               context,
               BottomNavView(
@@ -973,6 +974,7 @@ class _AuthScreenState extends State<AuthScreen> {
           if (isNewUser) {
             pushReplacement(context, const UserProfileScreen());
           } else {
+            prefs.setInt(PrefKey.conditiontoLoad, 1);
             pushReplacement(
                 context,
                 BottomNavView(

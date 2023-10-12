@@ -9,10 +9,12 @@ import 'package:ai_food/View/recipe_info/recipe_info.dart';
 import 'package:ai_food/config/app_urls.dart';
 import 'package:ai_food/config/dio/app_dio.dart';
 import 'package:ai_food/config/dio/spoonacular_app_dio.dart';
+import 'package:ai_food/config/keys/pref_keys.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'result_container_askMaida.dart';
 
@@ -42,6 +44,7 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
     spoonDio = SpoonAcularAppDio(context);
 
     logger.init();
+    changeCondition();
     _scrollController = ScrollController();
     super.initState();
   }
@@ -132,7 +135,7 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
                             children: [
                               Container(
                                 margin:
-                                    const EdgeInsets.symmetric(vertical: 20),
+                                const EdgeInsets.symmetric(vertical: 20),
                                 width: MediaQuery.of(context).size.width * 0.7,
                                 height: 80,
                                 decoration: BoxDecoration(
@@ -168,7 +171,7 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
               const SizedBox(height: 10),
               Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 6),
+                const EdgeInsets.symmetric(horizontal: 8.0, vertical: 6),
                 child: Row(
                   children: [
                     Expanded(
@@ -176,11 +179,11 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
                         children: [
                           loadingProvider.isLoading
                               ? Image.asset(
-                                  "assets/images/loader.gif",
-                                  // width: 100,
-                                  height: 50,
-                                  color: AppTheme.appColor,
-                                )
+                            "assets/images/loader.gif",
+                            // width: 100,
+                            height: 50,
+                            color: AppTheme.appColor,
+                          )
                               : const SizedBox.shrink(),
                           Align(
                             alignment: Alignment.center,
@@ -199,7 +202,7 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
                                     color: AppTheme.whiteColor,
                                     borderRadius: BorderRadius.circular(50),
                                     border:
-                                        Border.all(color: AppTheme.appColor),
+                                    Border.all(color: AppTheme.appColor),
                                   ),
                                   child: Padding(
                                     padding: const EdgeInsets.only(
@@ -207,7 +210,7 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
                                     child: Row(
                                       mainAxisSize: MainAxisSize.min,
                                       mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                      MainAxisAlignment.spaceBetween,
                                       children: [
                                         Icon(
                                           Icons.autorenew,
@@ -263,17 +266,17 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
                               ),
                               border: const OutlineInputBorder(
                                 borderRadius:
-                                    BorderRadius.all(Radius.circular(80.0)),
+                                BorderRadius.all(Radius.circular(80.0)),
                               ),
                               focusedBorder: const OutlineInputBorder(
                                 borderRadius:
-                                    BorderRadius.all(Radius.circular(80)),
+                                BorderRadius.all(Radius.circular(80)),
                                 borderSide: BorderSide(
                                     width: 1, color: Colors.transparent),
                               ),
                               enabledBorder: const OutlineInputBorder(
                                 borderRadius:
-                                    BorderRadius.all(Radius.circular(80)),
+                                BorderRadius.all(Radius.circular(80)),
                                 borderSide: BorderSide(
                                     width: 1, color: Colors.transparent),
                               ),
@@ -366,12 +369,12 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
               ),
               Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
+                const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
                 child: Container(
                   margin:
-                      const EdgeInsets.symmetric(vertical: 4, horizontal: 14),
+                  const EdgeInsets.symmetric(vertical: 4, horizontal: 14),
                   padding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                  const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                   decoration: BoxDecoration(
                     color: AppTheme.whiteColor,
                     borderRadius: const BorderRadius.only(
@@ -391,12 +394,12 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
               resData['media'] == null || resData['media'].isEmpty
                   ? const SizedBox.shrink()
                   : Column(
-                      children: resData['media']
-                          .map<Widget>(
-                            (item) => resultContainer(data: item),
-                          )
-                          .toList(),
-                    ),
+                children: resData['media']
+                    .map<Widget>(
+                      (item) => resultContainer(data: item),
+                )
+                    .toList(),
+              ),
             ],
           ),
         );
@@ -452,10 +455,10 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
                 ),
                 Padding(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
+                  const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
                   child: Container(
                     margin:
-                        const EdgeInsets.symmetric(vertical: 4, horizontal: 14),
+                    const EdgeInsets.symmetric(vertical: 4, horizontal: 14),
                     padding: const EdgeInsets.symmetric(
                         vertical: 10, horizontal: 10),
                     decoration: BoxDecoration(
@@ -477,12 +480,12 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
                 resData['media'] == null || resData['media'].isEmpty
                     ? const SizedBox.shrink()
                     : Column(
-                        children: resData['media']
-                            .map<Widget>(
-                              (item) => resultContainer(data: item),
-                            )
-                            .toList(),
-                      ),
+                  children: resData['media']
+                      .map<Widget>(
+                        (item) => resultContainer(data: item),
+                  )
+                      .toList(),
+                ),
               ],
             ),
           );
@@ -525,10 +528,14 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
       }
 
       var responseChatBot =
-          await dio.post(path: AppUrls.searchRecipe, data: params);
+      await dio.post(path: AppUrls.searchRecipe, data: params);
       print("api_response $responseChatBot");
     } catch (e) {
       print(e);
     }
+  }
+  void changeCondition() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setInt(PrefKey.conditiontoLoad, 0);
   }
 }

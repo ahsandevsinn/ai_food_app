@@ -66,15 +66,17 @@ class _HomeScreenState extends State<HomeScreen> {
   bool isLoading = false;
   bool isHiting = false;
   bool recipeInfoLoader = false;
+  bool regenerateResultLoader = false;
   List showProgressindicators = [];
   List apiRecipeIds = [];
+
   @override
   void initState() {
     dio = AppDio(context);
     spoonDio = SpoonAcularAppDio(context);
     logger.init();
     getFavouriteRecipes();
-    // getUserCredentials();
+    storeValuetoAPI(data: widget.data);
     if (widget.type == 1) {
       type = widget.type;
       showProgressindicators = widget.searchList;
@@ -85,9 +87,6 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
   }
 
-  void LoadingDataFromSharedPreffromProfile() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-  }
 
   void getUserCredentials() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -103,7 +102,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
+    final width = MediaQuery
+        .of(context)
+        .size
+        .width;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -126,8 +128,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: InkWell(
                   onTap: () {
                     Navigator.of(context).pushReplacement(MaterialPageRoute(
-                      builder: (context) => BottomNavView(),
-                    ));
+                      builder: (context) => BottomNavView(),));
                   },
                   child: CircleAvatar(
                     backgroundColor: AppTheme.appColor,
@@ -163,44 +164,78 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   // REGENERATE RECIPE BUTTON
                   type == 1
-                      ? InkWell(
-                          onTap: () async {
-                            await reGenerateRecipe(context);
-                          },
-                          child: Container(
-                            height: 35,
-                            decoration: BoxDecoration(
-                              color: AppTheme.whiteColor,
-                              borderRadius: BorderRadius.circular(50),
-                              border: Border.all(color: AppTheme.appColor),
+                      ? regenerateResultLoader == false ? InkWell(
+                    onTap: () {
+                      setState(() {
+                        regenerateResultLoader = true;
+                      });
+                      reGenerateRecipe(context);
+                    },
+                    child: Container(
+                      height: 35,
+                      decoration: BoxDecoration(
+                        color: AppTheme.whiteColor,
+                        borderRadius: BorderRadius.circular(50),
+                        border: Border.all(color: AppTheme.appColor),
+                      ),
+                      child: Padding(
+                        padding:
+                        const EdgeInsets.only(left: 10.0, right: 10),
+                        child: Row(
+                          mainAxisAlignment:
+                          MainAxisAlignment.spaceBetween,
+                          children: [
+                            Icon(
+                              Icons.autorenew,
+                              color: AppTheme.appColor,
+                              size: 18,
                             ),
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 10.0, right: 10),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Icon(
-                                    Icons.autorenew,
-                                    color: AppTheme.appColor,
-                                    size: 18,
-                                  ),
-                                  const SizedBox(
-                                    width: 4,
-                                  ),
-                                  AppText.appText(
-                                    "Regenerate result",
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w600,
-                                    textColor: AppTheme.appColor,
-                                  ),
-                                ],
-                              ),
+                            const SizedBox(
+                              width: 4,
                             ),
+                            AppText.appText(
+                              "Regenerate result",
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              textColor: AppTheme.appColor,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  )
+                      : const SizedBox.shrink() : Container(
+                    height: 35,
+                    decoration: BoxDecoration(
+                      color: AppTheme.whiteColor,
+                      borderRadius: BorderRadius.circular(50),
+                      border: Border.all(color: AppTheme.appColor),
+                    ),
+                    child: Padding(
+                      padding:
+                      const EdgeInsets.only(left: 10.0, right: 10),
+                      child: Row(
+                        mainAxisAlignment:
+                        MainAxisAlignment.spaceBetween,
+                        children: [
+                          Icon(
+                            Icons.autorenew,
+                            color: AppTheme.appColor,
+                            size: 18,
                           ),
-                        )
-                      : const SizedBox.shrink(),
+                          const SizedBox(
+                            width: 4,
+                          ),
+                          AppText.appText(
+                            "Regenerate result",
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            textColor: AppTheme.appColor,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -209,81 +244,90 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: isLoading
           ? Center(
-              child: CircularProgressIndicator(
-                color: AppTheme.appColor,
-              ),
-            )
+        child: CircularProgressIndicator(
+          color: AppTheme.appColor,
+        ),
+      )
           : Container(
-              height: double.infinity,
-              // color: Colors.red,
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage("assets/images/logo.png"),
-                      scale: 0.5,
-                      opacity: 0.25)),
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 10.0, vertical: 10),
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        type == 0
-                            ? responseData == null
-                                ? randomData == false
-                                    ? Container(
-                                        height: 500,
-                                        width:
-                                            MediaQuery.of(context).size.width,
-                                        child: Center(
-                                          child: CircularProgressIndicator(
-                                            color: AppTheme.appColor,
-                                          ),
-                                        ),
-                                      )
-                                    : Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 20.0),
-                                        child: Container(
-                                          height: 500,
-                                          child: Center(
-                                              child: AppText.appText(
-                                                  "${errorResponse}")),
-                                        ),
-                                      )
-                                : responseData.isEmpty
-                                    ? Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 20.0),
-                                        child: Container(
-                                          height: 500,
-                                          child: Center(
-                                              child: AppText.appText(
-                                                  "No results found. Please try adjusting your profile parameters.")),
-                                        ),
-                                      )
-                                    : gridView(data: responseData)
-                            : widget.data.length == 0
-                                ? Container(
-                                    height: MediaQuery.of(context).size.height *
-                                        0.6,
-                                    width: MediaQuery.of(context).size.width,
-                                    child: Center(
-                                      child: Text(
-                                        widget.searchType == 1
-                                            ? "No results found. Please try adjusting your search parameters."
-                                            : "No results found.",
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ),
-                                  )
-                                : gridView(data: widget.data)
-                      ]),
-                ),
-              ),
-            ),
+        height: double.infinity,
+        // color: Colors.red,
+        decoration: BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage("assets/images/logo.png"),
+                scale: 0.5,
+                opacity: 0.25)),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+                horizontal: 10.0, vertical: 10),
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  type == 0
+                      ? responseData == null
+                      ? randomData == false
+                      ? Container(
+                    height: 500,
+                    width:
+                    MediaQuery
+                        .of(context)
+                        .size
+                        .width,
+                    child: Center(
+                      child: CircularProgressIndicator(
+                        color: AppTheme.appColor,
+                      ),
+                    ),
+                  )
+                      : Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20.0),
+                    child: Container(
+                      height: 500,
+                      child: Center(
+                          child: AppText.appText(
+                              "${errorResponse}")),
+                    ),
+                  )
+                      : responseData.isEmpty
+                      ? Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20.0),
+                    child: Container(
+                      height: 500,
+                      child: Center(
+                          child: AppText.appText(
+                              "No results found. Please try adjusting your profile parameters.")),
+                    ),
+                  )
+                      : gridView(data: responseData)
+                      : widget.data.length == 0
+                      ? Container(
+                    height: MediaQuery
+                        .of(context)
+                        .size
+                        .height *
+                        0.6,
+                    width: MediaQuery
+                        .of(context)
+                        .size
+                        .width,
+                    child: Center(
+                      child: Text(
+                        widget.searchType == 1
+                            ? "No results found. Please try adjusting your search parameters."
+                            : "No results found.",
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  )
+                      : gridView(data: widget.data)
+                ]),
+          ),
+        ),
+      ),
     );
   }
 
@@ -305,166 +349,104 @@ class _HomeScreenState extends State<HomeScreen> {
         showProgressindicators[index] = false;
         final idAsInt = int.tryParse(id.toString());
         final bool isFav = apiRecipeIds!.contains(idAsInt);
-       Navigator.of(context).push(
+        Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (context) => RecipeInfo(
-              recipeData: response.data,
-              isFav: isFav ? 1 : 0,
-            ),
+            builder: (context) =>
+                RecipeInfo(
+                  recipeData: response.data,
+                  isFav: isFav ? 1 : 0,
+                ),
           ),
         ).then((value) {
-         if(value == true){
-           setState(() {
-             getFavouriteRecipes();
-           });
-         }
-       });
-
-      });
-    } else if (response.statusCode == 402) {
-      response = await spoonDio.get(path: apiUrl2);
-      setState(() {
-        isHiting = false;
-        showProgressindicators[index] = false;
-        final idAsInt = int.tryParse(id.toString());
-        final bool isFav = apiRecipeIds!.contains(idAsInt);
-       Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => RecipeInfo(
-              recipeData: response.data,
-              isFav: isFav ? 1 : 0,
-            ),
-          ),
-        ).then((value) {
-          if(value == true){
+          if (value == true) {
             setState(() {
               getFavouriteRecipes();
             });
           }
-       });
-
+        });
       });
+    } else if (response.statusCode == 402) {
+      response = await spoonDio.get(path: apiUrl2);
+      if (response.statusCode == 402) {
+        print('API request failed with status code: ${response.statusCode}');
+      } else {
+        setState(() {
+          isHiting = false;
+          showProgressindicators[index] = false;
+          final idAsInt = int.tryParse(id.toString());
+          final bool isFav = apiRecipeIds!.contains(idAsInt);
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) =>
+                  RecipeInfo(
+                    recipeData: response.data,
+                    isFav: isFav ? 1 : 0,
+                  ),
+            ),
+          ).then((value) {
+            if (value == true) {
+              setState(() {
+                getFavouriteRecipes();
+              });
+            }
+          });
+        });
+      }
     } else {
       print('API request failed with status code: ${response.statusCode}');
     }
   }
-  // getSearchResult({id, index}) async {
-  //   print("kjbjfejfbjefbefljeblf$id");
-  //   setState(() {
-  //     isHiting = true;
-  //     showProgressindicators[index] = true;
-  //     print("jbjbdjsbdjbdjsb $showProgressindicators");
-  //   });
-  //
-  //   final apiUrl =
-  //       'https://api.spoonacular.com/recipes/$id/information?includeNutrition=&apiKey=$apiKey';
-  //
-  //   final response = await dio.get(path: apiUrl);
-  //
-  //   if (response.statusCode == 200) {
-  //     print("kwbdbkwk${response.data}");
-  //     setState(() {
-  //       isHiting = false;
-  //       showProgressindicators[index] = false;
-  //       final idAsInt = int.tryParse(id.toString());
-  //       final bool isFav = apiRecipeIds!.contains(idAsInt);
-  //
-  //       Navigator.of(context).push(
-  //         MaterialPageRoute(
-  //           builder: (context) => RecipeInfo(
-  //             recipeData: response.data,
-  //             isFav: isFav ? 1 : 0,
-  //           ),
-  //         ),
-  //       );
-  //     });
-  //   } else {
-  //     print('API request failed with status code: ${response.statusCode}');
-  //   }
-  // }
-  ////////////////////////////////////get suggested recipe////////////////////////////////////////////////////////////////////
 
-  // getSuggestedRecipes({allergies, dietaryRestrictions}) async {
-  //   final allergiesAre =
-  //       allergies.isNotEmpty ? "${allergies.join(',').toLowerCase()}" : "";
-  //   final dietaryRestrictionsAre = dietaryRestrictions.isNotEmpty
-  //       ? "${dietaryRestrictions.join(',').toLowerCase()}"
-  //       : "";
-  //   String apiFinalUrl;
-  //   if (allergiesAre.isEmpty && dietaryRestrictionsAre.isNotEmpty) {
-  //     apiFinalUrl =
-  //         '${AppUrls.spoonacularBaseUrl}/recipes/complexSearch?number=8&tags=${dietaryRestrictionsAre}&apiKey=$apiKey';
-  //   } else if (allergiesAre.isNotEmpty && dietaryRestrictionsAre.isEmpty) {
-  //     apiFinalUrl =
-  //         'https://api.spoonacular.com/recipes/complexSearch?number=8&intolerances=${allergiesAre}&apiKey=$apiKey';
-  //   } else if (allergiesAre.isNotEmpty && dietaryRestrictionsAre.isNotEmpty) {
-  //     apiFinalUrl =
-  //         'https://api.spoonacular.com/recipes/complexSearch?number=8&intolerances=${allergiesAre}&tags=${dietaryRestrictionsAre}&apiKey=$apiKey';
-  //   } else {
-  //     apiFinalUrl =
-  //         'https://api.spoonacular.com/recipes/complexSearch?number=8&apiKey=$apiKey';
-  //   }
-  //   try {
-  //     var response;
-  //     response = await spoondio.get(path: apiFinalUrl);
-  //     if (response.statusCode == 200) {
-  //       setState(() {
-  //         responseData = response.data["results"];
-  //         showProgressindicators =
-  //             List.generate(responseData.length, (index) => false);
-  //       });
-  //     } else if (response.statusCode == 402) {
-  //       setState(() {
-  //         randomData = true;
-  //         errorResponse = response.data["message"];
-  //       });
-  //     } else {
-  //       showSnackBar(context, "Something Went Wrong!");
-  //     }
-  //   } catch (e) {
-  //     print(e);
-  //   }
-  // }
-
-  //get recipes data api
-
-//////////////////////////////
-//Here is the function for regenrating recipes
   Future reGenerateRecipe(context) async {
     var response;
     setState(() {
       isLoading = true;
     });
     final allergiesProvider =
-        Provider.of<AllergiesProvider>(context, listen: false);
+    Provider.of<AllergiesProvider>(context, listen: false);
     final restrictionsProvider =
-        Provider.of<DietaryRestrictionsProvider>(context, listen: false);
+    Provider.of<DietaryRestrictionsProvider>(context, listen: false);
     final proteinProvider =
-        Provider.of<PreferredProteinProvider>(context, listen: false);
+    Provider.of<PreferredProteinProvider>(context, listen: false);
     final delicacyProvider =
-        Provider.of<RegionalDelicacyProvider>(context, listen: false);
+    Provider.of<RegionalDelicacyProvider>(context, listen: false);
     final kitchenProvider =
-        Provider.of<KitchenResourcesProvider>(context, listen: false);
+    Provider.of<KitchenResourcesProvider>(context, listen: false);
 
     int currentOffset = widget.offset + 8;
 
     final style =
-        widget.foodStyle.isNotEmpty ? "&cuisine=${widget.foodStyle}" : "";
+    widget.foodStyle.isNotEmpty ? "&cuisine=${widget.foodStyle}" : "";
     final kitchenResources = kitchenProvider.addKitchenResources.isNotEmpty
-        ? "&equipment=${kitchenProvider.addKitchenResources.toString().substring(1, kitchenProvider.addKitchenResources.toString().length - 1)}"
+        ? "&equipment=${kitchenProvider.addKitchenResources.toString()
+        .substring(1, kitchenProvider.addKitchenResources
+        .toString()
+        .length - 1)}"
         : "";
     final preferredProtein = proteinProvider.addProtein.isNotEmpty
-        ? "&includeIngredients=${proteinProvider.addProtein.toString().substring(1, proteinProvider.addProtein.toString().length - 1)}"
+        ? "&includeIngredients=${proteinProvider.addProtein.toString()
+        .substring(1, proteinProvider.addProtein
+        .toString()
+        .length - 1)}"
         : "";
     final allergies = allergiesProvider.addAllergies.isNotEmpty
-        ? "&intolerances=${allergiesProvider.addAllergies.toString().substring(1, allergiesProvider.addAllergies.toString().length - 1)}"
+        ? "&intolerances=${allergiesProvider.addAllergies.toString().substring(
+        1, allergiesProvider.addAllergies
+        .toString()
+        .length - 1)}"
         : "";
     final dietaryRestrictions = restrictionsProvider
-            .addDietaryRestrictions.isNotEmpty
-        ? "&diet=${restrictionsProvider.addDietaryRestrictions.toString().substring(1, restrictionsProvider.addDietaryRestrictions.toString().length - 1)}"
+        .addDietaryRestrictions.isNotEmpty
+        ? "&diet=${restrictionsProvider.addDietaryRestrictions.toString()
+        .substring(1, restrictionsProvider.addDietaryRestrictions
+        .toString()
+        .length - 1)}"
         : "";
     final regionalDelicacy = delicacyProvider.addRegionalDelicacy.isNotEmpty
-        ? "query=${delicacyProvider.addRegionalDelicacy.toString().substring(1, delicacyProvider.addRegionalDelicacy.toString().length - 1)}"
+        ? "query=${delicacyProvider.addRegionalDelicacy.toString().substring(
+        1, delicacyProvider.addRegionalDelicacy
+        .toString()
+        .length - 1)}"
         : "";
 
     // Update the offset value in the API URL
@@ -483,7 +465,7 @@ class _HomeScreenState extends State<HomeScreen> {
           totalResults: response.data["totalResults"],
           foodStyle: widget.foodStyle,
           searchList:
-              List.generate(response.data["results"].length, (index) => false),
+          List.generate(response.data["results"].length, (index) => false),
           searchType: 1,
         );
       }));
@@ -493,23 +475,32 @@ class _HomeScreenState extends State<HomeScreen> {
     } else {
       if (response.statusCode == 402) {
         response = await spoonDio.get(path: apiUrl2);
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) {
-          return BottomNavView(
-            type: 1,
-            data: response.data["results"],
-            offset: currentOffset,
-            totalResults: response.data["totalResults"],
-            foodStyle: widget.foodStyle,
-            searchList: List.generate(
-                response.data["results"].length, (index) => false),
-            searchType: 1,
-          );
-        }));
-        setState(() {
-          isLoading = false;
-        });
-        showSnackBar(context, "${response.statusMessage}");
+        if (response.statusCode == 402) {
+          setState(() {
+            isLoading = false;
+            regenerateResultLoader = false;
+          });
+          print('API request failed with status code: ${response.statusCode}');
+          showSnackBar(context, "${response.statusMessage}");
+        } else {
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) {
+                return BottomNavView(
+                  type: 1,
+                  data: response.data["results"],
+                  offset: currentOffset,
+                  totalResults: response.data["totalResults"],
+                  foodStyle: widget.foodStyle,
+                  searchList: List.generate(
+                      response.data["results"].length, (index) => false),
+                  searchType: 1,
+                );
+              }));
+          setState(() {
+            isLoading = false;
+          });
+        }
+        // showSnackBar(context, "${response.statusMessage}");
       } else {
         setState(() {
           isLoading = false;
@@ -605,7 +596,10 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget gridView({data}) {
-    final width = MediaQuery.of(context).size.width;
+    final width = MediaQuery
+        .of(context)
+        .size
+        .width;
 
     return GridView.builder(
       physics: const NeverScrollableScrollPhysics(),
@@ -616,7 +610,6 @@ class _HomeScreenState extends State<HomeScreen> {
       shrinkWrap: true,
       itemCount: data.length,
       itemBuilder: (context, int index) {
-
         bool recipeDataId = apiRecipeIds.contains(data[index]["id"]);
 
         return Container(
@@ -645,10 +638,10 @@ class _HomeScreenState extends State<HomeScreen> {
                               height: 130,
                               width: width,
                               errorWidget: (context, url, error) =>
-                                  const Icon(Icons.error),
+                              const Icon(Icons.error),
                             ),
                           ),
-                          !recipeDataId? SizedBox.shrink():   Padding(
+                          !recipeDataId ? SizedBox.shrink() : Padding(
                             padding:
                             const EdgeInsets.all(
                                 8.0),
@@ -690,50 +683,106 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(height: 14),
                 showProgressindicators[index] == true
                     ? Center(
-                        child: CircularProgressIndicator(
-                          color: AppTheme.whiteColor,
-                        ),
-                      )
+                  child: CircularProgressIndicator(
+                    color: AppTheme.whiteColor,
+                  ),
+                )
                     : InkWell(
-                        onTap: () {
-                          if (isHiting == false) {
-                            getSearchResult(
-                                id: "${data[index]["id"]}", index: index);
-                          }
-                        },
-                        child: Container(
-                          height: 32,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(32),
-                            color: AppTheme.whiteColor,
+                  onTap: () {
+                    if (isHiting == false) {
+                      getSearchResult(
+                          id: "${data[index]["id"]}", index: index);
+                    }
+                  },
+                  child: Container(
+                    height: 32,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(32),
+                      color: AppTheme.whiteColor,
+                    ),
+                    child: Padding(
+                      padding:
+                      const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          AppText.appText(
+                            "See details",
+                            textColor: AppTheme.appColor,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
                           ),
-                          child: Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 16.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                AppText.appText(
-                                  "See details",
-                                  textColor: AppTheme.appColor,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                                Icon(
-                                  Icons.arrow_forward_ios,
-                                  color: AppTheme.appColor,
-                                  size: 18,
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
+                          Icon(
+                            Icons.arrow_forward_ios,
+                            color: AppTheme.appColor,
+                            size: 18,
+                          )
+                        ],
                       ),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
         );
       },
     );
+  }
+
+  storeValuetoAPI({data}) async {
+    var response;
+    int index = 1;
+    Map<String, dynamic> arrangeIndexParam = {};
+    int responseCode200 = 200; // For successful request.
+    int responseCode400 = 400; // For Bad Request.
+    int responseCode401 = 401; // For Unauthorized access.
+    int responseCode404 = 404; // For For data not found
+    int responseCode500 = 500; // Internal server error.
+    for (var values in data) {
+      String title = values["title"].toString();
+      int id = values["id"];
+      String image = values["image"];
+      String url = "http://";
+      arrangeIndexParam.addAll({
+        "recipes[${index}][recipe_id]": id,
+        "recipes[${index}][title]": title,
+        "recipes[${index}][image]": image,
+        "recipes[${index}][url]": url,
+      });
+      index++;
+    }
+    try {
+      Map<String,dynamic> finalData = {
+        "search" : "String",
+     ...arrangeIndexParam
+      };
+      response = await dio.post(path: AppUrls.searchRecipe,data: finalData);
+      var responseData = response.data;
+      if (response.statusCode == responseCode400) {
+        print("Bad Request.");
+        showSnackBar(context, "${responseData["message"]}");
+      } else if (response.statusCode == responseCode401) {
+        print("Unauthorized access.");
+        showSnackBar(context, "${responseData["message"]}");
+      } else if (response.statusCode == responseCode404) {
+        print(
+            "The requested resource could not be found but may be available again in the future. Subsequent requests by the client are permissible.");
+        showSnackBar(context, "${responseData["message"]}");
+      } else if (response.statusCode == responseCode500) {
+        print("Internal server error.");
+        showSnackBar(context, "${responseData["message"]}");
+      } else if (response.statusCode == responseCode200) {
+        if (responseData["status"] == false) {
+          alertDialogError(context: context, message: responseData["message"]);
+          return;
+        } else {
+          print("done");
+        }
+      }
+    } catch (e) {
+      print("Something went Wrong ${e}");
+      showSnackBar(context, "Something went Wrong.");
+    }
   }
 }

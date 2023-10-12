@@ -532,20 +532,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
    allListsProviders() {
      final allergiesProvider = Provider.of<AllergiesProvider>(context, listen: false);
      final dietaryRestrictionsProvider = Provider.of<DietaryRestrictionsProvider>(context, listen: false);
-
-
-
-
-    }
-
-
-
-
-
-
-
-
-
+  }
 
   SaveUnit() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -681,6 +668,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     prefs.setStringList(PrefKey.dataonBoardScreenAllergies, allergies);
     prefs.setStringList(
         PrefKey.dataonBoardScreenDietryRestriction, dietryRestriction);
+    prefs.setInt(PrefKey.conditiontoLoad, 1);
     // showSnackBar(context, "Data is saved in SharedPreference");
   }
 

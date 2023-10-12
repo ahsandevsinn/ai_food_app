@@ -568,8 +568,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           PrefKey.dateOfBirth, DateFormat('MM-dd-yyyy').format(selectedDate!));
     }
     prefs.setStringList(PrefKey.dataonBoardScreenAllergies, allergies);
-    prefs.setStringList(
-        PrefKey.dataonBoardScreenDietryRestriction, dietryRestriction);
+    prefs.setStringList(PrefKey.dataonBoardScreenDietryRestriction, dietryRestriction);
+    prefs.setInt(PrefKey.conditiontoLoad, 1);
     setState(() {
       checkAPI == false;
     });

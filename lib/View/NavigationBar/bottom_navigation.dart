@@ -5,8 +5,10 @@ import 'package:ai_food/View/HomeScreen/home_screen.dart';
 import 'package:ai_food/View/HomeScreen/recipe_params_screen.dart';
 import 'package:ai_food/View/HomeScreen/widgets/providers/dietary_restrictions_provider.dart';
 import 'package:ai_food/View/SettingScreen/setting_screen.dart';
+import 'package:ai_food/config/keys/pref_keys.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class BottomNavView extends StatefulWidget {
   final type;
@@ -31,7 +33,7 @@ class BottomNavView extends StatefulWidget {
       this.query,
       this.searchType,
       this.totalResults,
-      this.searchList});
+      this.searchList,});
 
   @override
   State<BottomNavView> createState() => _BottomNavViewState();
@@ -39,12 +41,13 @@ class BottomNavView extends StatefulWidget {
 
 class _BottomNavViewState extends State<BottomNavView> {
   int _selectedIndex = 0;
+  int isLoadedFromShared =1;
 
   List<Widget> _widgetOptions = [];
-
   @override
   void initState() {
-    super.initState();
+
+
     _widgetOptions = [
       widget.type == 1
           ? HomeScreen(
@@ -58,14 +61,13 @@ class _BottomNavViewState extends State<BottomNavView> {
               searchList: widget.searchList,
             )
           : RecipeParamScreen(
-              // dietaryRestrictions: widget.dietaryRestrictions,
-              // allergies: widget.allergies,
-              // searchType: 0,
-            ),
-      const FavouriteScreen(),
-      const AskMaidaScreen(),
-      const SettingScreen(),
+
+                ),
+       FavouriteScreen(),
+       AskMaidaScreen(),
+       SettingScreen(),
     ];
+    super.initState();
   }
 
   @override
@@ -128,4 +130,6 @@ class _BottomNavViewState extends State<BottomNavView> {
       ),
     );
   }
+
+
 }

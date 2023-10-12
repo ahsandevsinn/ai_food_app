@@ -26,7 +26,7 @@ import 'package:sizer/sizer.dart';
 import '../../Constants/app_logger.dart';
 
 class RecipeParamScreen extends StatefulWidget {
-  const RecipeParamScreen({Key? key}) : super(key: key);
+  const RecipeParamScreen({Key? key, }) : super(key: key);
 
   @override
   State<RecipeParamScreen> createState() => _RecipeParamScreenState();
@@ -34,6 +34,7 @@ class RecipeParamScreen extends StatefulWidget {
 
 class _RecipeParamScreenState extends State<RecipeParamScreen> {
   bool showFoodStyle = false;
+  var isLoadedfromShared;
 
   //start food style
   List<String> foodStyle = [];
@@ -51,10 +52,17 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
     dio = AppDio(context);
     spoonDio = SpoonAcularAppDio(context);
     logger.init();
+    loadconditionfromSharedPref();
     setRecipesParameters();
     super.initState();
   }
-
+  void loadconditionfromSharedPref() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      isLoadedfromShared = prefs.getInt(PrefKey.conditiontoLoad)!;
+    });
+    print("check what is going on here${isLoadedfromShared}");
+  }
   void setRecipesParameters() async {
     final allergiesProvider = Provider.of<AllergiesProvider>(
         context, listen: false);
@@ -160,46 +168,49 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                   .add(RecipesParameterClass(parameter: value));
             });
           }
-          print("dkjasdkljaklsdjklasndklajsdklasjkdnjkasdklnaskldnlak");
-          List<String> storedData = prefs.getStringList(
-              PrefKey.dataonBoardScreenAllergies)!;
-          allergiesProvider.showAllergiesParameterDetailsload(
-              context, "Allergies");
-          for (String entry in storedData) {
-            String result = entry.replaceAll(RegExp(r'^MapEntry\(|\)'), '');
-            List<String> parts = result.split(':');
-            if (parts.length == 2) {
-              int key = int.parse(parts[0].trim()) - 1;
-              String value = parts[1].trim();
-              if (allergiesProvider.preferredAllergiesRecipe[key].isChecked ==
-                  false) {
-                allergiesProvider.toggleAllergiesRecipeState(key);
-                allergiesProvider.addAllergiesValue(value, key);
+          if(isLoadedfromShared == 1){
+            print("dkjasdkljaklsdjklasndklajsdklasjkdnjkasdklnaskldnlak");
+            List<String> storedData = prefs.getStringList(
+                PrefKey.dataonBoardScreenAllergies)!;
+            allergiesProvider.showAllergiesParameterDetailsload(
+                context, "Allergies");
+            for (String entry in storedData) {
+              String result = entry.replaceAll(RegExp(r'^MapEntry\(|\)'), '');
+              List<String> parts = result.split(':');
+              if (parts.length == 2) {
+                int key = int.parse(parts[0].trim()) - 1;
+                String value = parts[1].trim();
+                if (allergiesProvider.preferredAllergiesRecipe[key].isChecked ==
+                    false) {
+                  allergiesProvider.toggleAllergiesRecipeState(key);
+                  allergiesProvider.addAllergiesValue(value, key);
+                }
+              }
+            }
+            print("dkjasdkljaklsdjklasndklajsdklasjkdnjkasdklnaskldnlak");
+            List<String> storedData2 = prefs.getStringList(
+                PrefKey.dataonBoardScreenDietryRestriction)!;
+            dietaryRestrictionProvider
+                .showDietaryRestrictionsParameterDetailsload(
+                context, "Dietary Restrictions");
+            for (String entry in storedData2) {
+              String result = entry.replaceAll(RegExp(r'^MapEntry\(|\)'), '');
+              List<String> parts = result.split(':');
+              if (parts.length == 2) {
+                int key = int.parse(parts[0].trim()) - 1;
+                String value = parts[1].trim();
+                if (dietaryRestrictionProvider
+                    .preferredDietaryRestrictionsParametersRecipe[key]
+                    .isChecked == false) {
+                  dietaryRestrictionProvider.toggleDietaryRestrictionsRecipeState(
+                      key);
+                  dietaryRestrictionProvider.addDietaryRestrictionsValue(
+                      value, key);
+                }
               }
             }
           }
-          print("dkjasdkljaklsdjklasndklajsdklasjkdnjkasdklnaskldnlak");
-          List<String> storedData2 = prefs.getStringList(
-              PrefKey.dataonBoardScreenDietryRestriction)!;
-          dietaryRestrictionProvider
-              .showDietaryRestrictionsParameterDetailsload(
-              context, "Dietary Restrictions");
-          for (String entry in storedData2) {
-            String result = entry.replaceAll(RegExp(r'^MapEntry\(|\)'), '');
-            List<String> parts = result.split(':');
-            if (parts.length == 2) {
-              int key = int.parse(parts[0].trim()) - 1;
-              String value = parts[1].trim();
-              if (dietaryRestrictionProvider
-                  .preferredDietaryRestrictionsParametersRecipe[key]
-                  .isChecked == false) {
-                dietaryRestrictionProvider.toggleDietaryRestrictionsRecipeState(
-                    key);
-                dietaryRestrictionProvider.addDietaryRestrictionsValue(
-                    value, key);
-              }
-            }
-          }
+
         }
       }
     } catch (e) {
@@ -457,7 +468,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(
+                   SizedBox(
                     height: 80,
                   ),
                   isLoading
@@ -604,10 +615,13 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
   }
 
   Future generateRecipe({style, allergy, dietary, regional, kitchen}) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
     var response;
     setState(() {
       isLoading = true;
     });
+    prefs.setInt(PrefKey.conditiontoLoad, 0);
     final foodStyleProvider =
     Provider.of<FoodStyleProvider>(context, listen: false);
     final allergiesProvider =
@@ -663,6 +677,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
     response = await spoonDio.get(path: apiUrl);
     try {
       if (response.statusCode == 200) {
+
         pushReplacement(
             context,
             BottomNavView(
@@ -681,7 +696,6 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
       } else {
         if (response.statusCode == 402) {
           response = await spoonDio.get(path: apiUrlTwo);
-          // Handle successful response with the second API key
           if (response.statusCode == 402) {
             showSnackBar(context, "${response.statusMessage}");
           } else {
@@ -720,7 +734,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
       setState(() {
         isLoading = false;
       });
-      showSnackBar(context, response.statusCode);
+      showSnackBar(context, "${response.statusCode}");
     }
   }
 
@@ -735,4 +749,5 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
         fontSize: 13,),
     );
   }
+
 }

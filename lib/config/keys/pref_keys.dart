@@ -12,6 +12,7 @@ class PrefKey {
   static const String parametersLists = "parameters";
   static const String dataonBoardScreenAllergies = "dataonBoardScreenAllergies";
   static const String dataonBoardScreenDietryRestriction = "dataonBoardScreenDietryRestriction";
+  static const String conditiontoLoad = "conditiontoLoad";
   static const String userName = "userName";
   static const String dateOfBirth = "dateOfBirth";
   static const String type = "type";

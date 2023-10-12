@@ -60,6 +60,7 @@ if(storedData!=null&&storedData2!=null){
   }
     if (token != null && token.isNotEmpty) {
       print("check what is being shown here${value}");
+      prefs.setInt(PrefKey.conditiontoLoad, 1);
       pushReplacement(context, BottomNavView(type: 0,allergies: finalValue,dietaryRestrictions: finalValue2));
     } else {
       pushReplacement(context, const AuthScreen());
