@@ -184,8 +184,7 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                                                           child: Center(
                                                             child: Icon(
                                                               Icons.favorite,
-                                                              color: AppTheme
-                                                                  .appColor,
+                                                              color: AppTheme.appColor,
                                                             ),
                                                           ),
                                                         ),
@@ -349,12 +348,23 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
         });
       } else if (response.statusCode == 402) {
         response = await spoondio.get(path: apiFinalUrl2);
+        if(response.statusCode == 402){
+          setState(() {
+            _isLoading = false;
+          });
+          showSnackBar(context, "${response.statusMessage}");
+        }else{
+          setState(() {
+            _isLoading = false;
+            responseID = response.data;
+          });
+        }
+
+      } else {
         setState(() {
           _isLoading = false;
-          responseID = response.data;
         });
-      } else {
-        showSnackBar(context, "Something Went Wrong!");
+        showSnackBar(context, response.statusMessage);
       }
     } catch (e) {
       print("jaklsjdklajsdkljaskldjaskldjlaksdjklajsdaskljdklajsdklj${e}");

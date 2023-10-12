@@ -34,6 +34,7 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
   var savePreviousQuery;
 
   bool visibilityContainer = true;
+  //new api data adding
 
   @override
   void initState() {
@@ -323,7 +324,7 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
     response = await spoonDio.get(path: apiUrl);
     if (response.statusCode == 200) {
       final resData = response.data;
-
+      searchRecipeChatBot(resData, queryText ?? _messageController.text);
       if (resData != null) {
         setState(() {
           visibilityContainer = false;
@@ -405,86 +406,129 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
       }
     } else if (response.statusCode == 402) {
       response = await spoonDio.get(path: apiUrlTwo);
-      final resData = response.data;
-      if (resData != null) {
-        setState(() {
-          visibilityContainer = false;
-        });
+      if (response.statusCode == 402) {
+        chatsProvider.messageLoading(false);
+        showSnackBar(context, '${response.statusCode}');
+      } else {
+        final resData = response.data;
+        if (resData != null) {
+          setState(() {
+            visibilityContainer = false;
+          });
 
-        chatsProvider.displayChatWidgets(
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Stack(
-                alignment: Alignment.topRight,
-                children: [
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8.0, vertical: 8),
-                      child: Container(
-                        margin: const EdgeInsets.symmetric(
-                            vertical: 4, horizontal: 14),
+          chatsProvider.displayChatWidgets(
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Stack(
+                  alignment: Alignment.topRight,
+                  children: [
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: Padding(
                         padding: const EdgeInsets.symmetric(
-                            vertical: 10, horizontal: 10),
-                        decoration: BoxDecoration(
-                          color: AppTheme.appColor,
-                          borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(20),
-                            bottomLeft: Radius.circular(20),
-                            bottomRight: Radius.circular(10),
-                            topRight: Radius.circular(0),
+                            horizontal: 8.0, vertical: 8),
+                        child: Container(
+                          margin: const EdgeInsets.symmetric(
+                              vertical: 4, horizontal: 14),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 10),
+                          decoration: BoxDecoration(
+                            color: AppTheme.appColor,
+                            borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(20),
+                              bottomLeft: Radius.circular(20),
+                              bottomRight: Radius.circular(10),
+                              topRight: Radius.circular(0),
+                            ),
                           ),
+                          child: AppText.appText(
+                              "${queryText == null ? savePreviousQuery : queryText}",
+                              textColor: AppTheme.whiteColor),
                         ),
-                        child: AppText.appText(
-                            "${queryText == null ? savePreviousQuery : queryText}",
-                            textColor: AppTheme.whiteColor),
                       ),
                     ),
-                  ),
-                ],
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
-                child: Container(
-                  margin:
-                      const EdgeInsets.symmetric(vertical: 4, horizontal: 14),
+                  ],
+                ),
+                Padding(
                   padding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                  decoration: BoxDecoration(
-                    color: AppTheme.whiteColor,
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(0),
-                      bottomLeft: Radius.circular(10),
-                      bottomRight: Radius.circular(20),
-                      topRight: Radius.circular(20),
+                      const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
+                  child: Container(
+                    margin:
+                        const EdgeInsets.symmetric(vertical: 4, horizontal: 14),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 10),
+                    decoration: BoxDecoration(
+                      color: AppTheme.whiteColor,
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(0),
+                        bottomLeft: Radius.circular(10),
+                        bottomRight: Radius.circular(20),
+                        topRight: Radius.circular(20),
+                      ),
                     ),
-                  ),
-                  child: AppText.appText(
-                    resData['answerText'],
-                    textColor: AppTheme.appColor,
+                    child: AppText.appText(
+                      resData['answerText'],
+                      textColor: AppTheme.appColor,
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(width: 4),
-              resData['media'] == null || resData['media'].isEmpty
-                  ? const SizedBox.shrink()
-                  : Column(
-                      children: resData['media']
-                          .map<Widget>(
-                            (item) => resultContainer(data: item),
-                          )
-                          .toList(),
-                    ),
-            ],
-          ),
-        );
-      } else {
-        print('API request failed with status code: ${response.statusCode}');
-        chatsProvider.messageLoading(false);
+                const SizedBox(width: 4),
+                resData['media'] == null || resData['media'].isEmpty
+                    ? const SizedBox.shrink()
+                    : Column(
+                        children: resData['media']
+                            .map<Widget>(
+                              (item) => resultContainer(data: item),
+                            )
+                            .toList(),
+                      ),
+              ],
+            ),
+          );
+        } else {
+          showSnackBar(context, '${response.statusCode}');
+          chatsProvider.messageLoading(false);
+        }
       }
+    }
+  }
+
+  void searchRecipeChatBot(chatBotResponseData, query) async {
+    Map<String, dynamic> params = {};
+    try {
+      if (chatBotResponseData['media'] != null &&
+          chatBotResponseData['media'].isNotEmpty) {
+        params = {
+          "search": query,
+          "recipes": [],
+        };
+
+        for (int i = 0; i < chatBotResponseData['media'].length; i++) {
+          params['recipes'].add({
+            "url": chatBotResponseData['media'][i]['link'] ?? 'link not found',
+            "recipe_id": chatBotResponseData['media'][i]['link'].toString().split("-").last,
+            "title": chatBotResponseData['media'] == null
+                ? chatBotResponseData['answerText']
+                : chatBotResponseData['media'][i]['title'].toString().substring(0, 10),
+            "image": chatBotResponseData['media'][i]['image'] ?? 'image not found',
+          });
+        }
+      } else {
+        params = {
+          "search": query,
+          "recipes[1][url]": 'link not found',
+          "recipes[1][recipe_id]": '1234',
+          "recipes[1][title]": chatBotResponseData['answerText'],
+          "recipes[1][image]": 'image not found',
+        };
+      }
+
+      var responseChatBot =
+          await dio.post(path: AppUrls.searchRecipe, data: params);
+      print("api_response $responseChatBot");
+    } catch (e) {
+      print(e);
     }
   }
 }

@@ -30,7 +30,6 @@ class CustomRecipesSelection extends StatelessWidget {
         width: width,
         height: 55,
         decoration: BoxDecoration(
-            color: Colors.white,
             borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(5),
               topRight: Radius.circular(5),
@@ -40,11 +39,11 @@ class CustomRecipesSelection extends StatelessWidget {
             border: Border.all(color: AppTheme.appColor, width: 2)),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15.0),
-          child: Row(
+          child: Row(mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               AppText.appText(recipeText,
-                  fontSize: 18,
+                  fontSize: 15,
                   fontWeight: FontWeight.w500,
                   textColor: AppTheme.appColor),
               Icon(
@@ -59,7 +58,6 @@ class CustomRecipesSelection extends StatelessWidget {
     ):Container(
       width: width,
       decoration: BoxDecoration(
-          color: Colors.white,
           borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(5),
             topRight: Radius.circular(5),
@@ -68,35 +66,28 @@ class CustomRecipesSelection extends StatelessWidget {
           ),
           border: Border.all(color: AppTheme.appColor, width: 2)),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15.0,vertical: 10.0),
-        child: Column(mainAxisSize: MainAxisSize.min,crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            GestureDetector(
-              onTap: onTap,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  AppText.appText("${recipeText}:",
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                      textColor: AppTheme.appColor),
-                  Icon(
-                    Icons.arrow_forward_ios,
-                    color: AppTheme.appColor,
-                    size: 20,
-                  ),
-                ],
+        padding: const EdgeInsets.symmetric(horizontal: 15.0,vertical: 15.0),
+        child: GestureDetector(
+          onTap: onTap,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              AppText.appText("${recipeText}: ",
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
+                  textColor: AppTheme.appColor),
+              Expanded(child: widget,),
+              Icon(
+                Icons.arrow_forward_ios,
+                color: AppTheme.appColor,
+                size: 20,
               ),
-            ),
-            const SizedBox(height: 10,),
-            customChipWidget(),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget customChipWidget() {
-          return widget;
-  }
+
 }

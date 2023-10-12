@@ -18,6 +18,7 @@ import 'package:ai_food/View/recipe_info/recipe_info.dart';
 import 'package:ai_food/config/app_urls.dart';
 import 'package:ai_food/config/dio/app_dio.dart';
 import 'package:ai_food/config/dio/spoonacular_app_dio.dart';
+import 'package:ai_food/providers/home_screen_provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -66,7 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool isHiting = false;
   bool recipeInfoLoader = false;
   List showProgressindicators = [];
-  List? apiRecipeIds;
+  List apiRecipeIds = [];
   @override
   void initState() {
     dio = AppDio(context);
@@ -118,7 +119,7 @@ class _HomeScreenState extends State<HomeScreen> {
               alignment: Alignment.topLeft,
               child: Padding(
                 padding: const EdgeInsets.only(
-                  left: 20.0,
+                  left: 18.0,
                   // bottom: 19,
                   top: 20,
                 ),
@@ -148,7 +149,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 left: 20.0,
                 right: 20.0,
               ),
-              child: Row(crossAxisAlignment: CrossAxisAlignment.end,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Padding(
@@ -165,7 +167,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           onTap: () async {
                             await reGenerateRecipe(context);
                           },
-
                           child: Container(
                             height: 35,
                             decoration: BoxDecoration(
@@ -174,8 +175,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               border: Border.all(color: AppTheme.appColor),
                             ),
                             child: Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 10.0, right: 10),
+                              padding:
+                                  const EdgeInsets.only(left: 10.0, right: 10),
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -213,9 +214,8 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             )
           : Container(
-        height: double.infinity,
-              // width: width,
-              // color: Colors.blueGrey,
+              height: double.infinity,
+              // color: Colors.red,
               decoration: BoxDecoration(
                   image: DecorationImage(
                       image: AssetImage("assets/images/logo.png"),
@@ -305,14 +305,21 @@ class _HomeScreenState extends State<HomeScreen> {
         showProgressindicators[index] = false;
         final idAsInt = int.tryParse(id.toString());
         final bool isFav = apiRecipeIds!.contains(idAsInt);
-        Navigator.of(context).push(
+       Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) => RecipeInfo(
               recipeData: response.data,
               isFav: isFav ? 1 : 0,
             ),
           ),
-        );
+        ).then((value) {
+         if(value == true){
+           setState(() {
+             getFavouriteRecipes();
+           });
+         }
+       });
+
       });
     } else if (response.statusCode == 402) {
       response = await spoonDio.get(path: apiUrl2);
@@ -321,14 +328,21 @@ class _HomeScreenState extends State<HomeScreen> {
         showProgressindicators[index] = false;
         final idAsInt = int.tryParse(id.toString());
         final bool isFav = apiRecipeIds!.contains(idAsInt);
-        Navigator.of(context).push(
+       Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) => RecipeInfo(
               recipeData: response.data,
               isFav: isFav ? 1 : 0,
             ),
           ),
-        );
+        ).then((value) {
+          if(value == true){
+            setState(() {
+              getFavouriteRecipes();
+            });
+          }
+       });
+
       });
     } else {
       print('API request failed with status code: ${response.statusCode}');
@@ -602,6 +616,9 @@ class _HomeScreenState extends State<HomeScreen> {
       shrinkWrap: true,
       itemCount: data.length,
       itemBuilder: (context, int index) {
+
+        bool recipeDataId = apiRecipeIds.contains(data[index]["id"]);
+
         return Container(
           width: width / 2.26,
           height: 225,
@@ -618,16 +635,48 @@ class _HomeScreenState extends State<HomeScreen> {
                 Container(
                     padding: const EdgeInsets.only(top: 12, bottom: 8),
                     child: Center(
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: CachedNetworkImage(
-                          fit: BoxFit.cover,
-                          imageUrl: "${data[index]["image"]}",
-                          height: 130,
-                          width: width,
-                          errorWidget: (context, url, error) =>
-                              const Icon(Icons.error),
-                        ),
+                      child: Stack(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: CachedNetworkImage(
+                              fit: BoxFit.cover,
+                              imageUrl: "${data[index]["image"]}",
+                              height: 130,
+                              width: width,
+                              errorWidget: (context, url, error) =>
+                                  const Icon(Icons.error),
+                            ),
+                          ),
+                          !recipeDataId? SizedBox.shrink():   Padding(
+                            padding:
+                            const EdgeInsets.all(
+                                8.0),
+                            child: Align(
+                              alignment:
+                              Alignment.topRight,
+                              child: Container(
+                                height: 35,
+                                width: 35,
+                                decoration:
+                                BoxDecoration(
+                                  color: AppTheme
+                                      .whiteColor,
+                                  borderRadius:
+                                  BorderRadius
+                                      .circular(
+                                      100),
+                                ),
+                                child: Center(
+                                  child: Icon(
+                                    Icons.favorite,
+                                    color: AppTheme.appColor,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     )),
                 Padding(
