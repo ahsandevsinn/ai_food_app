@@ -13,7 +13,7 @@ class ChatBotProvider extends ChangeNotifier {
   }
 
   final List<String> _addChatAnswer = [];
-  
+
   List<String> get addChatAnswer => _addChatAnswer;
 
   List<String> addChatsAnswer (String chatsAnswer){
@@ -49,6 +49,15 @@ class ChatBotProvider extends ChangeNotifier {
 
   void messageLoading(value){
     _isLoading = value;
+    notifyListeners();
+  }
+
+  //  control visibility in container
+  bool _iscontainer = true;
+  bool get iscontainer => _iscontainer;
+
+  void containerLoading(value){
+    _iscontainer = value;
     notifyListeners();
   }
 

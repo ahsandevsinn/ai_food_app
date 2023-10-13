@@ -27,6 +27,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
   final allergies;
+  final urlString;
   final dietaryRestrictions;
   final data;
   final type;
@@ -47,7 +48,7 @@ class HomeScreen extends StatefulWidget {
       this.offset,
       this.query,
       this.searchType,
-      this.totalResults})
+      this.totalResults, this.urlString})
       : super(key: key);
 
   @override
@@ -83,7 +84,6 @@ class _HomeScreenState extends State<HomeScreen> {
     } else {
       // LoadingDataFromSharedPreffromProfile();
     }
-
     super.initState();
   }
 
@@ -459,6 +459,7 @@ class _HomeScreenState extends State<HomeScreen> {
     if (response.statusCode == 200) {
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
         return BottomNavView(
+          urlString: apiUrl.split("&apiKey=$apiKey").toString().substring(1,apiUrl.split("&apiKey=$apiKey").toString().length - 3),
           type: 1,
           data: response.data["results"],
           offset: currentOffset,
@@ -486,6 +487,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) {
                 return BottomNavView(
+                  urlString: apiUrl2.split("&apiKey=$apiKey2").toString().substring(1,apiUrl2.split("&apiKey=$apiKey2").toString().length - 3),
                   type: 1,
                   data: response.data["results"],
                   offset: currentOffset,
@@ -743,7 +745,7 @@ class _HomeScreenState extends State<HomeScreen> {
       String title = values["title"].toString();
       int id = values["id"];
       String image = values["image"];
-      String url = "http://";
+      String url = "";
       arrangeIndexParam.addAll({
         "recipes[${index}][recipe_id]": id,
         "recipes[${index}][title]": title,
@@ -754,7 +756,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
     try {
       Map<String,dynamic> finalData = {
-        "search" : "String",
+        "search" : "${widget.urlString}",
      ...arrangeIndexParam
       };
       response = await dio.post(path: AppUrls.searchRecipe,data: finalData);

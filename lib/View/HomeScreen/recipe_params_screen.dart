@@ -668,12 +668,8 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
         .toString()
         .length - 1)}"
         : "";
-    final apiUrl =
-        '${AppUrls
-        .spoonacularBaseUrl}/recipes/complexSearch?$regionalDelicacy$style$kitchenResources$preferredProtein$allergies$dietaryRestrictions&number=8&apiKey=$apiKey';
-    final apiUrlTwo =
-        '${AppUrls
-        .spoonacularBaseUrl}/recipes/complexSearch?$regionalDelicacy$style$kitchenResources$preferredProtein$allergies$dietaryRestrictions&number=8&apiKey=$apiKey2';
+    final apiUrl = '${AppUrls.spoonacularBaseUrl}/recipes/complexSearch?$regionalDelicacy$style$kitchenResources$preferredProtein$allergies$dietaryRestrictions&number=8&apiKey=$apiKey';
+    final apiUrlTwo = '${AppUrls.spoonacularBaseUrl}/recipes/complexSearch?$regionalDelicacy$style$kitchenResources$preferredProtein$allergies$dietaryRestrictions&number=8&apiKey=$apiKey2';
     response = await spoonDio.get(path: apiUrl);
     try {
       if (response.statusCode == 200) {
@@ -681,6 +677,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
         pushReplacement(
             context,
             BottomNavView(
+              urlString: apiUrl.split("&apiKey=$apiKey").toString().substring(1,apiUrl.split("&apiKey=$apiKey").toString().length - 3),
               type: 1,
               offset: response.data["offset"],
               totalResults: response.data["totalResults"],
@@ -702,6 +699,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
             pushReplacement(
               context,
               BottomNavView(
+                urlString: apiUrlTwo.split("&apiKey=$apiKey2").toString().substring(1,apiUrlTwo.split("&apiKey=$apiKey2").toString().length - 3),
                 type: 1,
                 offset: response.data["offset"],
                 totalResults: response.data["totalResults"],

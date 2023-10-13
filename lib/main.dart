@@ -21,7 +21,9 @@ Future<void> main() async {
   await Firebase.initializeApp();
   AppLogger logger = AppLogger();
   logger.init();
-  runApp(const MyApp());
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown],).then((_) =>  runApp(const MyApp()));
+
 }
 
 class MyApp extends StatelessWidget {
@@ -57,7 +59,7 @@ class MyApp extends StatelessWidget {
             primarySwatch: Colors.blue,
           ),
           // home: BottomNavView(),
-          home: const SplashScreen(),
+          home:  SplashScreen(),
         ),
       );
     });

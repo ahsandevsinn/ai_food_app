@@ -18,8 +18,9 @@ import 'package:sizer/sizer.dart';
 class RecipeInfo extends StatefulWidget {
   final recipeData;
   final isFav;
+  final urlLinkFromAskMaida;
 
-  const RecipeInfo({super.key, this.recipeData, this.isFav});
+  const RecipeInfo({super.key, this.recipeData, this.isFav, this.urlLinkFromAskMaida});
 
   @override
   State<RecipeInfo> createState() => _RecipeInfoState();
@@ -204,15 +205,18 @@ class _RecipeInfoState extends State<RecipeInfo>
                                           onTap: () {
                                             setState(() {
                                               favoriteTap = true;
-
-
                                             });
+                                            widget.recipeData["spoonacularSourceUrl"]==null?
                                             favoriteAPI(
                                                 recpieid: widget.recipeData["id"],
                                                 title: widget.recipeData["title"],
                                                 image: widget.recipeData["image"],
-                                                link: widget.recipeData[
-                                                    "spoonacularSourceUrl"]);
+                                                link: widget.urlLinkFromAskMaida):
+                                            favoriteAPI(
+                                                recpieid: widget.recipeData["id"],
+                                                title: widget.recipeData["title"],
+                                                image: widget.recipeData["image"],
+                                                link: widget.recipeData["spoonacularSourceUrl"]);
                                           },
                                           child: Card(
                                             elevation: 6,

@@ -12,6 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class BottomNavView extends StatefulWidget {
   final type;
+  final urlString;
   final allergies;
   final dietaryRestrictions;
   final data;
@@ -33,7 +34,7 @@ class BottomNavView extends StatefulWidget {
       this.query,
       this.searchType,
       this.totalResults,
-      this.searchList,});
+      this.searchList, this.urlString,});
 
   @override
   State<BottomNavView> createState() => _BottomNavViewState();
@@ -51,6 +52,7 @@ class _BottomNavViewState extends State<BottomNavView> {
     _widgetOptions = [
       widget.type == 1
           ? HomeScreen(
+        urlString: widget.urlString,
               type: 1,
               data: widget.data,
               offset: widget.offset,
