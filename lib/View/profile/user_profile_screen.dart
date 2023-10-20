@@ -1,11 +1,13 @@
 import 'dart:convert';
 
 import 'package:ai_food/Constants/app_logger.dart';
+import 'package:ai_food/Utils/logout.dart';
 import 'package:ai_food/Utils/resources/res/AppAssetsImage.dart';
 import 'package:ai_food/Utils/resources/res/app_theme.dart';
 import 'package:ai_food/Utils/utils.dart';
 import 'package:ai_food/Utils/widgets/others/app_button.dart';
 import 'package:ai_food/Utils/widgets/others/app_text.dart';
+import 'package:ai_food/Utils/widgets/others/errordialogue.dart';
 import 'package:ai_food/View/HomeScreen/TestScreens/model_recipe.dart';
 import 'package:ai_food/View/NavigationBar/bottom_navigation.dart';
 import 'package:ai_food/config/app_urls.dart';
@@ -89,8 +91,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final allergiesProvider = Provider.of<AllergiesProvider>(context, listen: false);
-    final dietaryRestrictionsProvider = Provider.of<DietaryRestrictionsProvider>(context, listen: false);
+    final allergiesProvider =
+        Provider.of<AllergiesProvider>(context, listen: false);
+    final dietaryRestrictionsProvider =
+        Provider.of<DietaryRestrictionsProvider>(context, listen: false);
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
@@ -277,26 +281,42 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                           setState(() {
                             checkAPI = true;
                           });
-                          allergiesProvider.showAllergiesParameterDetailsload(context, "Allergies");
+                          allergiesProvider.showAllergiesParameterDetailsload(
+                              context, "Allergies");
                           allergiesProvider.removeAllergyParams();
                           allergiesProvider.clearAllergiesAllCheckboxStates();
                           addAllergies.forEach((key, value) {
-                            int intKey = int.parse(key) -1;
+                            int intKey = int.parse(key) - 1;
                             //allergiesProvider.toggleAllergiesRecipeStatefalse(intKey);
-                            if (allergiesProvider.preferredAllergiesRecipe[intKey].isChecked == false) {
-                              allergiesProvider.toggleAllergiesRecipeState(intKey);
-                              allergiesProvider.addAllergiesValue(value, intKey);
+                            if (allergiesProvider
+                                    .preferredAllergiesRecipe[intKey]
+                                    .isChecked ==
+                                false) {
+                              allergiesProvider
+                                  .toggleAllergiesRecipeState(intKey);
+                              allergiesProvider.addAllergiesValue(
+                                  value, intKey);
                             }
                           });
-                          dietaryRestrictionsProvider.showDietaryRestrictionsParameterDetailsload(context, "Dietary Restrictions");
-                          dietaryRestrictionsProvider.removeDietaryRestrictions();
-                          dietaryRestrictionsProvider.clearDietaryRestrictionsAllCheckboxStates();
+                          dietaryRestrictionsProvider
+                              .showDietaryRestrictionsParameterDetailsload(
+                                  context, "Dietary Restrictions");
+                          dietaryRestrictionsProvider
+                              .removeDietaryRestrictions();
+                          dietaryRestrictionsProvider
+                              .clearDietaryRestrictionsAllCheckboxStates();
                           addDietaryRestrictions.forEach((key, value) {
-                            int intKey = int.parse(key) -1;
+                            int intKey = int.parse(key) - 1;
                             //dietaryRestrictionsProvider.toggleDietaryRestrictionsRecipeStatefalse(intKey);
-                            if (dietaryRestrictionsProvider.preferredDietaryRestrictionsParametersRecipe[intKey].isChecked == false) {
-                              dietaryRestrictionsProvider.toggleDietaryRestrictionsRecipeState(intKey);
-                              dietaryRestrictionsProvider.addDietaryRestrictionsValue(value, intKey);
+                            if (dietaryRestrictionsProvider
+                                    .preferredDietaryRestrictionsParametersRecipe[
+                                        intKey]
+                                    .isChecked ==
+                                false) {
+                              dietaryRestrictionsProvider
+                                  .toggleDietaryRestrictionsRecipeState(intKey);
+                              dietaryRestrictionsProvider
+                                  .addDietaryRestrictionsValue(value, intKey);
                             }
                           });
                           /* where i am converting the map keys into list so that i can call them in
@@ -360,7 +380,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         // showSnackBar(context, "${responseData["message"]}");
       } else if (response.statusCode == responseCode200) {
         if (responseData["status"] == false) {
-          // showSnackBar(context, "${responseData["message"]}");
+          if (responseData["data"]["statusCode"] == 403) {
+            alertDialogErrorBan(context: context,message:"${responseData["message"]}");
+          } else {
+            // showSnackBar(context, "${responseData["message"]}");
+          }
         } else {
           var encodeData = jsonEncode(responseData);
           prefs.setString(PrefKey.parametersLists, encodeData);
@@ -408,7 +432,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   .add(RecipesParameterClass(parameter: value));
             });
           }
-
 
           //adding regional delicacy list
           if (regionalDelicacyProvider.isEmpty) {
@@ -519,11 +542,19 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           break;
         case responseCode200:
           if (responseData["status"] == false) {
-            setState(() {
-              checkAPI = false;
-            });
-            showSnackBar(context, "${responseData["message"]}");
-            // print("Something Went Wrong: ${responseData["message"]}");
+            if (responseData["data"]["statusCode"] == 403) {
+              alertDialogErrorBan(context: context,message:"${responseData["message"]}");
+              setState(() {
+                checkAPI = false;
+              });
+            } else {
+              setState(() {
+                checkAPI = false;
+              });
+              showSnackBar(context, "${responseData["message"]}");
+              // print("Something Went Wrong: ${responseData["message"]}");
+            }
+
           } else {
             setState(() {
               checkAPI = false;
@@ -568,7 +599,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           PrefKey.dateOfBirth, DateFormat('MM-dd-yyyy').format(selectedDate!));
     }
     prefs.setStringList(PrefKey.dataonBoardScreenAllergies, allergies);
-    prefs.setStringList(PrefKey.dataonBoardScreenDietryRestriction, dietryRestriction);
+    prefs.setStringList(
+        PrefKey.dataonBoardScreenDietryRestriction, dietryRestriction);
     prefs.setInt(PrefKey.conditiontoLoad, 1);
     setState(() {
       checkAPI == false;
@@ -603,7 +635,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           break;
         case responseCode200:
           if (responseData["status"] == false) {
-            print("Something Went Wrong: ${responseData["message"]}");
+            if (responseData["data"]["statusCode"] == 403) {
+              alertDialogErrorBan(context: context,message:"${responseData["message"]}");
+            } else {
+              print("Something Went Wrong: ${responseData["message"]}");
+            }
           } else {
             var data = responseData["data"]["allergies"];
             var data2 = responseData["data"]["dietaryRestrictions"];

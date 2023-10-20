@@ -1,12 +1,14 @@
 import 'dart:convert';
 
 import 'package:ai_food/Constants/app_logger.dart';
+import 'package:ai_food/Utils/logout.dart';
 import 'package:ai_food/Utils/resources/res/AppAssetsImage.dart';
 import 'package:ai_food/Utils/resources/res/app_theme.dart';
 import 'package:ai_food/Utils/utils.dart';
 import 'package:ai_food/Utils/widgets/others/app_button.dart';
 import 'package:ai_food/Utils/widgets/others/app_field.dart';
 import 'package:ai_food/Utils/widgets/others/app_text.dart';
+import 'package:ai_food/Utils/widgets/others/errordialogue.dart';
 import 'package:ai_food/View/HomeScreen/widgets/providers/allergies_provider.dart';
 import 'package:ai_food/config/app_urls.dart';
 import 'package:ai_food/config/dio/app_dio.dart';
@@ -630,10 +632,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
           break;
         case responseCode200:
           if (responseData["status"] == false) {
-            setState(() {
-              checkAPI = false;
-            });
-            showSnackBar(context, "Enter your name");
+            if(responseData["data"]["statusCode"] == 403){
+              alertDialogErrorBan(context: context,message:"${responseData["message"]}");
+              setState(() {
+                checkAPI = false;
+              });
+            }else{
+              setState(() {
+                checkAPI = false;
+              });
+              showSnackBar(context, "Enter your name");
+            }
+
           } else {
             setState(() {
               checkAPI = false;

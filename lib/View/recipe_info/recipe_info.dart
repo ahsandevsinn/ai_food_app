@@ -1,7 +1,9 @@
 import 'package:ai_food/Constants/app_logger.dart';
+import 'package:ai_food/Utils/logout.dart';
 import 'package:ai_food/Utils/resources/res/app_theme.dart';
 import 'package:ai_food/Utils/utils.dart';
 import 'package:ai_food/Utils/widgets/others/app_text.dart';
+import 'package:ai_food/Utils/widgets/others/errordialogue.dart';
 import 'package:ai_food/View/recipe_info/shopping_list.dart';
 import 'package:ai_food/config/app_urls.dart';
 import 'package:ai_food/config/dio/app_dio.dart';
@@ -668,10 +670,18 @@ class _RecipeInfoState extends State<RecipeInfo>
           break;
         case responseCode200:
           if (responseData["status"] == false) {
-            setState(() {
-              favoriteTap = false;
-            });
-            showSnackBar(context, "Something went wrong");
+            if (responseData["data"]["statusCode"] == 403) {
+              alertDialogErrorBan(context: context,message:"${responseData["message"]}");
+              setState(() {
+                favoriteTap = false;
+              });
+            }else{
+              setState(() {
+                favoriteTap = false;
+              });
+              showSnackBar(context, "Something went wrong");
+            }
+
           } else {}
           break;
         default:
@@ -732,10 +742,18 @@ class _RecipeInfoState extends State<RecipeInfo>
           break;
         case responseCode200:
           if (responseData["status"] == false) {
-            setState(() {
-              favoriteTap = false;
-            });
-            showSnackBar(context, "Something went wrong");
+            if (responseData["data"]["statusCode"] == 403) {
+              alertDialogErrorBan(context: context,message:"${responseData["message"]}");
+              setState(() {
+                favoriteTap = false;
+              });
+            }else{
+              setState(() {
+                favoriteTap = false;
+              });
+              showSnackBar(context, "Something went wrong");
+            }
+
           } else {
             print("everything is alright");
           }

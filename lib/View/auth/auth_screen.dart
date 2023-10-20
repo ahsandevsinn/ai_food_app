@@ -780,41 +780,47 @@ class _AuthScreenState extends State<AuthScreen> {
         showSnackBar(context, "${responseData["message"]}");
       } else if (response.statusCode == responseCode200) {
         if (responseData["status"] == false) {
-          setState(() {
-            _isLoading = false;
-          });
-          String responsemessage = responseData["message"];
-          print("jidmaosmdo${responsemessage}");
-          String errormessageconst = "The selected email is invalid.";
-          String errormessageconst4 =
-              "The email must be a valid email address.";
-          if (responsemessage == errormessageconst ||
-              responsemessage == errormessageconst4) {
+          if(responseData["data"]["statusCode"] ==  403){
+            alertDialogErrorBan(context: context,message:"${responseData["message"]}");
             setState(() {
-              errormessageLoginsEmail =
-                  responseData["messsage"] ?? "Invalid email";
-              hintTextColor2Condition = true;
+              _isLoading = false;
             });
-            // alertDialogError(
-            //     context: context, message: responseData["message"]);
-          }
-          String errormessageconst2 = "Invalid password";
-          if (responsemessage == errormessageconst2) {
+          }else{
             setState(() {
-              errormessageLoginsPassword =
-                  responseData["messsage"] ?? "Invalid password";
-              hintTextColorCondition = true;
+              _isLoading = false;
             });
+            String responsemessage = responseData["message"];
+            print("jidmaosmdo${responsemessage}");
+            String errormessageconst = "The selected email is invalid.";
+            String errormessageconst4 =
+                "The email must be a valid email address.";
+            if (responsemessage == errormessageconst ||
+                responsemessage == errormessageconst4) {
+              setState(() {
+                errormessageLoginsEmail =
+                    responseData["messsage"] ?? "Invalid email";
+                hintTextColor2Condition = true;
+              });
+              // alertDialogError(
+              //     context: context, message: responseData["message"]);
+            }
+            String errormessageconst2 = "Invalid password";
+            if (responsemessage == errormessageconst2) {
+              setState(() {
+                errormessageLoginsPassword =
+                    responseData["messsage"] ?? "Invalid password";
+                hintTextColorCondition = true;
+              });
+            }
+            String errormessageconst3 = "The password field is required.";
+            if (responsemessage == errormessageconst3) {
+              setState(() {
+                errormessageLoginsPassword =
+                    responseData["messsage"] ?? "Password field is Empty";
+                hintTextColorCondition = true;
+              });
+            }
           }
-          String errormessageconst3 = "The password field is required.";
-          if (responsemessage == errormessageconst3) {
-            setState(() {
-              errormessageLoginsPassword =
-                  responseData["messsage"] ?? "Password field is Empty";
-              hintTextColorCondition = true;
-            });
-          }
-          return;
         } else {
 
           // alertDialogError(context: context, message: responseData["message"]);
@@ -822,10 +828,10 @@ class _AuthScreenState extends State<AuthScreen> {
             _isLoading = false;
           });
           var token = responseData['data']['token'];
-          var name = responseData['data']['user']['name'];
-          var usermail = responseData['data']['user']['email'];
-          var DOB = responseData['data']['user']['DOB'];
-          var measuringUnit = responseData["data"]["user"]["measuring_unit"];
+          var name = responseData['data']['user']['name']??"";
+          var usermail = responseData['data']['user']['email']??"";
+          var DOB = responseData['data']['user']['DOB']??"";
+          var measuringUnit = responseData["data"]["user"]["measuring_unit"]??"us";
           var dietary_restrictions =
               responseData['data']['user']['dietary_restrictions'];
           var allergies = responseData['data']['user']['allergies'];
@@ -939,11 +945,18 @@ class _AuthScreenState extends State<AuthScreen> {
         showSnackBar(context, "${responseData["message"]}");
       } else if (response.statusCode == responseCode200) {
         if (responseData["status"] == false) {
-          setState(() {
-            _appleLoading = false;
-          });
-          showSnackBar(context, "${responseData["message"]}");
-          return;
+          if(responseData["data"]["statusCode"] ==  403){
+            alertDialogErrorBan(context: context,message:"${responseData["message"]}");
+            setState(() {
+              _appleLoading = false;
+            });
+          }else{
+            setState(() {
+              _appleLoading = false;
+            });
+            showSnackBar(context, "${responseData["message"]}");
+            return;
+          }
         } else {
           var token = responseData['data']['token'];
           // if(name.isEmpty || name == ""){
@@ -951,8 +964,8 @@ class _AuthScreenState extends State<AuthScreen> {
           // }
 
           // print("name_is_here ${responseData['data']['user']['name']}");
-          var DOB = responseData['data']['user']['DOB'];
-          var username = responseData['data']['user']['name'];
+          var DOB = responseData['data']['user']['DOB']??"";
+          var username = responseData['data']['user']['name']??"";
           var usermail = responseData['data']['user']['email'];
           var measuringUnit = responseData['data']['user']['measuring_unit'];
 

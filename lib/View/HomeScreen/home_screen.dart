@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:ai_food/Constants/apikey.dart';
 import 'package:ai_food/Constants/app_logger.dart';
+import 'package:ai_food/Utils/logout.dart';
 import 'package:ai_food/Utils/resources/res/app_theme.dart';
 import 'package:ai_food/Utils/utils.dart';
 import 'package:ai_food/Utils/widgets/others/errordialogue.dart';
@@ -583,8 +584,14 @@ class _HomeScreenState extends State<HomeScreen> {
         showSnackBar(context, "${responseData["message"]}");
       } else if (response.statusCode == responseCode200) {
         if (responseData["status"] == false) {
-          alertDialogError(context: context, message: responseData["message"]);
-          return;
+          if(responseData["data"]["statusCode"] ==  403) {
+            alertDialogError(context: context, message: responseData["message"]);
+            return;
+
+          }else{
+            showSnackBar(context, "${responseData["message"]}");
+          }
+
         } else {
           setState(() {
             apiRecipeIds = responseData["data"]["recipe_ids"];
@@ -776,8 +783,13 @@ class _HomeScreenState extends State<HomeScreen> {
         showSnackBar(context, "${responseData["message"]}");
       } else if (response.statusCode == responseCode200) {
         if (responseData["status"] == false) {
-          alertDialogError(context: context, message: responseData["message"]);
-          return;
+          if(responseData["data"]["statusCode"] ==  403) {
+            alertDialogErrorBan(context: context,message:"${responseData["message"]}");
+          }else{
+            alertDialogError(context: context, message: responseData["message"]);
+            return;
+          }
+
         } else {
           print("done");
         }

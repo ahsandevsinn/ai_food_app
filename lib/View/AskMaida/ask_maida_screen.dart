@@ -1,5 +1,6 @@
 import 'package:ai_food/Constants/apikey.dart';
 import 'package:ai_food/Constants/app_logger.dart';
+import 'package:ai_food/Utils/logout.dart';
 import 'package:ai_food/Utils/resources/res/app_theme.dart';
 import 'package:ai_food/Utils/utils.dart';
 import 'package:ai_food/Utils/widgets/others/app_button.dart';
@@ -417,6 +418,7 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
         showSnackBar(context, '${response.statusCode}');
       } else {
         final resData = response.data;
+        searchRecipeChatBot(resData, queryText ?? _messageController.text);
         if (resData != null) {
           // setState(() {
           //   visibilityContainer = false;
@@ -570,8 +572,13 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
         showSnackBar(context, "${responseData["message"]}");
       } else if (response.statusCode == responseCode200) {
         if (responseData["status"] == false) {
-          alertDialogError(context: context, message: responseData["message"]);
-          return;
+          if(responseData["data"]["statusCode"] == 403) {
+            alertDialogErrorBan(context: context,message:"${responseData["message"]}");
+          }else{
+            alertDialogError(context: context, message: responseData["message"]);
+            return;
+          }
+
         } else {
           setState(() {
             apiRecipeIds = responseData["data"]["recipe_ids"];

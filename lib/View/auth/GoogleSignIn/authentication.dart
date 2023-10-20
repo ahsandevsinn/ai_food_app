@@ -1,4 +1,5 @@
 import 'package:ai_food/Utils/utils.dart';
+import 'package:ai_food/Utils/widgets/others/errordialogue.dart';
 import 'package:ai_food/View/AskMaida/ask_maida_screen.dart';
 import 'package:ai_food/View/NavigationBar/bottom_navigation.dart';
 import 'package:ai_food/View/auth/auth_screen.dart';
@@ -188,13 +189,18 @@ void login({
       showSnackBar(context, "${responseData["message"]}");
     } else if (response.statusCode == responseCode200) {
       if (responseData["status"] == false) {
-        showSnackBar(context, "${responseData["message"]}");
-        return;
+        if(responseData["data"]["statusCode"] ==  403){
+          alertDialogErrorBan(context: context,message:"${responseData["message"]}");
+        }else{
+          showSnackBar(context, "${responseData["message"]}");
+          return;
+        }
+
       } else {
         var token = responseData['data']['token'];
         var username = responseData['data']['user']['name'];
         var usermail = responseData['data']['user']['email'];
-        var DOB = responseData['data']['user']['DOB'];
+        var DOB = responseData['data']['user']['DOB']??"";
         var measuringUnit = responseData['data']['user']['measuring_unit'];
         var dietary_restrictions =
             responseData['data']['user']['dietary_restrictions'];

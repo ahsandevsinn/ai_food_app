@@ -21,6 +21,10 @@ class ChatBotProvider extends ChangeNotifier {
     notifyListeners();
     return addChatAnswer;
   }
+  void clearDisplayChatsWidget() {
+    _displayChatsWidget.clear();
+    notifyListeners();
+  }
 
   final List<dynamic> _addChatMedia = [];
 
@@ -68,4 +72,5 @@ class ChatBotProvider extends ChangeNotifier {
     _regenerateLoader = value;
     notifyListeners();
   }
+
 }

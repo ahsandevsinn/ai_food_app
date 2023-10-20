@@ -1,10 +1,12 @@
 import 'package:ai_food/Constants/app_logger.dart';
+import 'package:ai_food/Utils/logout.dart';
 import 'package:ai_food/Utils/resources/res/app_theme.dart';
 import 'package:ai_food/Utils/utils.dart';
 import 'package:ai_food/Utils/widgets/others/app_button.dart';
 import 'package:ai_food/Utils/widgets/others/app_text.dart';
 import 'package:ai_food/Utils/widgets/others/errordialogue.dart';
 import 'package:ai_food/View/HomeScreen/widgets/providers/allergies_provider.dart';
+import 'package:ai_food/View/HomeScreen/widgets/providers/chat_bot_provider.dart';
 import 'package:ai_food/View/HomeScreen/widgets/providers/dietary_restrictions_provider.dart';
 import 'package:ai_food/View/HomeScreen/widgets/providers/food_style_provider.dart';
 import 'package:ai_food/View/HomeScreen/widgets/providers/kitchenResources_provider.dart';
@@ -350,7 +352,8 @@ class _SettingScreenState extends State<SettingScreen> {
                       children: [
                         GestureDetector(
                           onTap: () async {
-                            await logout(context);
+                          //  await logout(context);
+                            AuthUtil.logout(context);
                             if (allergiesProvider.addAllergies.isNotEmpty ||
                                 restrictionsProvider
                                     .addDietaryRestrictions.isNotEmpty ||
@@ -637,12 +640,17 @@ class _SettingScreenState extends State<SettingScreen> {
     });
   }
 
-  Future<void> logout(context) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.remove(PrefKey.authorization);
-    // await prefs.remove(PrefKey.searchQueryParameter);
-    await Authentication.signOut(context: context);
-  }
+
+  // Future<void> logout(context) async {
+  //   final clearChatProvider = Provider.of<ChatBotProvider>(context, listen: false);
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   await prefs.remove(PrefKey.authorization);
+  //   clearChatProvider.containerLoading(true);
+  //
+  //   // await prefs.remove(PrefKey.searchQueryParameter);
+  //   clearChatProvider.clearDisplayChatsWidget();
+  //   await Authentication.signOut(context: context);
+  // }
 
   customerSupport() async {
     setState(() {
