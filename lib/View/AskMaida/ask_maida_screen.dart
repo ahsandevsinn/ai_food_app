@@ -415,7 +415,8 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
       response = await spoonDio.get(path: apiUrlTwo);
       if (response.statusCode == 402) {
         chatsProvider.messageLoading(false);
-        showSnackBar(context, '${response.statusCode}');
+        // showSnackBar(context, '${response.statusCode}');
+        showSnackBar(context, 'Payment required');
       } else {
         final resData = response.data;
         searchRecipeChatBot(resData, queryText ?? _messageController.text);

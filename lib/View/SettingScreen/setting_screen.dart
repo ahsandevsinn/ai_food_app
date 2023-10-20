@@ -617,7 +617,6 @@ class _SettingScreenState extends State<SettingScreen> {
                         backgroundColor: AppTheme.whiteColor, onTap: () {
                       if (_formKeyMessage.currentState!.validate()) {
                         customerSupport();
-                        Navigator.pop(context);
                       }
 
 
@@ -670,6 +669,7 @@ class _SettingScreenState extends State<SettingScreen> {
           _isLoading = false;
         });
         messageController.clear();
+        Navigator.pop(context);
         showSnackBar(context, "${responseData['message']}");
       }
     } catch (e) {

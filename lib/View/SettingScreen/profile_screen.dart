@@ -648,7 +648,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             setState(() {
               checkAPI = false;
             });
-            print("everything is alright");
+            showSnackBar(context,"Profile updated successfully");
             Navigator.of(context).pop();
           }
           break;

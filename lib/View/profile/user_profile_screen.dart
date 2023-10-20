@@ -559,7 +559,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             setState(() {
               checkAPI = false;
             });
-            print("everything is alright");
+            showSnackBar(context,"Profile updated successfully");
             pushReplacement(
                 context,
                 BottomNavView(

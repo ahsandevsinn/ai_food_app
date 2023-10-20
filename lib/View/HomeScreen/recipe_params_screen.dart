@@ -50,6 +50,8 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
   AppLogger logger = AppLogger();
 
   bool isLoading = false;
+  bool checkLoadDataFromAPI = false;
+  bool NoInternetConnection = false;
 
   @override
   void initState() {
@@ -71,9 +73,9 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
 
   void setRecipesParameters() async {
     final allergiesProvider =
-        Provider.of<AllergiesProvider>(context, listen: false);
+    Provider.of<AllergiesProvider>(context, listen: false);
     final dietaryRestrictionProvider =
-        Provider.of<DietaryRestrictionsProvider>(context, listen: false);
+    Provider.of<DietaryRestrictionsProvider>(context, listen: false);
     var response;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     const int responseCode200 = 200; // For successful request.
@@ -82,29 +84,34 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
     const int responseCode404 = 404; // For For data not found
     const int responseCode405 = 405; // Method not allowed
     const int responseCode500 = 500; // Internal server error.
-
+    setState(() {
+      checkLoadDataFromAPI = false;
+    });
     try {
       response = await dio.get(path: AppUrls.searchParameterUrl);
       var responseData = response.data;
       if (response.statusCode == responseCode405) {
-        // showSnackBar(context, "${responseData["message"]}");
+        showSnackBar(context, "${responseData["message"]}");
       } else if (response.statusCode == responseCode404) {
-        // showSnackBar(context, "${responseData["message"]}");
+        showSnackBar(context, "${responseData["message"]}");
       } else if (response.statusCode == responseCode400) {
-        // showSnackBar(context, "${responseData["message"]}");
+        showSnackBar(context, "${responseData["message"]}");
       } else if (response.statusCode == responseCode401) {
-        // showSnackBar(context, "${responseData["message"]}");
+        showSnackBar(context, "${responseData["message"]}");
       } else if (response.statusCode == responseCode500) {
-        // showSnackBar(context, "${responseData["message"]}");
+        showSnackBar(context, "${responseData["message"]}");
       } else if (response.statusCode == responseCode200) {
         if (responseData["status"] == false) {
           if (responseData["data"]["statusCode"] == 403) {
-            alertDialogErrorBan(context: context,message:"${responseData["message"]}");
+            alertDialogErrorBan(
+                context: context, message: "${responseData["message"]}");
           } else {
-            // showSnackBar(context, "${responseData["message"]}");
+            showSnackBar(context, "${responseData["message"]}");
           }
-
         } else {
+          setState(() {
+            checkLoadDataFromAPI = true;
+          });
           var encodeData = jsonEncode(responseData);
           prefs.setString(PrefKey.parametersLists, encodeData);
 
@@ -176,7 +183,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
           if (isLoadedfromShared == 1) {
             print("dkjasdkljaklsdjklasndklajsdklasjkdnjkasdklnaskldnlak");
             List<String> storedData =
-                prefs.getStringList(PrefKey.dataonBoardScreenAllergies)!;
+            prefs.getStringList(PrefKey.dataonBoardScreenAllergies)!;
             allergiesProvider.showAllergiesParameterDetailsload(
                 context, "Allergies");
             for (String entry in storedData) {
@@ -197,7 +204,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                 .getStringList(PrefKey.dataonBoardScreenDietryRestriction)!;
             dietaryRestrictionProvider
                 .showDietaryRestrictionsParameterDetailsload(
-                    context, "Dietary Restrictions");
+                context, "Dietary Restrictions");
             for (String entry in storedData2) {
               String result = entry.replaceAll(RegExp(r'^MapEntry\(|\)'), '');
               List<String> parts = result.split(':');
@@ -205,8 +212,8 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                 int key = int.parse(parts[0].trim()) - 1;
                 String value = parts[1].trim();
                 if (dietaryRestrictionProvider
-                        .preferredDietaryRestrictionsParametersRecipe[key]
-                        .isChecked ==
+                    .preferredDietaryRestrictionsParametersRecipe[key]
+                    .isChecked ==
                     false) {
                   dietaryRestrictionProvider
                       .toggleDietaryRestrictionsRecipeState(key);
@@ -219,8 +226,11 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
         }
       }
     } catch (e) {
+      setState(() {
+        checkLoadDataFromAPI = true;
+        NoInternetConnection = true;
+      });
       print("Something went Wrong ${e}");
-      // showSnackBar(context, "Something went Wrong.");
     }
   }
 
@@ -229,19 +239,68 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     final foodStyleProvider =
-        Provider.of<FoodStyleProvider>(context, listen: false);
+    Provider.of<FoodStyleProvider>(context, listen: false);
     print("food_style ${foodStyleProvider.foodStyle}");
     final allergiesProvider =
-        Provider.of<AllergiesProvider>(context, listen: true);
+    Provider.of<AllergiesProvider>(context, listen: true);
     final restrictionsProvider =
-        Provider.of<DietaryRestrictionsProvider>(context, listen: true);
+    Provider.of<DietaryRestrictionsProvider>(context, listen: true);
     final proteinProvider =
-        Provider.of<PreferredProteinProvider>(context, listen: true);
+    Provider.of<PreferredProteinProvider>(context, listen: true);
     final delicacyProvider =
-        Provider.of<RegionalDelicacyProvider>(context, listen: true);
+    Provider.of<RegionalDelicacyProvider>(context, listen: true);
     final kitchenProvider =
-        Provider.of<KitchenResourcesProvider>(context, listen: true);
-    return Scaffold(
+    Provider.of<KitchenResourcesProvider>(context, listen: true);
+    return checkLoadDataFromAPI == false
+        ?  Scaffold(
+      backgroundColor: Colors.white,
+      body: Container(
+        width: width,
+        height: height,
+        child: Center(
+            child: CircularProgressIndicator(
+              color: AppTheme.appColor,
+            )),
+      ),
+    ):NoInternetConnection == true?Scaffold(
+      backgroundColor: AppTheme.whiteColor,
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset('assets/images/internet_lost.png',
+                height: 200, width: 200),
+            const SizedBox(height: 30),
+            AppText.appText(
+              "No Internet Connection",
+              fontSize: 25,
+              fontWeight: FontWeight.bold,
+              textColor: AppTheme.appColor,
+            ),
+            const SizedBox(height: 10),
+            AppText.appText(
+              "Check your connection, then refresh the \n page",
+              fontWeight: FontWeight.bold,
+              textColor: AppTheme.appColor,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 30),
+            AppButton.appButton(
+              "Refresh",
+              onTap: (){
+                pushReplacement(context, BottomNavView());
+              },
+              width: 100,
+              height: 40,
+              border: true,
+              textColor: AppTheme.appColor,
+              fontWeight: FontWeight.bold,
+              backgroundColor: Colors.white,
+            ),
+          ],
+        ),
+      ),
+    ): Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -285,47 +344,53 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                           const SizedBox(height: 15),
                           GestureDetector(
                             onTap: () {
-                              showFoodStyle = !showFoodStyle;
-
-                              setState(() {});
+                              setState(() {
+                                showFoodStyle = !showFoodStyle;
+                              });
                             },
                             child: Container(
                               height: 55,
                               width: 227,
                               decoration: BoxDecoration(
-                                  borderRadius: const BorderRadius.only(
+                                  borderRadius:
+                                  const BorderRadius.only(
                                     topLeft: Radius.circular(5),
                                     topRight: Radius.circular(5),
                                     bottomLeft: Radius.circular(0),
                                     bottomRight: Radius.circular(0),
                                   ),
                                   border: Border.all(
-                                      color: AppTheme.appColor, width: 2)),
+                                      color: AppTheme.appColor,
+                                      width: 2)),
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 15.0),
                                 child: Row(
                                   mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  MainAxisAlignment.spaceBetween,
                                   children: [
                                     AppText.appText(
-                                        foodStyleProvider.foodStyle.isEmpty
+                                        foodStyleProvider
+                                            .foodStyle.isEmpty
                                             ? "Food style"
-                                            : foodStyleProvider.foodStyle,
+                                            : foodStyleProvider
+                                            .foodStyle,
                                         fontSize: 15,
                                         fontWeight: FontWeight.w500,
                                         textColor: AppTheme.appColor),
                                     !showFoodStyle
                                         ? Icon(
-                                            Icons.keyboard_arrow_down_outlined,
-                                            color: AppTheme.appColor,
-                                            size: 30,
-                                          )
+                                      Icons
+                                          .keyboard_arrow_down_outlined,
+                                      color: AppTheme.appColor,
+                                      size: 30,
+                                    )
                                         : Icon(
-                                            Icons.keyboard_arrow_up_outlined,
-                                            color: AppTheme.appColor,
-                                            size: 30,
-                                          ),
+                                      Icons
+                                          .keyboard_arrow_up_outlined,
+                                      color: AppTheme.appColor,
+                                      size: 30,
+                                    ),
                                   ],
                                 ),
                               ),
@@ -335,14 +400,16 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                           //here are the allergies
                           CustomRecipesSelection(
                             widget: chipWidget(
-                                details: allergiesProvider.addAllergies),
+                                details:
+                                allergiesProvider.addAllergies),
                             recipeText: "Allergies",
-                            showListDataInChip: allergiesProvider.addAllergies,
+                            showListDataInChip:
+                            allergiesProvider.addAllergies,
                             onTap: () {
                               Provider.of<AllergiesProvider>(context,
-                                      listen: false)
+                                  listen: false)
                                   .showAllergiesParameterDetails(
-                                      context, "Allergies");
+                                  context, "Allergies");
                             },
                           ),
                           const SizedBox(height: 20),
@@ -354,13 +421,15 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                                 details: restrictionsProvider
                                     .addDietaryRestrictions),
                             recipeText: "Dietary restrictions",
-                            showListDataInChip:
-                                restrictionsProvider.addDietaryRestrictions,
+                            showListDataInChip: restrictionsProvider
+                                .addDietaryRestrictions,
                             onTap: () {
-                              Provider.of<DietaryRestrictionsProvider>(context,
-                                      listen: false)
+                              Provider.of<DietaryRestrictionsProvider>(
+                                  context,
+                                  listen: false)
                                   .showDietaryRestrictionsParameterDetails(
-                                      context, "Dietary Restrictions");
+                                  context,
+                                  "Dietary Restrictions");
                             },
                           ),
                           const SizedBox(height: 20),
@@ -368,15 +437,17 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
 
                           //here are the Regional delicacy
                           CustomRecipesSelection(
-                            widget:
-                                chipWidget(details: proteinProvider.addProtein),
+                            widget: chipWidget(
+                                details: proteinProvider.addProtein),
                             recipeText: "Preferred protein",
-                            showListDataInChip: proteinProvider.addProtein,
+                            showListDataInChip:
+                            proteinProvider.addProtein,
                             onTap: () {
-                              Provider.of<PreferredProteinProvider>(context,
-                                      listen: false)
+                              Provider.of<PreferredProteinProvider>(
+                                  context,
+                                  listen: false)
                                   .showProteinParameterDetails(
-                                      context, "Preferred Protein");
+                                  context, "Preferred Protein");
                             },
                           ),
                           const SizedBox(height: 20),
@@ -385,15 +456,17 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                           //here are the Regional delicacy
                           CustomRecipesSelection(
                             widget: chipWidget(
-                                details: delicacyProvider.addRegionalDelicacy),
+                                details: delicacyProvider
+                                    .addRegionalDelicacy),
                             recipeText: "Regional delicacy",
                             showListDataInChip:
-                                delicacyProvider.addRegionalDelicacy,
+                            delicacyProvider.addRegionalDelicacy,
                             onTap: () {
-                              Provider.of<RegionalDelicacyProvider>(context,
-                                      listen: false)
+                              Provider.of<RegionalDelicacyProvider>(
+                                  context,
+                                  listen: false)
                                   .showRegionalDelicacyParameterDetails(
-                                      context, "Regional Delicacy");
+                                  context, "Regional Delicacy");
                             },
                           ),
                           const SizedBox(height: 20),
@@ -402,15 +475,17 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                           //here are the Kitchen resources
                           CustomRecipesSelection(
                             widget: chipWidget(
-                                details: kitchenProvider.addKitchenResources),
+                                details: kitchenProvider
+                                    .addKitchenResources),
                             recipeText: "Kitchen resources",
                             showListDataInChip:
-                                kitchenProvider.addKitchenResources,
+                            kitchenProvider.addKitchenResources,
                             onTap: () {
-                              Provider.of<KitchenResourcesProvider>(context,
-                                      listen: false)
+                              Provider.of<KitchenResourcesProvider>(
+                                  context,
+                                  listen: false)
                                   .showKitchenResourcesParameterDetails(
-                                      context, "Kitchen Resources");
+                                  context, "Kitchen Resources");
                             },
                           ),
                           const SizedBox(height: 16),
@@ -428,23 +503,29 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                     child: GestureDetector(
                       onTap: () {
                         //allergies
-                        if (allergiesProvider.addAllergies.isNotEmpty ||
+                        if (allergiesProvider
+                            .addAllergies.isNotEmpty ||
                             restrictionsProvider
                                 .addDietaryRestrictions.isNotEmpty ||
                             proteinProvider.addProtein.isNotEmpty ||
-                            kitchenProvider.addKitchenResources.isNotEmpty ||
-                            delicacyProvider.addRegionalDelicacy.isNotEmpty ||
+                            kitchenProvider
+                                .addKitchenResources.isNotEmpty ||
+                            delicacyProvider
+                                .addRegionalDelicacy.isNotEmpty ||
                             foodStyleProvider.foodStyle.isNotEmpty) {
                           //  allergies
                           allergiesProvider.removeAllergyParams();
-                          allergiesProvider.clearAllergiesAllCheckboxStates();
+                          allergiesProvider
+                              .clearAllergiesAllCheckboxStates();
                           //restrictions
-                          restrictionsProvider.removeDietaryRestrictions();
+                          restrictionsProvider
+                              .removeDietaryRestrictions();
                           restrictionsProvider
                               .clearDietaryRestrictionsAllCheckboxStates();
                           //protein
                           proteinProvider.removePreferredProtein();
-                          proteinProvider.clearProteinAllCheckboxStates();
+                          proteinProvider
+                              .clearProteinAllCheckboxStates();
                           //delicacy
                           delicacyProvider.removeRegionalDelicacy();
                           delicacyProvider
@@ -455,7 +536,8 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                               .clearKitchenResourcesAllCheckboxStates();
                           //food style
                           foodStyleProvider.clearFoodStyleValue();
-                          showSnackBar(context, "Filters Reset Succesfully");
+                          showSnackBar(
+                              context, "Filters Reset Succesfully");
                         }
                       },
                       child: AppText.appText(
@@ -472,31 +554,33 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                   ),
                   isLoading
                       ? Center(
-                          child: CircularProgressIndicator(
-                            color: AppTheme.appColor,
-                          ),
-                        )
+                    child: CircularProgressIndicator(
+                      color: AppTheme.appColor,
+                    ),
+                  )
                       : Center(
-                          child: AppButton.appButton(
-                            "Generate",
-                            fontSize: 20,
-                            fontWeight: FontWeight.w600,
-                            textColor: Colors.white,
-                            width:
-                                (MediaQuery.of(context).size.width / 100) * 45,
-                            height: 50,
-                            backgroundColor: AppTheme.appColor,
-                            onTap: () async {
-                              await generateRecipe(
-                                  style: addFoodStyle,
-                                  allergy: allergiesProvider,
-                                  dietary: restrictionsProvider,
-                                  regional: delicacyProvider,
-                                  kitchen: kitchenProvider);
-                              //removeSearchQueryValueFromPref();
-                            },
-                          ),
-                        ),
+                    child: AppButton.appButton(
+                      "Generate",
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                      textColor: Colors.white,
+                      width:
+                      (MediaQuery.of(context).size.width /
+                          100) *
+                          45,
+                      height: 50,
+                      backgroundColor: AppTheme.appColor,
+                      onTap: () async {
+                        await generateRecipe(
+                            style: addFoodStyle,
+                            allergy: allergiesProvider,
+                            dietary: restrictionsProvider,
+                            regional: delicacyProvider,
+                            kitchen: kitchenProvider);
+                        //removeSearchQueryValueFromPref();
+                      },
+                    ),
+                  ),
                   // ignore: prefer_const_constructors
                   const SizedBox(
                     height: 20,
@@ -517,13 +601,16 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
 
   Widget customFoodStyle() {
     final foodStyleProvider =
-        Provider.of<FoodStyleProvider>(context, listen: false);
+    Provider.of<FoodStyleProvider>(context, listen: false);
     return Padding(
       padding: const EdgeInsets.only(top: 70.0),
       child: Container(
         decoration: BoxDecoration(
           color: AppTheme.appColor,
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: const BorderRadius.only(
+            bottomLeft: Radius.circular(10),
+            bottomRight: Radius.circular(10),
+          ),
         ),
         child: ClipRRect(
           borderRadius: const BorderRadius.only(
@@ -563,8 +650,8 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                         padding: index == 0
                             ? const EdgeInsets.only(top: 10.0)
                             : (index == max - 1
-                                ? const EdgeInsets.only(bottom: 10.0)
-                                : const EdgeInsets.symmetric(vertical: 0.0)),
+                            ? const EdgeInsets.only(bottom: 10.0)
+                            : const EdgeInsets.symmetric(vertical: 0.0)),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.start,
@@ -581,16 +668,16 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                             const SizedBox(height: 3),
                             Container(
                               margin:
-                                  const EdgeInsets.symmetric(horizontal: 14),
+                              const EdgeInsets.symmetric(horizontal: 14),
                               decoration: BoxDecoration(
                                 border: Border(
                                   bottom: BorderSide(
                                     width: 2.0,
                                     color:
-                                        // foodStyle[index] == "Thai cuisine"
-                                        //     ? Colors.transparent
-                                        //     :
-                                        AppTheme.whiteColor,
+                                    // foodStyle[index] == "Thai cuisine"
+                                    //     ? Colors.transparent
+                                    //     :
+                                    AppTheme.whiteColor,
                                   ),
                                 ),
                               ),
@@ -619,17 +706,17 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
     });
     prefs.setInt(PrefKey.conditiontoLoad, 0);
     final foodStyleProvider =
-        Provider.of<FoodStyleProvider>(context, listen: false);
+    Provider.of<FoodStyleProvider>(context, listen: false);
     final allergiesProvider =
-        Provider.of<AllergiesProvider>(context, listen: false);
+    Provider.of<AllergiesProvider>(context, listen: false);
     final restrictionsProvider =
-        Provider.of<DietaryRestrictionsProvider>(context, listen: false);
+    Provider.of<DietaryRestrictionsProvider>(context, listen: false);
     final proteinProvider =
-        Provider.of<PreferredProteinProvider>(context, listen: false);
+    Provider.of<PreferredProteinProvider>(context, listen: false);
     final delicacyProvider =
-        Provider.of<RegionalDelicacyProvider>(context, listen: false);
+    Provider.of<RegionalDelicacyProvider>(context, listen: false);
     final kitchenProvider =
-        Provider.of<KitchenResourcesProvider>(context, listen: false);
+    Provider.of<KitchenResourcesProvider>(context, listen: false);
     final style = foodStyleProvider.foodStyle.isNotEmpty
         ? "&cuisine=${foodStyleProvider.foodStyle}"
         : "";
@@ -643,7 +730,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
         ? "&intolerances=${allergiesProvider.addAllergies.toString().substring(1, allergiesProvider.addAllergies.toString().length - 1)}"
         : "";
     final dietaryRestrictions = restrictionsProvider
-            .addDietaryRestrictions.isNotEmpty
+        .addDietaryRestrictions.isNotEmpty
         ? "&diet=${restrictionsProvider.addDietaryRestrictions.toString().substring(1, restrictionsProvider.addDietaryRestrictions.toString().length - 1)}"
         : "";
     final regionalDelicacy = delicacyProvider.addRegionalDelicacy.isNotEmpty
@@ -653,8 +740,9 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
         '${AppUrls.spoonacularBaseUrl}/recipes/complexSearch?$regionalDelicacy$style$kitchenResources$preferredProtein$allergies$dietaryRestrictions&number=8&apiKey=$apiKey';
     final apiUrlTwo =
         '${AppUrls.spoonacularBaseUrl}/recipes/complexSearch?$regionalDelicacy$style$kitchenResources$preferredProtein$allergies$dietaryRestrictions&number=8&apiKey=$apiKey2';
-    response = await spoonDio.get(path: apiUrl);
+
     try {
+      response = await spoonDio.get(path: apiUrl);
       if (response.statusCode == 200) {
         pushReplacement(
             context,
@@ -686,9 +774,9 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                     .split("&apiKey=$apiKey2")
                     .toString()
                     .substring(
-                        1,
-                        apiUrlTwo.split("&apiKey=$apiKey2").toString().length -
-                            3),
+                    1,
+                    apiUrlTwo.split("&apiKey=$apiKey2").toString().length -
+                        3),
                 type: 1,
                 offset: response.data["offset"],
                 totalResults: response.data["totalResults"],
@@ -700,17 +788,17 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
               ),
             );
           }
-
           setState(() {
             isLoading = false;
           });
         } else {
           setState(() {
             isLoading = false;
-            print(
-                'API request with the second key failed with status code: ${response.statusCode}');
-            showSnackBar(context, "${response.statusMessage}");
+
           });
+          print(
+              'API request with the second key failed with status code: ${response.statusCode}');
+          showSnackBar(context, "${response.statusMessage}");
           print('API request failed with status code: ${response.statusCode}');
           showSnackBar(context, "${response.statusMessage}");
         }
@@ -719,7 +807,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
       setState(() {
         isLoading = false;
       });
-      showSnackBar(context, "${response.statusCode}");
+      showSnackBar(context, response == null ?  "Something went wrong.": "${response.statusCode}");
     }
   }
 
