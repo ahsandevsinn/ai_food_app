@@ -364,7 +364,8 @@ class _HomeScreenState extends State<HomeScreen> {
               getFavouriteRecipes();
             });
           }
-        });
+        }
+        );
       });
     } else if (response.statusCode == 402) {
       response = await spoonDio.get(path: apiUrl2);

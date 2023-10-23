@@ -41,8 +41,8 @@ class ChatBotProvider extends ChangeNotifier {
   List<Widget> get displayChatsWidget => _displayChatsWidget;
 
   List<Widget> displayChatWidgets (Widget chatsWidget){
-
     _displayChatsWidget.add(chatsWidget);
+
     notifyListeners();
     return _displayChatsWidget;
   }
@@ -62,6 +62,15 @@ class ChatBotProvider extends ChangeNotifier {
 
   void containerLoading(value){
     _iscontainer = value;
+    notifyListeners();
+  }
+
+
+  bool _seeDetails = false;
+  bool get seeDetails => _seeDetails;
+
+  void seeDetailsLoading(value){
+    _seeDetails = value;
     notifyListeners();
   }
 

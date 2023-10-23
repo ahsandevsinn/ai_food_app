@@ -115,7 +115,6 @@ alertDialogErrorBan({context, message}) {
     },
   );
 }
-
 alertDialogErrorLogin({context, message}) {
   return showDialog(
     barrierColor: Colors.transparent,
@@ -124,7 +123,7 @@ alertDialogErrorLogin({context, message}) {
       return Padding(
         padding: EdgeInsets.only(left: 5.w, right: 5.w),
         child: AlertDialog(
-          actionsPadding: const EdgeInsets.only(top: 5, left: 0, right: 0),
+          actionsPadding: EdgeInsets.only(top: 5, left: 0, right: 0),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
           ),

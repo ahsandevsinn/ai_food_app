@@ -53,10 +53,10 @@ class _AuthScreenState extends State<AuthScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
-  TextEditingController();
+      TextEditingController();
   final TextEditingController _loginEmailController = TextEditingController();
   final TextEditingController _loginPasswordController =
-  TextEditingController();
+      TextEditingController();
 
   String errormessageLoginsPassword = "";
   String errormessageLoginsEmail = "";
@@ -99,7 +99,7 @@ class _AuthScreenState extends State<AuthScreen> {
         body: SingleChildScrollView(
           child: Padding(
             padding:
-            const EdgeInsets.only(left: 25, right: 25, bottom: 25, top: 45),
+                const EdgeInsets.only(left: 25, right: 25, bottom: 25, top: 45),
             child: SizedBox(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -154,17 +154,17 @@ class _AuthScreenState extends State<AuthScreen> {
                                       )),
                                   login == true
                                       ? SizedBox(
-                                    height: 5,
-                                    width: 90,
-                                    child: Divider(
-                                      color: AppTheme.appColor,
-                                      thickness: 2.0,
-                                      height: 20.0,
-                                    ),
-                                  )
+                                          height: 5,
+                                          width: 90,
+                                          child: Divider(
+                                            color: AppTheme.appColor,
+                                            thickness: 2.0,
+                                            height: 20.0,
+                                          ),
+                                        )
                                       : const SizedBox(
-                                    height: 5,
-                                  )
+                                          height: 5,
+                                        )
                                 ],
                               ),
                               Column(
@@ -185,314 +185,314 @@ class _AuthScreenState extends State<AuthScreen> {
                                             textAlign: TextAlign.center,
                                             textColor: login == false
                                                 ? AppTheme.appColor
-                                            // : Colors.black.withOpacity(0.25),
+                                                // : Colors.black.withOpacity(0.25),
                                                 : const Color(0xffBFBFBF),
                                             fontSize: 24,
                                             fontWeight: FontWeight.w600),
                                       )),
                                   login == false
                                       ? SizedBox(
-                                    height: 5,
-                                    width: 95,
-                                    child: Divider(
-                                      color: AppTheme.appColor,
-                                      thickness: 2.0,
-                                      height: 20.0,
-                                    ),
-                                  )
+                                          height: 5,
+                                          width: 95,
+                                          child: Divider(
+                                            color: AppTheme.appColor,
+                                            thickness: 2.0,
+                                            height: 20.0,
+                                          ),
+                                        )
                                       : const SizedBox(
-                                    height: 5,
-                                  )
+                                          height: 5,
+                                        )
                                 ],
                               ),
                             ],
                           ),
                           login == true
                               ? Column(
-                            children: [
-                              Form(
-                                key: _formKeyLoginEmail,
-                                child: CustomAppFormField(
-                                    onChanged: (value) {
-                                      setState(() {
-                                        hintTextColor2Condition = false;
-                                        errormessageLoginsEmail = "";
-                                      });
-                                    },
-                                    errorText: errormessageLoginsEmail,
-                                    errorStyle: TextStyle(
-                                      color:
-                                      hintTextColor2Condition == false
-                                          ? AppTheme.appColor
-                                          : Colors.red,
+                                  children: [
+                                    Form(
+                                      key: _formKeyLoginEmail,
+                                      child: CustomAppFormField(
+                                          onChanged: (value) {
+                                            setState(() {
+                                              hintTextColor2Condition = false;
+                                              errormessageLoginsEmail = "";
+                                            });
+                                          },
+                                          errorText: errormessageLoginsEmail,
+                                          errorStyle: TextStyle(
+                                            color:
+                                                hintTextColor2Condition == false
+                                                    ? AppTheme.appColor
+                                                    : Colors.red,
+                                          ),
+                                          focusedErrorBorder:
+                                              UnderlineInputBorder(
+                                                  borderSide: BorderSide(
+                                            color:
+                                                hintTextColor2Condition == false
+                                                    ? AppTheme.appColor
+                                                    : Colors.red,
+                                          )),
+                                          errorBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: hintTextColor2Condition ==
+                                                      false
+                                                  ? AppTheme.appColor
+                                                  : Colors.red,
+                                            ),
+                                          ),
+                                          texthint: "Enter email",
+                                          cursorColor:
+                                              hintTextColor2Condition == false
+                                                  ? AppTheme.appColor
+                                                  : Colors.red,
+                                          hintStyle: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w400,
+                                            color: AppTheme.appColor
+                                                .withOpacity(0.6),
+                                          ),
+                                          controller: _loginEmailController),
                                     ),
-                                    focusedErrorBorder:
-                                    UnderlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color:
-                                          hintTextColor2Condition == false
+                                    Form(
+                                      key: _formKeyLoginPassword,
+                                      child: CustomAppPasswordfield(
+                                        onChanged: (value) {
+                                          setState(() {
+                                            hintTextColorCondition = false;
+                                            errormessageLoginsPassword = "";
+                                          });
+                                        },
+                                        errorText: errormessageLoginsPassword,
+                                        errorStyle: TextStyle(
+                                          color: hintTextColorCondition == false
+                                              ? AppTheme.appColor
+                                              : Colors.red,
+                                        ),
+                                        focusedErrorBorder:
+                                            UnderlineInputBorder(
+                                                borderSide: BorderSide(
+                                          color: hintTextColorCondition == false
                                               ? AppTheme.appColor
                                               : Colors.red,
                                         )),
-                                    errorBorder: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: hintTextColor2Condition ==
-                                            false
-                                            ? AppTheme.appColor
-                                            : Colors.red,
+                                        errorBorder: UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color:
+                                                hintTextColorCondition == false
+                                                    ? AppTheme.appColor
+                                                    : Colors.red,
+                                          ),
+                                        ),
+                                        texthint: "Password",
+                                        style: TextStyle(
+                                            color:
+                                                hintTextColorCondition == false
+                                                    ? AppTheme.appColor
+                                                    : Colors.red),
+                                        cursorColor:
+                                            hintTextColorCondition == false
+                                                ? AppTheme.appColor
+                                                : Colors.red,
+                                        hintStyle: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w400,
+                                            color: AppTheme.appColor
+                                                .withOpacity(0.6)),
+                                        controller: _loginPasswordController,
                                       ),
                                     ),
-                                    texthint: "Enter email",
-                                    cursorColor:
-                                    hintTextColor2Condition == false
-                                        ? AppTheme.appColor
-                                        : Colors.red,
-                                    hintStyle: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w400,
-                                      color: AppTheme.appColor
-                                          .withOpacity(0.6),
-                                    ),
-                                    controller: _loginEmailController),
-                              ),
-                              Form(
-                                key: _formKeyLoginPassword,
-                                child: CustomAppPasswordfield(
-                                  onChanged: (value) {
-                                    setState(() {
-                                      hintTextColorCondition = false;
-                                      errormessageLoginsPassword = "";
-                                    });
-                                  },
-                                  errorText: errormessageLoginsPassword,
-                                  errorStyle: TextStyle(
-                                    color: hintTextColorCondition == false
-                                        ? AppTheme.appColor
-                                        : Colors.red,
-                                  ),
-                                  focusedErrorBorder:
-                                  UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: hintTextColorCondition == false
-                                            ? AppTheme.appColor
-                                            : Colors.red,
-                                      )),
-                                  errorBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color:
-                                      hintTextColorCondition == false
-                                          ? AppTheme.appColor
-                                          : Colors.red,
-                                    ),
-                                  ),
-                                  texthint: "Password",
-                                  style: TextStyle(
-                                      color:
-                                      hintTextColorCondition == false
-                                          ? AppTheme.appColor
-                                          : Colors.red),
-                                  cursorColor:
-                                  hintTextColorCondition == false
-                                      ? AppTheme.appColor
-                                      : Colors.red,
-                                  hintStyle: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w400,
-                                      color: AppTheme.appColor
-                                          .withOpacity(0.6)),
-                                  controller: _loginPasswordController,
-                                ),
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  InkWell(
-                                      onTap: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  ForgotPasswordScreen(),
-                                            ));
-                                      },
-                                      child: AppText.appText(
-                                        "Forgot password?",
-                                        textColor: AppTheme.appColor,
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w500,
-                                      )),
-                                ],
-                              )
-                            ],
-                          )
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        InkWell(
+                                            onTap: () {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        ForgotPasswordScreen(),
+                                                  ));
+                                            },
+                                            child: AppText.appText(
+                                              "Forgot password?",
+                                              textColor: AppTheme.appColor,
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w500,
+                                            )),
+                                      ],
+                                    )
+                                  ],
+                                )
                               : Column(
-                            children: [
-                              Form(
-                                autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
-                                key: _formKeyName,
-                                child: CustomAppFormField(
-                                    validator: (value) {
-                                      if (value == null ||
-                                          value.isEmpty) {
-                                        return 'Enter your name';
-                                      }
-                                      return null; // Validation passed
-                                    },
-                                    height: 50,
-                                    texthint: "Enter full name",
-                                    cursorColor: AppTheme.appColor,
-                                    hintStyle: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w400,
-                                      color: AppTheme.appColor
-                                          .withOpacity(0.6),
+                                  children: [
+                                    Form(
+                                      autovalidateMode:
+                                          AutovalidateMode.onUserInteraction,
+                                      key: _formKeyName,
+                                      child: CustomAppFormField(
+                                          validator: (value) {
+                                            if (value == null ||
+                                                value.isEmpty) {
+                                              return 'Enter your name';
+                                            }
+                                            return null; // Validation passed
+                                          },
+                                          height: 50,
+                                          texthint: "Enter full name",
+                                          cursorColor: AppTheme.appColor,
+                                          hintStyle: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w400,
+                                            color: AppTheme.appColor
+                                                .withOpacity(0.6),
+                                          ),
+                                          controller: _nameController),
                                     ),
-                                    controller: _nameController),
-                              ),
-                              Form(
-                                autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
-                                key: _formKeyEmail,
-                                child: CustomAppFormField(
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return 'Enter your email';
-                                    }
-                                    final emailRegex = RegExp(
-                                        r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$');
-                                    if (!emailRegex.hasMatch(value)) {
-                                      return 'Enter valid email';
-                                    }
-                                    return null;
-                                  },
-                                  // height: 50,
-                                  texthint: "Enter email",
-                                  cursorColor: AppTheme.appColor,
-                                  hintStyle: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w400,
-                                    color: AppTheme.appColor
-                                        .withOpacity(0.6),
-                                  ),
-                                  controller: _emailController,
+                                    Form(
+                                      autovalidateMode:
+                                          AutovalidateMode.onUserInteraction,
+                                      key: _formKeyEmail,
+                                      child: CustomAppFormField(
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return 'Enter your email';
+                                          }
+                                          final emailRegex = RegExp(
+                                              r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$');
+                                          if (!emailRegex.hasMatch(value)) {
+                                            return 'Enter valid email';
+                                          }
+                                          return null;
+                                        },
+                                        // height: 50,
+                                        texthint: "Enter email",
+                                        cursorColor: AppTheme.appColor,
+                                        hintStyle: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w400,
+                                          color: AppTheme.appColor
+                                              .withOpacity(0.6),
+                                        ),
+                                        controller: _emailController,
+                                      ),
+                                    ),
+                                    Form(
+                                      autovalidateMode:
+                                          AutovalidateMode.onUserInteraction,
+                                      key: _formKeyPassword,
+                                      child: CustomAppPasswordfield(
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return 'Enter your password';
+                                          } else if (value.length < 8) {
+                                            return "Password length should be at least 8 characters";
+                                          }
+                                          return null; // Validation passed
+                                        },
+                                        texthint: "Enter password",
+                                        style:
+                                            TextStyle(color: AppTheme.appColor),
+                                        cursorColor: AppTheme.appColor,
+                                        hintStyle: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w400,
+                                            color: AppTheme.appColor
+                                                .withOpacity(0.6)),
+                                        controller: _passwordController,
+                                      ),
+                                    ),
+                                    Form(
+                                      autovalidateMode:
+                                          AutovalidateMode.onUserInteraction,
+                                      key: _formKeyConfirmPassword,
+                                      child: CustomAppPasswordfield(
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return 'Enter your confirm password';
+                                          } else if (_passwordController.text !=
+                                              value) {
+                                            return "Password does not match";
+                                          }
+                                          return null; // Validation passed
+                                        },
+                                        texthint: "Confirm password",
+                                        style:
+                                            TextStyle(color: AppTheme.appColor),
+                                        cursorColor: AppTheme.appColor,
+                                        hintStyle: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w400,
+                                            color: AppTheme.appColor
+                                                .withOpacity(0.6)),
+                                        controller: _confirmPasswordController,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                              Form(
-                                autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
-                                key: _formKeyPassword,
-                                child: CustomAppPasswordfield(
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return 'Enter your password';
-                                    } else if (value.length < 8) {
-                                      return "Password length should be at least 8 characters";
-                                    }
-                                    return null; // Validation passed
-                                  },
-                                  texthint: "Enter password",
-                                  style:
-                                  TextStyle(color: AppTheme.appColor),
-                                  cursorColor: AppTheme.appColor,
-                                  hintStyle: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w400,
-                                      color: AppTheme.appColor
-                                          .withOpacity(0.6)),
-                                  controller: _passwordController,
-                                ),
-                              ),
-                              Form(
-                                autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
-                                key: _formKeyConfirmPassword,
-                                child: CustomAppPasswordfield(
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return 'Enter your confirm password';
-                                    } else if (_passwordController.text !=
-                                        value) {
-                                      return "Password does not match";
-                                    }
-                                    return null; // Validation passed
-                                  },
-                                  texthint: "Confirm password",
-                                  style:
-                                  TextStyle(color: AppTheme.appColor),
-                                  cursorColor: AppTheme.appColor,
-                                  hintStyle: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w400,
-                                      color: AppTheme.appColor
-                                          .withOpacity(0.6)),
-                                  controller: _confirmPasswordController,
-                                ),
-                              ),
-                            ],
-                          ),
                           _isLoading
                               ? CircularProgressIndicator(
-                            color: AppTheme.appColor,
-                          )
+                                  color: AppTheme.appColor,
+                                )
                               : AppButton.appButton(onTap: () {
-                            FocusScope.of(context)
-                                .requestFocus(FocusNode());
-                            if (login == true) {
-                              if (_loginEmailController.text.isEmpty) {
-                                setState(() {
-                                  errormessageLoginsEmail =
-                                  "Email field is empty";
-                                  hintTextColor2Condition = true;
-                                });
-                              }
-                              if (_loginPasswordController.text.isEmpty) {
-                                setState(() {
-                                  errormessageLoginsPassword =
-                                  "Password field is empty";
-                                  hintTextColorCondition = true;
-                                });
-                              }
-                              if (_loginEmailController.text.isNotEmpty &&
-                                  _loginPasswordController
-                                      .text.isNotEmpty) {
-                                Login(context);
-                                print("Email:${_emailController.text}");
-                                print(
-                                    "Password:${_passwordController.text}");
-                              }
+                                  FocusScope.of(context)
+                                      .requestFocus(FocusNode());
+                                  if (login == true) {
+                                    if (_loginEmailController.text.isEmpty) {
+                                      setState(() {
+                                        errormessageLoginsEmail =
+                                            "Email field is empty";
+                                        hintTextColor2Condition = true;
+                                      });
+                                    }
+                                    if (_loginPasswordController.text.isEmpty) {
+                                      setState(() {
+                                        errormessageLoginsPassword =
+                                            "Password field is empty";
+                                        hintTextColorCondition = true;
+                                      });
+                                    }
+                                    if (_loginEmailController.text.isNotEmpty &&
+                                        _loginPasswordController
+                                            .text.isNotEmpty) {
+                                      Login(context);
+                                      print("Email:${_emailController.text}");
+                                      print(
+                                          "Password:${_passwordController.text}");
+                                    }
 
-                              // if (_formKeyLoginEmail.currentState!
-                              //         .validate() &&
-                              //     _formKeyLoginPassword.currentState!
-                              //         .validate()) {
-                              // Navigator.of(context).push(
-                              //   MaterialPageRoute(
-                              //     builder: (context) =>
-                              //         const UserProfileScreen(),
-                              //   ),
-                              // );
+                                    // if (_formKeyLoginEmail.currentState!
+                                    //         .validate() &&
+                                    //     _formKeyLoginPassword.currentState!
+                                    //         .validate()) {
+                                    // Navigator.of(context).push(
+                                    //   MaterialPageRoute(
+                                    //     builder: (context) =>
+                                    //         const UserProfileScreen(),
+                                    //   ),
+                                    // );
 
-                              // }
-                            } else {
-                              if (_formKeyName.currentState!.validate() &&
-                                  _formKeyEmail.currentState!
-                                      .validate() &&
-                                  _formKeyPassword.currentState!
-                                      .validate() &&
-                                  _formKeyConfirmPassword.currentState!
-                                      .validate()) {
-                                SignUp(context);
-                              }
-                            }
-                          }, login == true ? "Sign In" : "Sign Up",
-                              blurContainer: true,
-                              backgroundColor: AppTheme.appColor,
-                              textColor: Colors.white,
-                              width: 44.w,
-                              height: 40,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w600)
+                                    // }
+                                  } else {
+                                    if (_formKeyName.currentState!.validate() &&
+                                        _formKeyEmail.currentState!
+                                            .validate() &&
+                                        _formKeyPassword.currentState!
+                                            .validate() &&
+                                        _formKeyConfirmPassword.currentState!
+                                            .validate()) {
+                                      SignUp(context);
+                                    }
+                                  }
+                                }, login == true ? "Sign In" : "Sign Up",
+                                  blurContainer: true,
+                                  backgroundColor: AppTheme.appColor,
+                                  textColor: Colors.white,
+                                  width: 44.w,
+                                  height: 40,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w600)
                         ]),
                   ),
                   SizedBox(
@@ -504,25 +504,25 @@ class _AuthScreenState extends State<AuthScreen> {
                     children: [
                       Platform.isIOS
                           ? _appleLoading
-                          ? Center(
-                        child: CircularProgressIndicator(
-                          color: AppTheme.appColor,
-                        ),
-                      )
-                          : Center(
-                        child: AppButton.appButtonWithLeadingImage(
-                          "Continue with Apple",
-                          onTap: () async {
-                            await handleAppleSignIn();
-                          },
-                          fontSize: 20,
-                          fontWeight: FontWeight.w400,
-                          textColor: AppTheme.appColor,
-                          // icons: Icons.apple,
-                          imagePath: "assets/images/Apple_icon.svg",
-                          height: 48,
-                        ),
-                      )
+                              ? Center(
+                                  child: CircularProgressIndicator(
+                                    color: AppTheme.appColor,
+                                  ),
+                                )
+                              : Center(
+                                  child: AppButton.appButtonWithLeadingImage(
+                                    "Continue with Apple",
+                                    onTap: () async {
+                                      await handleAppleSignIn();
+                                    },
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w400,
+                                    textColor: AppTheme.appColor,
+                                    // icons: Icons.apple,
+                                    imagePath: "assets/images/Apple_icon.svg",
+                                    height: 48,
+                                  ),
+                                )
                           : const SizedBox.shrink(),
                       const SizedBox(
                         height: 8,
@@ -609,7 +609,7 @@ class _AuthScreenState extends State<AuthScreen> {
       );
 
       final result =
-      await FirebaseAuth.instance.signInWithCredential(oauthCredential);
+          await FirebaseAuth.instance.signInWithCredential(oauthCredential);
 
       if (kDebugMode) {
         print(result.user!.displayName.toString());
@@ -709,7 +709,6 @@ class _AuthScreenState extends State<AuthScreen> {
           return;
         } else {
           print("responseData${responseData}");
-          // alertDialogError(context: context, message: responseData["message"]);
           showSnackBar(context, "${responseData["message"]}");
           setState(() {
             _isLoading = false;
@@ -834,7 +833,7 @@ class _AuthScreenState extends State<AuthScreen> {
           var DOB = responseData['data']['user']['DOB']??"";
           var measuringUnit = responseData["data"]["user"]["measuring_unit"]??"us";
           var dietary_restrictions =
-          responseData['data']['user']['dietary_restrictions'];
+              responseData['data']['user']['dietary_restrictions'];
           var allergies = responseData['data']['user']['allergies'];
           for (var data0 in dietary_restrictions) {
             dietaryRestrictionsList.addAll({'${data0['id']}:${data0['name']}'});
@@ -866,8 +865,8 @@ class _AuthScreenState extends State<AuthScreen> {
       setState(() {
         _isLoading = false;
       });
-      //  print("Something went Wrong ${e}");
-      //  showSnackBar(context, "Something went Wrong.");
+    //  print("Something went Wrong ${e}");
+    //  showSnackBar(context, "Something went Wrong.");
     }
   }
 
@@ -899,9 +898,9 @@ class _AuthScreenState extends State<AuthScreen> {
   //apple sign in
   void appleLogin(
       {required String userId,
-        required bool isNewUser,
-        required String email,
-        required String name}) async {
+      required bool isNewUser,
+      required String email,
+      required String name}) async {
     setState(() {
       _appleLoading = true;
     });
@@ -972,7 +971,7 @@ class _AuthScreenState extends State<AuthScreen> {
           var measuringUnit = responseData['data']['user']['measuring_unit'];
 
           var dietary_restrictions =
-          responseData['data']['user']['dietary_restrictions'];
+              responseData['data']['user']['dietary_restrictions'];
           var allergies = responseData['data']['user']['allergies'];
           for (var data0 in dietary_restrictions) {
             dietaryRestrictionsList.addAll({'${data0['id']}:${data0['name']}'});
@@ -1002,6 +1001,7 @@ class _AuthScreenState extends State<AuthScreen> {
           prefs.setString(PrefKey.dateOfBirth, DOB ?? "");
           prefs.setString(PrefKey.email, usermail ?? email);
           prefs.setString(PrefKey.unit, measuringUnit);
+          prefs.setString(PrefKey.socialId, userId);
           print("responseData${responseData}");
           setState(() {
             _appleLoading = false;
@@ -1023,44 +1023,44 @@ class _AuthScreenState extends State<AuthScreen> {
     }
   }
 
-// alertDialogError(context) {
-//   return showDialog(
-//     context: context,
-//     builder: (context) {
-//       return AlertDialog(
-//         backgroundColor: AppTheme.whiteColor,
-//         actionsAlignment: MainAxisAlignment.center,
-//         actions: [
-//           Center(
-//               child: Image.asset(
-//             "assets/images/done.gif",
-//             height: 120,
-//           )),
-//           const SizedBox(
-//             height: 50,
-//           ),
-//           Center(
-//             child: AppText.appText(
-//               "User Created Successfully",
-//               fontSize: 24,
-//               textColor: AppTheme.appColor,
-//               fontWeight: FontWeight.w600,
-//             ),
-//           ),
-//           const SizedBox(
-//             height: 20,
-//           ),
-//           AppButton.appButton("Okay",
-//               onTap: () => Navigator.of(context).pop(),
-//               height: 30,
-//               fontWeight: FontWeight.w600,
-//               fontSize: 20,
-//               textColor: AppTheme.appColor,
-//               backgroundColor: AppTheme.whiteColor,
-//               border: false)
-//         ],
-//       );
-//     },
-//   );
-// }
+  // alertDialogError(context) {
+  //   return showDialog(
+  //     context: context,
+  //     builder: (context) {
+  //       return AlertDialog(
+  //         backgroundColor: AppTheme.whiteColor,
+  //         actionsAlignment: MainAxisAlignment.center,
+  //         actions: [
+  //           Center(
+  //               child: Image.asset(
+  //             "assets/images/done.gif",
+  //             height: 120,
+  //           )),
+  //           const SizedBox(
+  //             height: 50,
+  //           ),
+  //           Center(
+  //             child: AppText.appText(
+  //               "User Created Successfully",
+  //               fontSize: 24,
+  //               textColor: AppTheme.appColor,
+  //               fontWeight: FontWeight.w600,
+  //             ),
+  //           ),
+  //           const SizedBox(
+  //             height: 20,
+  //           ),
+  //           AppButton.appButton("Okay",
+  //               onTap: () => Navigator.of(context).pop(),
+  //               height: 30,
+  //               fontWeight: FontWeight.w600,
+  //               fontSize: 20,
+  //               textColor: AppTheme.appColor,
+  //               backgroundColor: AppTheme.whiteColor,
+  //               border: false)
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
 }

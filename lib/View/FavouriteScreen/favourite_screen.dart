@@ -5,6 +5,7 @@ import 'package:ai_food/Utils/resources/res/app_theme.dart';
 import 'package:ai_food/Utils/utils.dart';
 import 'package:ai_food/Utils/widgets/others/app_text.dart';
 import 'package:ai_food/Utils/widgets/others/errordialogue.dart';
+import 'package:ai_food/View/HomeScreen/widgets/providers/chat_bot_provider.dart';
 import 'package:ai_food/View/recipe_info/recipe_info.dart';
 import 'package:ai_food/config/app_urls.dart';
 import 'package:ai_food/config/dio/app_dio.dart';
@@ -13,6 +14,7 @@ import 'package:ai_food/config/keys/pref_keys.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FavouriteScreen extends StatefulWidget {
@@ -188,7 +190,8 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                                                           child: Center(
                                                             child: Icon(
                                                               Icons.favorite,
-                                                              color: AppTheme.appColor,
+                                                              color: AppTheme
+                                                                  .appColor,
                                                             ),
                                                           ),
                                                         ),
@@ -211,12 +214,19 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                                         const SizedBox(height: 14),
                                         InkWell(
                                           onTap: () {
-                                            push(
-                                                context,
-                                                RecipeInfo(
-                                                  recipeData: responseID[index],
-                                                  isFav: 1,
-                                                ));
+                                            Navigator.of(context)
+                                                .push(MaterialPageRoute(
+                                              builder: (context) => RecipeInfo(
+                                                recipeData: responseID[index],
+                                                isFav: 1,
+                                              ),
+                                            )).then((value) {
+                                              if (value == true) {
+                                                setState(() {
+                                                  getFavouriteRecipes();
+                                                });
+                                              }
+                                            });
                                           },
                                           child: Container(
                                             height: 32,
@@ -305,16 +315,18 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
         });
       } else if (response.statusCode == responseCode200) {
         if (responseData["status"] == false) {
-          if(responseData["data"]["statusCode"] ==  403) {
-            alertDialogErrorBan(context: context,message:"${responseData["message"]}");
+          if (responseData["data"]["statusCode"] == 403) {
+            alertDialogErrorBan(
+                context: context, message: "${responseData["message"]}");
             setState(() {
               _isLoading = false;
             });
-          }else{
+          } else {
             setState(() {
               _isLoading = false;
             });
-            alertDialogError(context: context, message: responseData["message"]);
+            alertDialogError(
+                context: context, message: responseData["message"]);
             return;
           }
           setState(() {
@@ -357,29 +369,28 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
       var response;
       response = await spoondio.get(path: apiFinalUrl);
       if (response.statusCode == 200) {
-        if(mounted){
-        setState(() {
-          _isLoading = false;
-          responseID = response.data;
-          print("jbefjbfkebfkbkfbe${responseID}");
-        });}
+        if (mounted) {
+          setState(() {
+            _isLoading = false;
+            responseID = response.data;
+            print("jbefjbfkebfkbkfbe${responseID}");
+          });
+        }
       } else if (response.statusCode == 402) {
         response = await spoondio.get(path: apiFinalUrl2);
-        if(response.statusCode == 402){
+        if (response.statusCode == 402) {
           setState(() {
             _isLoading = false;
           });
           showSnackBar(context, "${response.statusMessage}");
-        }else{
-          if(mounted){
+        } else {
+          if (mounted) {
             setState(() {
               _isLoading = false;
               responseID = response.data;
             });
           }
-
         }
-
       } else {
         setState(() {
           _isLoading = false;
@@ -424,9 +435,9 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
           break;
         case responseCode200:
           if (responseData["status"] == false) {
-            if(responseData["data"]["statusCode"] ==  403) {
+            if (responseData["data"]["statusCode"] == 403) {
               showSnackBar(context, "${responseData["message"]}");
-            }else{
+            } else {
               showSnackBar(context, "Something went wrong");
             }
           } else {
@@ -442,7 +453,7 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
     }
   }
 
-  void changeCondition() async{
+  void changeCondition() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setInt(PrefKey.conditiontoLoad, 0);
   }

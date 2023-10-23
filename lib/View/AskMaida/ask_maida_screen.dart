@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:ai_food/Constants/apikey.dart';
 import 'package:ai_food/Constants/app_logger.dart';
 import 'package:ai_food/Utils/logout.dart';
@@ -12,6 +14,7 @@ import 'package:ai_food/config/app_urls.dart';
 import 'package:ai_food/config/dio/app_dio.dart';
 import 'package:ai_food/config/dio/spoonacular_app_dio.dart';
 import 'package:ai_food/config/keys/pref_keys.dart';
+import 'package:ai_food/main.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +22,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'result_container_askMaida.dart';
+final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 
 class AskMaidaScreen extends StatefulWidget {
   const AskMaidaScreen({Key? key}) : super(key: key);
@@ -27,27 +31,25 @@ class AskMaidaScreen extends StatefulWidget {
   State<AskMaidaScreen> createState() => _AskMaidaScreenState();
 }
 
-class _AskMaidaScreenState extends State<AskMaidaScreen> {
+class _AskMaidaScreenState extends State<AskMaidaScreen> with AutomaticKeepAliveClientMixin{
+ bool get wantKeepAlive => true;
   final TextEditingController _messageController = TextEditingController();
   late ScrollController _scrollController;
   late AppDio dio;
   late SpoonAcularAppDio spoonDio;
-
   AppLogger logger = AppLogger();
   var queryText;
   var savePreviousQuery;
-  List apiRecipeIds = [];
-
- // bool visibilityContainer = true;
   //new api data adding
-
   @override
   void initState() {
+
     dio = AppDio(context);
     spoonDio = SpoonAcularAppDio(context);
     logger.init();
     changeCondition();
-    getFavouriteRecipes();
+    //clearChatProvider.displayChatsWidget;
+
     _scrollController = ScrollController();
     super.initState();
   }
@@ -56,9 +58,11 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
   void dispose() {
     _messageController.dispose();
     _scrollController.dispose();
+    // Future.microtask(() {
+    //   clearChatProvider.clearDisplayChatsWidget();
+    // });
     super.dispose();
   }
-
   void scrollToBottom() {
     final bottomOffset = _scrollController.position.maxScrollExtent;
     _scrollController.animateTo(
@@ -70,12 +74,14 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final loadingProvider = Provider.of<ChatBotProvider>(context, listen: true);
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).requestFocus(FocusNode());
       },
       child: Scaffold(
+        key: scaffoldMessengerKey,
         backgroundColor: Colors.black.withOpacity(0.1),
         // floatingActionButton: FloatingActionButton(onPressed: () {
         //   getRecipeInformation(id:);
@@ -99,7 +105,6 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
                   opacity: 0.25)),
           child: Column(
             children: [
-
               Visibility(
                 visible: loadingProvider.iscontainer,
                 child: Container(
@@ -139,7 +144,7 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
                             children: [
                               Container(
                                 margin:
-                                const EdgeInsets.symmetric(vertical: 20),
+                                    const EdgeInsets.symmetric(vertical: 20),
                                 width: MediaQuery.of(context).size.width * 0.7,
                                 height: 80,
                                 decoration: BoxDecoration(
@@ -175,7 +180,7 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
               const SizedBox(height: 10),
               Padding(
                 padding:
-                const EdgeInsets.symmetric(horizontal: 8.0, vertical: 6),
+                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 6),
                 child: Row(
                   children: [
                     Expanded(
@@ -183,11 +188,11 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
                         children: [
                           loadingProvider.isLoading
                               ? Image.asset(
-                            "assets/images/loader.gif",
-                            // width: 100,
-                            height: 50,
-                            color: AppTheme.appColor,
-                          )
+                                  "assets/images/loader.gif",
+                                  // width: 100,
+                                  height: 50,
+                                  color: AppTheme.appColor,
+                                )
                               : const SizedBox.shrink(),
                           Align(
                             alignment: Alignment.center,
@@ -206,7 +211,7 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
                                     color: AppTheme.whiteColor,
                                     borderRadius: BorderRadius.circular(50),
                                     border:
-                                    Border.all(color: AppTheme.appColor),
+                                        Border.all(color: AppTheme.appColor),
                                   ),
                                   child: Padding(
                                     padding: const EdgeInsets.only(
@@ -214,7 +219,7 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
                                     child: Row(
                                       mainAxisSize: MainAxisSize.min,
                                       mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Icon(
                                           Icons.autorenew,
@@ -270,17 +275,17 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
                               ),
                               border: const OutlineInputBorder(
                                 borderRadius:
-                                BorderRadius.all(Radius.circular(80.0)),
+                                    BorderRadius.all(Radius.circular(80.0)),
                               ),
                               focusedBorder: const OutlineInputBorder(
                                 borderRadius:
-                                BorderRadius.all(Radius.circular(80)),
+                                    BorderRadius.all(Radius.circular(80)),
                                 borderSide: BorderSide(
                                     width: 1, color: Colors.transparent),
                               ),
                               enabledBorder: const OutlineInputBorder(
                                 borderRadius:
-                                BorderRadius.all(Radius.circular(80)),
+                                    BorderRadius.all(Radius.circular(80)),
                                 borderSide: BorderSide(
                                     width: 1, color: Colors.transparent),
                               ),
@@ -320,12 +325,13 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
   }
 
   chatBotTalk() async {
+    final width = MediaQuery.of(context).size.width;
+    final pref = await SharedPreferences.getInstance();
     var response;
     final chatsProvider = Provider.of<ChatBotProvider>(context, listen: false);
     chatsProvider.messageLoading(true);
     final apiUrlTwo =
         'https://api.spoonacular.com/food/converse?text=${queryText == null ? savePreviousQuery : queryText}&apiKey=$apiKey2';
-
     final apiUrl =
         'https://api.spoonacular.com/food/converse?text=${queryText == null ? savePreviousQuery : queryText}&apiKey=$apiKey';
     response = await spoonDio.get(path: apiUrl);
@@ -373,12 +379,12 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
               ),
               Padding(
                 padding:
-                const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
+                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
                 child: Container(
                   margin:
-                  const EdgeInsets.symmetric(vertical: 4, horizontal: 14),
+                      const EdgeInsets.symmetric(vertical: 4, horizontal: 14),
                   padding:
-                  const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                   decoration: BoxDecoration(
                     color: AppTheme.whiteColor,
                     borderRadius: const BorderRadius.only(
@@ -398,15 +404,16 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
               resData['media'] == null || resData['media'].isEmpty
                   ? const SizedBox.shrink()
                   : Column(
-                children: resData['media']
-                    .map<Widget>(
-                      (item) => resultContainer(data: item,apiRecipeId: apiRecipeIds),
-                )
-                    .toList(),
-              ),
+                      children: resData['media']
+                          .map<Widget>(
+                            (item) => resultContainer(data: item,)
+                          )
+                          .toList(),
+                    ),
             ],
           ),
         );
+
         chatsProvider.regenerateLoaderLoading(true);
         _messageController.clear();
         chatsProvider.messageLoading(false);
@@ -415,7 +422,6 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
       response = await spoonDio.get(path: apiUrlTwo);
       if (response.statusCode == 402) {
         chatsProvider.messageLoading(false);
-        // showSnackBar(context, '${response.statusCode}');
         showSnackBar(context, 'Payment required');
       } else {
         final resData = response.data;
@@ -461,10 +467,10 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
                 ),
                 Padding(
                   padding:
-                  const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
+                      const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
                   child: Container(
                     margin:
-                    const EdgeInsets.symmetric(vertical: 4, horizontal: 14),
+                        const EdgeInsets.symmetric(vertical: 4, horizontal: 14),
                     padding: const EdgeInsets.symmetric(
                         vertical: 10, horizontal: 10),
                     decoration: BoxDecoration(
@@ -486,12 +492,10 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
                 resData['media'] == null || resData['media'].isEmpty
                     ? const SizedBox.shrink()
                     : Column(
-                  children: resData['media']
-                      .map<Widget>(
-                        (item) => resultContainer(data: item,apiRecipeId: apiRecipeIds),
-                  )
-                      .toList(),
-                ),
+                        children: resData['media']
+                            .map<Widget>(
+                              (item) => resultContainer(data: item),).toList(),
+                      ),
               ],
             ),
           );
@@ -519,11 +523,15 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
         for (int i = 0; i < chatBotResponseData['media'].length; i++) {
           params['recipes'].add({
             "url": chatBotResponseData['media'][i]['link'] ?? 'link not found',
-            "recipe_id": chatBotResponseData['media'][i]['link'].toString().split("-").last,
+            "recipe_id": chatBotResponseData['media'][i]['link']
+                .toString()
+                .split("-")
+                .last,
             "title": chatBotResponseData['media'] == null
                 ? chatBotResponseData['answerText']
                 : chatBotResponseData['media'][i]['title'],
-            "image": chatBotResponseData['media'][i]['image'] ?? 'image not found',
+            "image":
+                chatBotResponseData['media'][i]['image'] ?? 'image not found',
           });
         }
       } else {
@@ -537,58 +545,17 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
       }
 
       var responseChatBot =
-      await dio.post(path: AppUrls.searchRecipe, data: params);
+          await dio.post(path: AppUrls.searchRecipe, data: params);
       print("api_response $responseChatBot");
     } catch (e) {
       print(e);
     }
   }
-  void changeCondition() async{
+
+  void changeCondition() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setInt(PrefKey.conditiontoLoad, 0);
   }
-  void getFavouriteRecipes() async {
-    var response;
-    int responseCode200 = 200; // For successful request.
-    int responseCode400 = 400; // For Bad Request.
-    int responseCode401 = 401; // For Unauthorized access.
-    int responseCode404 = 404; // For For data not found
-    int responseCode500 = 500; // Internal server error.
 
-    try {
-      response = await dio.get(path: AppUrls.getFavouriteRecipes);
-      var responseData = response.data;
-      if (response.statusCode == responseCode400) {
-        print("Bad Request.");
-        showSnackBar(context, "${responseData["message"]}");
-      } else if (response.statusCode == responseCode401) {
-        print("Unauthorized access.");
-        showSnackBar(context, "${responseData["message"]}");
-      } else if (response.statusCode == responseCode404) {
-        print(
-            "The requested resource could not be found but may be available again in the future. Subsequent requests by the client are permissible.");
-        showSnackBar(context, "${responseData["message"]}");
-      } else if (response.statusCode == responseCode500) {
-        print("Internal server error.");
-        showSnackBar(context, "${responseData["message"]}");
-      } else if (response.statusCode == responseCode200) {
-        if (responseData["status"] == false) {
-          if(responseData["data"]["statusCode"] == 403) {
-            alertDialogErrorBan(context: context,message:"${responseData["message"]}");
-          }else{
-            alertDialogError(context: context, message: responseData["message"]);
-            return;
-          }
 
-        } else {
-          setState(() {
-            apiRecipeIds = responseData["data"]["recipe_ids"];
-          });
-        }
-      }
-    } catch (e) {
-      print("Something went Wrong ${e}");
-      showSnackBar(context, "Something went Wrong.");
-    }
-  }
 }

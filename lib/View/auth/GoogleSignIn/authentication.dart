@@ -218,6 +218,7 @@ void login({
         prefs.setString(PrefKey.userName, username ?? name);
         prefs.setString(PrefKey.email, usermail ?? email);
         prefs.setString(PrefKey.unit, measuringUnit);
+        prefs.setString(PrefKey.socialId, userId);
 
         if (isNewUser) {
           pushReplacement(context, const UserProfileScreen());
