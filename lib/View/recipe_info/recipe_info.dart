@@ -149,7 +149,7 @@ class _RecipeInfoState extends State<RecipeInfo>
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Padding(
-                              padding: const EdgeInsets.only(top: 10.0),
+                              padding: const EdgeInsets.only(top: 5.0),
                               child: Container(
                                 // color: Colors.deepPurple,
                                 width: 55.w,
@@ -158,7 +158,7 @@ class _RecipeInfoState extends State<RecipeInfo>
                                     textColor: AppTheme.appColor,
                                     fontSize: 18,
                                     overflow: TextOverflow.ellipsis,
-                                    // maxlines: 2,
+                                    maxlines: 2,
                                     fontWeight: FontWeight.w700),
                               ),
                             ),

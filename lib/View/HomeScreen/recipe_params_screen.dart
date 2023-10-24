@@ -22,6 +22,7 @@ import 'package:ai_food/config/dio/app_dio.dart';
 import 'package:ai_food/config/dio/spoonacular_app_dio.dart';
 import 'package:ai_food/config/keys/pref_keys.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
@@ -38,6 +39,7 @@ class RecipeParamScreen extends StatefulWidget {
 }
 
 class _RecipeParamScreenState extends State<RecipeParamScreen> {
+  final TextEditingController _searchController = TextEditingController();
   bool showFoodStyle = false;
   var isLoadedfromShared;
 
@@ -51,6 +53,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
   AppLogger logger = AppLogger();
 
   bool isLoading = false;
+  bool isLoadingSearch = false;
   bool checkLoadDataFromAPI = false;
   bool NoInternetConnection = false;
 
@@ -329,6 +332,95 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            const SizedBox(height: 28),
+                            Container(
+                              width: width,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                color: const Color(0xffd9c4ef),
+                                borderRadius: BorderRadius.circular(100),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 20.0),
+                                    child: SizedBox(
+                                      width: width * 0.65,
+                                      child: TextFormField(
+                                        onFieldSubmitted: (value) {
+                                          if(_searchController.text == "" || _searchController.text.isEmpty){
+                                            showSnackBar(context, "Please type something.");
+                                          } else {
+                                            getFood(context);
+                                          }
+                                        },
+                                        textInputAction: TextInputAction.search,
+                                        controller: _searchController,
+                                        autofocus: false,
+                                        cursorColor: AppTheme.appColor,
+                                        style: TextStyle(color: AppTheme.whiteColor),
+                                        decoration: InputDecoration.collapsed(
+                                          hintText: 'Find recipes',
+                                          hintStyle: TextStyle(
+                                              color: AppTheme.whiteColor,
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w500),
+                                        ),
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return 'Please enter a recipe';
+                                          }
+                                          return null;
+                                        },
+                                        onChanged: (value) {
+                                          // setState(() {
+                                          //   _autoValidateMode = AutovalidateMode.disabled;
+                                          // });
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      FocusScope.of(context).requestFocus(FocusNode());
+                                      if(_searchController.text == "" || _searchController.text.isEmpty){
+                                        showSnackBar(context, "Please type something.");
+                                      } else {
+                                        getFood(context);
+                                      }
+                                    },
+                                    child: Stack(
+                                      children: [
+                                        Container(
+                                          width: 60,
+                                          height: 50,
+                                          decoration: const BoxDecoration(
+                                            color: Color(0xFFB38ADE),
+                                            borderRadius: BorderRadius.only(
+                                                topRight: Radius.circular(100),
+                                                bottomRight: Radius.circular(100)),
+                                          ),
+                                        ),
+                                        Align(
+                                          alignment: Alignment.center,
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 14.0),
+                                            // child: SvgPicture.asset("assets/images/Search.svg",
+                                            child: isLoadingSearch ? SizedBox(
+                                                width: 30,
+                                                height: 30,
+                                                child: CircularProgressIndicator(color: AppTheme.whiteColor,)) : AppText.appText("Find",
+                                              textColor: AppTheme.whiteColor,
+                                              fontWeight: FontWeight.bold,),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                             const SizedBox(height: 28),
                             AppText.appText(
                               "Food choices:",
@@ -826,4 +918,101 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
       ),
     );
   }
+
+
+
+
+
+  Future<void> getFood(context) async {
+    // SharedPreferences pref = await SharedPreferences.getInstance();
+    setState(() {
+      isLoadingSearch = true;
+    });
+
+    var searchtext = _searchController.text;
+    if(searchtext.isNotEmpty){
+      // pref.setString(PrefKey.searchQueryParameter, searchtext);
+    }else{}
+
+    final apiUrl =
+        '${AppUrls.spoonacularBaseUrl}/recipes/complexSearch?query=$searchtext&apiKey=$apiKey';
+
+    final apiUrl2 =
+        '${AppUrls.spoonacularBaseUrl}/recipes/complexSearch?query=$searchtext&apiKey=$apiKey2';
+
+    try {
+      final response = await spoonDio.get(path: apiUrl);
+
+      if (response.statusCode == 200) {
+        setState(() {
+          isLoadingSearch = false;
+        });
+        pushReplacement(
+          context,
+          BottomNavView(
+            urlString: apiUrl.split("&apiKey=$apiKey").toString().substring(
+                1, apiUrl.split("&apiKey=$apiKey").toString().length - 3),
+            searchType: 0,
+            type: 1,
+            data: response.data["results"],
+            searchList: List.generate(response.data["results"].length, (index) => false),
+            query: searchtext,
+            offset: response.data["offset"],
+          ),
+        );
+
+        // _searchController.clear();
+      }else if (response.statusCode == 402) {
+        try{
+          var responseApi2 = await spoonDio.get(path: apiUrl2);
+          if (responseApi2.statusCode == 200) {
+            setState(() {
+              isLoadingSearch = false;
+            });
+            pushReplacement(
+              context,
+              BottomNavView(
+                urlString: apiUrl2
+                    .split("&apiKey=$apiKey2")
+                    .toString()
+                    .substring(
+                    1,
+                    apiUrl2.split("&apiKey=$apiKey2").toString().length -
+                        3),
+                searchType: 0,
+                type: 1,
+                data: responseApi2.data["results"],
+                searchList: List.generate(responseApi2.data["results"].length, (index) => false),
+                query: searchtext,
+                offset: responseApi2.data["offset"],
+              ),
+            );
+            print("status_code is ${responseApi2.statusCode}");
+          } else if(responseApi2.statusCode == 402){
+            setState(() {
+              isLoadingSearch = false;
+            });
+            showSnackBar(context, "${responseApi2.statusMessage}");
+          }
+        }catch(e){
+          print("Catch eroor"+e.toString());
+        }
+        setState(() {
+          isLoadingSearch = false;
+          // randomData = true;
+          // errorResponse = response.data["message"];
+          // print("l;nkwkdn${response.data["message"]}");
+        });
+        // showSnackBar(context, "${response.statusMessage}");
+      } else {
+        print('API request failed with status code: ${response.statusCode}');
+      }
+    } catch (error) {
+      print('API request failed with error: $error');
+    } finally {
+      // Set isLoading to false when the API call completes (success or failure)
+    }
+  }
+
+
 }

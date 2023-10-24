@@ -164,13 +164,16 @@ class _HomeScreenState extends State<HomeScreen> {
                         fontWeight: FontWeight.w600),
                   ),
                   // REGENERATE RECIPE BUTTON
-                  type == 1
-                      ? regenerateResultLoader == false ? InkWell(
+                  regenerateResultLoader == false ? InkWell(
                     onTap: () {
                       setState(() {
                         regenerateResultLoader = true;
                       });
-                      reGenerateRecipe(context);
+                      if(type == 1 && widget.searchType == 1) {
+                        reGenerateRecipe(context);
+                      } else if (type == 1 && widget.searchType == 0){
+                        reGenerateRecipeQuery(context);
+                      }
                     },
                     child: Container(
                       height: 35,
@@ -205,38 +208,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                   )
-                      : const SizedBox.shrink() : Container(
-                    height: 35,
-                    decoration: BoxDecoration(
-                      color: AppTheme.whiteColor,
-                      borderRadius: BorderRadius.circular(50),
-                      border: Border.all(color: AppTheme.appColor),
-                    ),
-                    child: Padding(
-                      padding:
-                      const EdgeInsets.only(left: 10.0, right: 10),
-                      child: Row(
-                        mainAxisAlignment:
-                        MainAxisAlignment.spaceBetween,
-                        children: [
-                          Icon(
-                            Icons.autorenew,
-                            color: AppTheme.appColor,
-                            size: 18,
-                          ),
-                          const SizedBox(
-                            width: 4,
-                          ),
-                          AppText.appText(
-                            "Regenerate result",
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                            textColor: AppTheme.appColor,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                      : const SizedBox.shrink()
                 ],
               ),
             ),
@@ -515,49 +487,86 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  // Future reGenerateRecipeQuery(context) async {
-  //   setState(() {
-  //     isLoading = true;
-  //   });
-  //
-  //   int currentOffset = widget.offset + 8;
-  //
-  //   final apiUrl =
-  //       'https://api.spoonacular.com/recipes/complexSearch?query=${widget.query}&number=8&offset=$currentOffset&apiKey=$apiKey';
-  //
-  //   final response = await dio.get(path: apiUrl);
-  //
-  //   if (response.statusCode == 200) {
-  //     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
-  //       return BottomNavView(
-  //         type: 1,
-  //         data: response.data["results"],
-  //         offset: currentOffset,
-  //         totalResults: response.data["totalResults"],
-  //         query: widget.query,
-  //         searchType: 0,
-  //         searchList:
-  //             List.generate(response.data["results"].length, (index) => false),
-  //       );
-  //     }));
-  //     setState(() {
-  //       isLoading = false;
-  //     });
-  //   } else {
-  //     if (response.statusCode == 402) {
-  //       setState(() {
-  //         isLoading = false;
-  //       });
-  //       showSnackBar(context, "${response.statusMessage}");
-  //     } else {
-  //       setState(() {
-  //         isLoading = false;
-  //       });
-  //       print('API request failed with status code: ${response.statusCode}');
-  //       showSnackBar(context, "${response.statusMessage}");
-  //     }
-  //   }
-  // }
+  Future reGenerateRecipeQuery(context) async {
+    setState(() {
+      isLoading = true;
+    });
+
+    int currentOffset = widget.offset + 8;
+
+    final apiUrl =
+        'https://api.spoonacular.com/recipes/complexSearch?query=${widget.query}&number=8&offset=$currentOffset&apiKey=$apiKey';
+
+    final apiUrl2 =
+        'https://api.spoonacular.com/recipes/complexSearch?query=${widget.query}&number=8&offset=$currentOffset&apiKey=$apiKey2';
+
+    final response = await dio.get(path: apiUrl);
+
+    if (response.statusCode == 200) {
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
+        return BottomNavView(
+          type: 1,
+          data: response.data["results"],
+          offset: currentOffset,
+          totalResults: response.data["totalResults"],
+          query: widget.query,
+          searchType: 0,
+          searchList:
+              List.generate(response.data["results"].length, (index) => false),
+        );
+      }));
+      setState(() {
+        isLoading = false;
+      });
+    } else {
+      if (response.statusCode == 402) {
+        try{
+          var responseApi2 = await spoonDio.get(path: apiUrl2);
+          if (responseApi2.statusCode == 200) {
+            setState(() {
+              isLoading = false;
+            });
+            pushReplacement(
+              context,
+              BottomNavView(
+                urlString: apiUrl2
+                    .split("&apiKey=$apiKey2")
+                    .toString()
+                    .substring(
+                    1,
+                    apiUrl2.split("&apiKey=$apiKey2").toString().length -
+                        3),
+                searchType: 0,
+                type: 1,
+                data: responseApi2.data["results"],
+                searchList: List.generate(responseApi2.data["results"].length, (index) => false),
+                query: widget.query,
+                offset: responseApi2.data["offset"],
+              ),
+            );
+            print("status_code is ${responseApi2.statusCode}");
+          } else if(responseApi2.statusCode == 402){
+            setState(() {
+              isLoading = false;
+            });
+            showSnackBar(context, "${responseApi2.statusMessage}");
+          }
+        }catch(e){
+          print("Catch eroor"+e.toString());
+        }
+        setState(() {
+          isLoading = false;
+        });
+        // showSnackBar(context, "${response.statusMessage}");
+      } else {
+        setState(() {
+          isLoading = false;
+        });
+        print('API request failed with status code: ${response.statusCode}');
+        showSnackBar(context, "${response.statusMessage}");
+      }
+    }
+  }
 
   void getFavouriteRecipes() async {
     var response;
