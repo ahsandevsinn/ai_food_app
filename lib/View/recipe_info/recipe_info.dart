@@ -172,7 +172,7 @@ class _RecipeInfoState extends State<RecipeInfo>
                                           .push(MaterialPageRoute(
                                               builder: (context) => ShoppingList(
                                                     image: widget
-                                                        .recipeData["image"],
+                                                        .recipeData["image"]??"https://t4.ftcdn.net/jpg/02/51/95/53/360_F_251955356_FAQH0U1y1TZw3ZcdPGybwUkH90a3VAhb.jpg",
                                                     name: widget
                                                         .recipeData["title"],
                                                     ingredient: widget.recipeData[
@@ -212,12 +212,12 @@ class _RecipeInfoState extends State<RecipeInfo>
                                             favoriteAPI(
                                                 recpieid: widget.recipeData["id"],
                                                 title: widget.recipeData["title"],
-                                                image: widget.recipeData["image"],
+                                                image: widget.recipeData["image"]??"https://t4.ftcdn.net/jpg/02/51/95/53/360_F_251955356_FAQH0U1y1TZw3ZcdPGybwUkH90a3VAhb.jpg",
                                                 link: widget.urlLinkFromAskMaida):
                                             favoriteAPI(
                                                 recpieid: widget.recipeData["id"],
                                                 title: widget.recipeData["title"],
-                                                image: widget.recipeData["image"],
+                                                image: widget.recipeData["image"]??"https://t4.ftcdn.net/jpg/02/51/95/53/360_F_251955356_FAQH0U1y1TZw3ZcdPGybwUkH90a3VAhb.jpg",
                                                 link: widget.recipeData["spoonacularSourceUrl"]);
                                           },
                                           child: Card(
@@ -354,7 +354,7 @@ class _RecipeInfoState extends State<RecipeInfo>
                                       ),
                                     );
                                   },
-                                  imageUrl: "${widget.recipeData["image"]}",
+                                  imageUrl: "${widget.recipeData["image"]??"https://t4.ftcdn.net/jpg/02/51/95/53/360_F_251955356_FAQH0U1y1TZw3ZcdPGybwUkH90a3VAhb.jpg"}",
                                   fit: BoxFit.cover,
                                 ),
                               ),

@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 class AllergiesProvider extends ChangeNotifier {
   final List<String> _addAllergies = [];
 
+
   List<String> get addAllergies => _addAllergies;
 
   List<String> addAllergiesValue(String allergies, int index) {

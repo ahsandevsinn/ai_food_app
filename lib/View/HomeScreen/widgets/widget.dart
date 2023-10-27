@@ -23,6 +23,7 @@ class CustomRecipesSelection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("rescipeText${recipeText}");
     final width = MediaQuery.of(context).size.width;
     return showListDataInChip.isEmpty? GestureDetector(
       onTap: onTap,

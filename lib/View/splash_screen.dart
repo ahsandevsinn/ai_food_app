@@ -29,6 +29,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void getUserCredentials(context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+
     String ? value;
     String ? value2;
     List<String> finalValue = [];

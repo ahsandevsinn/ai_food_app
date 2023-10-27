@@ -146,41 +146,80 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
           });
 
           //adding allergies list
-          if (allergyProvider.isEmpty) {
-            allergies.forEach((key, value) {
-              allergyProvider.add(RecipesParameterClass(parameter: value));
-            });
+          int id=0;
+
+
+         // if (allergyProvider.isEmpty) {
+          if(allergyProvider.isNotEmpty){
+            allergyProvider.clear();
+            allergiesProvider.allergiesRecipesParameters.clear();
           }
+            allergies.forEach((key, value) {
+
+              id=int.parse(key);
+              if(allergiesProvider.addAllergies.isNotEmpty) {
+                if (allergiesProvider.addAllergies.contains(value)) {
+                  var data = RecipesParameterClass(parameter: value, id: id);
+                  data.isChecked = true;
+                  allergyProvider.add(data);
+                } else {
+                  allergyProvider.add(
+                      RecipesParameterClass(parameter: value, id: id));
+                }
+              }else{
+                allergyProvider.add(
+                    RecipesParameterClass(parameter: value, id: id));
+              }
+            });
+        // }
 
           //adding dietary restrictions list
-          if (dietaryRestrictionsProvider.isEmpty) {
-            dietaryRestrictions.forEach((key, value) {
-              dietaryRestrictionsProvider
-                  .add(RecipesParameterClass(parameter: value));
-            });
+          if(dietaryRestrictionsProvider.isNotEmpty){
+            dietaryRestrictionsProvider.clear();
+            dietaryRestrictionProvider.dietaryRestrictionsRecipesParameters.clear();
           }
+            dietaryRestrictions.forEach((key, value) {
+              id=int.parse(key);
+              if(dietaryRestrictionProvider.addDietaryRestrictions.isNotEmpty) {
+                if (dietaryRestrictionProvider.addDietaryRestrictions.contains(value)) {
+                  var data = RecipesParameterClass(parameter: value, id: id);
+                  data.isChecked = true;
+                  dietaryRestrictionsProvider.add(data);
+                } else {
+                  dietaryRestrictionsProvider.add(
+                      RecipesParameterClass(parameter: value, id: id));
+                }
+              }else{
+                dietaryRestrictionsProvider.add(
+                    RecipesParameterClass(parameter: value, id: id));
+              }
+            });
+
 
           //adding proteins list
           if (preferredProteinProvider.isEmpty) {
             preferredProteins.forEach((key, value) {
+              id=int.parse(key);
               preferredProteinProvider
-                  .add(RecipesParameterClass(parameter: value));
+                  .add(RecipesParameterClass(parameter: value,id: id));
             });
           }
 
           //adding regional delicacy list
           if (regionalDelicacyProvider.isEmpty) {
             regionalDelicacies.forEach((key, value) {
+              id=int.parse(key);
               regionalDelicacyProvider
-                  .add(RecipesParameterClass(parameter: value));
+                  .add(RecipesParameterClass(parameter: value,id: id));
             });
           }
 
           //adding kitchen resources list
           if (kitchenResourcesProvider.isEmpty) {
             kitchenResources.forEach((key, value) {
+              id=int.parse(key);
               kitchenResourcesProvider
-                  .add(RecipesParameterClass(parameter: value));
+                  .add(RecipesParameterClass(parameter: value,id: id));
             });
           }
           if (isLoadedfromShared == 1) {
@@ -189,40 +228,59 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                 prefs.getStringList(PrefKey.dataonBoardScreenAllergies)!;
             allergiesProvider.showAllergiesParameterDetailsload(
                 context, "Allergies");
+            if(allergiesProvider.addAllergies.isNotEmpty){
+              allergiesProvider.addAllergies.clear();
+            }
+            print(storedData);
             for (String entry in storedData) {
               String result = entry.replaceAll(RegExp(r'^MapEntry\(|\)'), '');
               List<String> parts = result.split(':');
               if (parts.length == 2) {
-                int key = int.parse(parts[0].trim()) - 1;
+                int key = int.parse(parts[0].trim());
                 String value = parts[1].trim();
-                if (allergiesProvider.preferredAllergiesRecipe[key].isChecked ==
-                    false) {
-                  allergiesProvider.toggleAllergiesRecipeState(key);
-                  allergiesProvider.addAllergiesValue(value, key);
-                }
+                for(var data in allergyProvider){
+
+                  if(data.parameter==value&&data.id==key){
+
+                    data.isChecked=true;
+                    allergiesProvider.addAllergiesValue(value, key);
+
+                  }
+
+                  //allergiesProvider.preferredAllergiesRecipe.add(data);
+                 }
+                // allergiesProvider.toggleAllergiesRecipeState(key);
+                //allergiesProvider.addAllergiesValue(value, key);
               }
             }
             print("dkjasdkljaklsdjklasndklajsdklasjkdnjkasdklnaskldnlak");
             List<String> storedData2 = prefs
                 .getStringList(PrefKey.dataonBoardScreenDietryRestriction)!;
+
             dietaryRestrictionProvider
                 .showDietaryRestrictionsParameterDetailsload(
                     context, "Dietary Restrictions");
+            if(dietaryRestrictionProvider.addDietaryRestrictions.isNotEmpty){
+              dietaryRestrictionProvider.addDietaryRestrictions.clear();
+            }
             for (String entry in storedData2) {
               String result = entry.replaceAll(RegExp(r'^MapEntry\(|\)'), '');
               List<String> parts = result.split(':');
               if (parts.length == 2) {
-                int key = int.parse(parts[0].trim()) - 1;
+                int key = int.parse(parts[0].trim());
                 String value = parts[1].trim();
-                if (dietaryRestrictionProvider
-                        .preferredDietaryRestrictionsParametersRecipe[key]
-                        .isChecked ==
-                    false) {
-                  dietaryRestrictionProvider
-                      .toggleDietaryRestrictionsRecipeState(key);
-                  dietaryRestrictionProvider.addDietaryRestrictionsValue(
-                      value, key);
+
+                for(var data in dietaryRestrictionsProvider){
+                  if(data.parameter==value){
+                    data.isChecked=true;
+                    dietaryRestrictionProvider.addDietaryRestrictionsValue(value, key);
+                  }
                 }
+
+               //  if (dietaryRestrictionProvider.preferredDietaryRestrictionsParametersRecipe[key].isChecked == false) {
+               // //   dietaryRestrictionProvider.toggleDietaryRestrictionsRecipeState(index2);
+               //    dietaryRestrictionProvider.addDietaryRestrictionsValue(value, key);
+               //  }
               }
             }
           }
@@ -265,45 +323,48 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                 color: AppTheme.appColor,
               )),
             ),
-          ):NoInternetConnection == true?Scaffold(
-      backgroundColor: AppTheme.whiteColor,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset('assets/images/internet_lost.png',
-                height: 200, width: 200),
-            const SizedBox(height: 30),
-            AppText.appText(
-              "No Internet Connection",
-              fontSize: 25,
-              fontWeight: FontWeight.bold,
-              textColor: AppTheme.appColor,
-            ),
-            const SizedBox(height: 10),
-            AppText.appText(
-              "Check your connection, then refresh the \n page",
-              fontWeight: FontWeight.bold,
-              textColor: AppTheme.appColor,
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 30),
-            AppButton.appButton(
-              "Refresh",
-              onTap: (){
-                pushReplacement(context, BottomNavView());
-              },
-              width: 100,
-              height: 40,
-              border: true,
-              textColor: AppTheme.appColor,
-              fontWeight: FontWeight.bold,
-              backgroundColor: Colors.white,
-            ),
-          ],
-        ),
-      ),
-    ): Scaffold(
+          ):
+    // NoInternetConnection == true?
+    // Scaffold(
+    //   backgroundColor: AppTheme.whiteColor,
+    //   body: Center(
+    //     child: Column(
+    //       mainAxisAlignment: MainAxisAlignment.center,
+    //       children: [
+    //         Image.asset('assets/images/internet_lost.png',
+    //             height: 200, width: 200),
+    //         const SizedBox(height: 30),
+    //         AppText.appText(
+    //           "No Internet Connection",
+    //           fontSize: 25,
+    //           fontWeight: FontWeight.bold,
+    //           textColor: AppTheme.appColor,
+    //         ),
+    //         const SizedBox(height: 10),
+    //         AppText.appText(
+    //           "Check your connection, then refresh the \n page",
+    //           fontWeight: FontWeight.bold,
+    //           textColor: AppTheme.appColor,
+    //           textAlign: TextAlign.center,
+    //         ),
+    //         const SizedBox(height: 30),
+    //         AppButton.appButton(
+    //           "Refresh",
+    //           onTap: (){
+    //             pushReplacement(context, BottomNavView());
+    //           },
+    //           width: 100,
+    //           height: 40,
+    //           border: true,
+    //           textColor: AppTheme.appColor,
+    //           fontWeight: FontWeight.bold,
+    //           backgroundColor: Colors.white,
+    //         ),
+    //       ],
+    //     ),
+    //   ),
+    // ):
+    Scaffold(
                 backgroundColor: Colors.white,
                 appBar: AppBar(
                   backgroundColor: Colors.white,
@@ -904,7 +965,9 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
   }
 
   chipWidget({details}) {
+
     String itemsText = details.join(', ');
+    print("rescipeTextes${itemsText}");
     return Text(
       textAlign: TextAlign.left,
       "${itemsText}",

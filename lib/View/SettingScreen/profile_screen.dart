@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 
 import 'package:ai_food/Constants/app_logger.dart';
 import 'package:ai_food/Utils/logout.dart';
@@ -114,7 +115,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     print("check if i recieve the data of birth${selectedDateFromPref}");
     List<String> storedData =
         prefs.getStringList(PrefKey.dataonBoardScreenAllergies)!;
-
     for (String entry in storedData) {
       String result = entry.replaceAll(RegExp(r'^MapEntry\(|\)'), '');
       List<String> parts = result.split(':');
@@ -122,6 +122,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         String key = parts[0].trim();
         String value = parts[1].trim();
         addAllergies[key] = value;
+
       }
     }
     List<String> storedData2 =
@@ -410,37 +411,69 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             allergiesProvider.showAllergiesParameterDetailsload(context, "Allergies");
                             allergiesProvider.removeAllergyParams();
                             allergiesProvider.clearAllergiesAllCheckboxStates();
+
+                            var index=0;
+                            allergiesProvider.addAllergies.clear();
                             addAllergies.forEach((key, value) {
-                              int intKey = int.parse(key) -1;
-                               //allergiesProvider.toggleAllergiesRecipeStatefalse(intKey);
-                              if (allergiesProvider.preferredAllergiesRecipe[intKey].isChecked == false) {
-                                allergiesProvider.toggleAllergiesRecipeState(intKey);
-                                allergiesProvider.addAllergiesValue(value, intKey);
+
+                              // int intKey = int.parse(key) -1;
+                              //  //allergiesProvider.toggleAllergiesRecipeStatefalse(intKey);
+
+                              allergiesProvider.addAllergiesValue(value,int.parse(key));
+
+                              for(var data in allergiesProvider.preferredAllergiesRecipe){
+
+                                if(data.parameter==value&&!data.isChecked){
+                                  data.isChecked=true;
+                                }
                               }
+
+                              // if (allergiesProvider.preferredAllergiesRecipe[index].isChecked == true) {
+                              //   allergiesProvider.toggleAllergiesRecipeState(index);
+                              //   allergiesProvider.addAllergiesValue(value, int.parse(key));
+                              // }
+
+                              index++;
                             });
+
                             dietaryRestrictionsProvider.showDietaryRestrictionsParameterDetailsload(context, "Dietary Restrictions");
                             dietaryRestrictionsProvider.removeDietaryRestrictions();
                             dietaryRestrictionsProvider.clearDietaryRestrictionsAllCheckboxStates();
+                            var index2=0;
+                            dietaryRestrictionsProvider.addDietaryRestrictions.clear();
                             addDietaryRestrictions.forEach((key, value) {
-                              int intKey = int.parse(key) -1;
-                              dietaryRestrictionsProvider.toggleDietaryRestrictionsRecipeStatefalse(intKey);
-                              if (dietaryRestrictionsProvider.preferredDietaryRestrictionsParametersRecipe[intKey].isChecked == false) {
-                                dietaryRestrictionsProvider.toggleDietaryRestrictionsRecipeState(intKey);
-                                dietaryRestrictionsProvider.addDietaryRestrictionsValue(value, intKey);
+
+
+                              dietaryRestrictionsProvider.addDietaryRestrictionsValue(value,int.parse(key));
+                              for(var data in dietaryRestrictionsProvider.preferredDietaryRestrictionsParametersRecipe){
+                                if(data.parameter==value&&!data.isChecked){
+                                  data.isChecked=true;
+                                }
                               }
+                              //int intKey = int.parse(key) -1;
+                              // dietaryRestrictionsProvider.toggleDietaryRestrictionsRecipeStatefalse(intKey);
+                              // if (dietaryRestrictionsProvider.preferredDietaryRestrictionsParametersRecipe[intKey].isChecked == false) {
+                              //   dietaryRestrictionsProvider.toggleDietaryRestrictionsRecipeState(intKey);
+                              //   dietaryRestrictionsProvider.addDietaryRestrictionsValue(value, intKey);
+                              // }
+                              index2++;
                             });
-                            allListsProviders();
+
                             SaveUnit();
+                            //allergiesProvider.addAllergies.clear();
+
                             List<String> allergiesList = addAllergies.entries
                                 .map((value) => value.toString())
                                 .toList();
+                            //dietaryRestrictionsProvider.addDietaryRestrictions.clear();
                             List<String> dietaryRestrictionsList =
                                 addDietaryRestrictions.entries
                                     .map((value) => value.toString())
                                     .toList();
-                            await StoreDatainSharedPref(
+
+                             StoreDatainSharedPref(
                                 allergiesList, dietaryRestrictionsList);
-                            await UpdateSetupProfileOnUpdateAPI();
+                          await UpdateSetupProfileOnUpdateAPI();
                           },
                           fontSize: 24,
                           fontWeight: FontWeight.w600,
@@ -531,11 +564,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
 
-   allListsProviders() {
-     final allergiesProvider = Provider.of<AllergiesProvider>(context, listen: false);
-     final dietaryRestrictionsProvider = Provider.of<DietaryRestrictionsProvider>(context, listen: false);
-  }
-
   SaveUnit() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString(PrefKey.unit, updatedvalueM);
@@ -560,6 +588,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     const int responseCode500 = 500; // Internal server error.
 
     //here creates map like allergies[0]: 4,... using for loop to insert the data;
+
     if (addAllergies.isEmpty) {
       arrangeIndexParam["allergies[0]"] = "0";
     } else {
@@ -571,6 +600,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         index++;
       }
     }
+
     if (addDietaryRestrictions.isEmpty) {
       arrangeIndexParam2["dietary_restrictions[0]"] = "0";
     } else {
@@ -670,12 +700,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   StoreDatainSharedPref(allergies, dietryRestriction) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove(PrefKey.dataonBoardScreenAllergies);
     prefs.setString(PrefKey.userName, _userNameController.text);
     selectedDate == null
         ? prefs.setString(PrefKey.dateOfBirth, selectedDateFromPref!)
         : prefs.setString(PrefKey.dateOfBirth,
             DateFormat('MM-dd-yyyy').format(selectedDate!));
+    print("what i got now${allergies}");
     prefs.setStringList(PrefKey.dataonBoardScreenAllergies, allergies);
+    final data4 = await prefs.getStringList(PrefKey.dataonBoardScreenAllergies);
+    print("what i got now${data4}");
     prefs.setStringList(
         PrefKey.dataonBoardScreenDietryRestriction, dietryRestriction);
     prefs.setInt(PrefKey.conditiontoLoad, 1);
@@ -691,6 +725,7 @@ class CustomContainer extends StatelessWidget {
   final Color textColor;
   final Color containerColor;
   final borderColor;
+
 
   CustomContainer(
       {super.key,

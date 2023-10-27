@@ -413,7 +413,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           //adding allergies list
           if (allergyProvider.isEmpty) {
             allergies.forEach((key, value) {
-              allergyProvider.add(RecipesParameterClass(parameter: value));
+              allergyProvider.add(RecipesParameterClass(parameter: value,id: key));
             });
           }
 
@@ -421,7 +421,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           if (dietaryRestrictionsProvider.isEmpty) {
             dietaryRestrictions.forEach((key, value) {
               dietaryRestrictionsProvider
-                  .add(RecipesParameterClass(parameter: value));
+                  .add(RecipesParameterClass(parameter: value,id: key));
             });
           }
 
@@ -429,7 +429,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           if (preferredProteinProvider.isEmpty) {
             preferredProteins.forEach((key, value) {
               preferredProteinProvider
-                  .add(RecipesParameterClass(parameter: value));
+                  .add(RecipesParameterClass(parameter: value,id: key));
             });
           }
 
@@ -437,7 +437,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           if (regionalDelicacyProvider.isEmpty) {
             regionalDelicacies.forEach((key, value) {
               regionalDelicacyProvider
-                  .add(RecipesParameterClass(parameter: value));
+                  .add(RecipesParameterClass(parameter: value,id: key));
             });
           }
 
@@ -445,7 +445,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           if (kitchenResourcesProvider.isEmpty) {
             kitchenResources.forEach((key, value) {
               kitchenResourcesProvider
-                  .add(RecipesParameterClass(parameter: value));
+                  .add(RecipesParameterClass(parameter: value,id: key));
             });
           }
         }

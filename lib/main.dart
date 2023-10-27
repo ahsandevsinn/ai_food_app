@@ -18,6 +18,7 @@ import 'package:sizer/sizer.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await Firebase.initializeApp();
   AppLogger logger = AppLogger();
   logger.init();

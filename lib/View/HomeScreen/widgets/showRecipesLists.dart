@@ -146,26 +146,52 @@ class _RecipesSelectionState extends State<RecipesSelection> {
     if (widget.parameter == "Allergies") {
       return Consumer<AllergiesProvider>(
         builder: (context, recipeProvider, _) {
+
           return Wrap(
             spacing: 10,
             runSpacing: 10,
             children: List.generate(
                 recipeProvider.preferredAllergiesRecipe.length, (index) {
+
               final recipesParams =
                   recipeProvider.preferredAllergiesRecipe[index];
               return GestureDetector(
                 onTap: () {
+                  if (recipeProvider.addAllergies.contains(recipeProvider
+                      .preferredAllergiesRecipe[index].parameter)) {
+                    print("contain not");
+                    recipeProvider.addAllergies.remove(recipeProvider
+                        .preferredAllergiesRecipe[index].parameter);
+                    recipeProvider.toggleAllergiesRecipeState(index);
+                    print("contain not"+recipeProvider
+                        .preferredAllergiesRecipe[index].isChecked.toString());
+
+                  } else {
+                    print("contain");
+                    recipeProvider.addAllergies.add(recipeProvider
+                        .preferredAllergiesRecipe[index].parameter);
+                    recipeProvider.toggleAllergiesRecipeState(index);
+                    print("contain not"+recipeProvider
+                        .preferredAllergiesRecipe[index].isChecked.toString());
+
+                  }
                   if (recipeProvider
                           .preferredAllergiesRecipe[index].isChecked ==
                       false) {
-                    recipeProvider.toggleAllergiesRecipeState(index);
-                    recipeProvider.addAllergiesValue(
-                        recipesParams.parameter, index);
+                    // recipeProvider
+                    //     .preferredAllergiesRecipe[index].isChecked=true;
+                   // print("contain not");
+                   // recipeProvider.toggleAllergiesRecipeState(index);
+                    // recipeProvider.addAllergiesValue(
+                    //     recipesParams.parameter, recipesParams.id!);
                     // recipeProvider.addAllergieslistIndex(index);
                   } else {
-                    recipeProvider.toggleAllergiesRecipeState(index);
-                    recipeProvider.removeAllergiesValue(
-                        recipesParams.parameter, index);
+                  //  recipeProvider.toggleAllergiesRecipeState(index);
+                   // print("contain");
+                    // recipeProvider.removeAllergiesValue(
+                    //     recipesParams.parameter, index);
+                    // recipeProvider
+                    //     .preferredAllergiesRecipe[index].isChecked=false;
                   }
                 },
                 child: Container(
