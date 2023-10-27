@@ -42,7 +42,8 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
   final TextEditingController _searchController = TextEditingController();
   bool showFoodStyle = false;
   var isLoadedfromShared;
-
+  var responseID;
+  var response;
   //start food style
   List<String> foodStyle = [];
   List<String> addFoodStyle = [];
@@ -79,7 +80,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
         Provider.of<AllergiesProvider>(context, listen: false);
     final dietaryRestrictionProvider =
         Provider.of<DietaryRestrictionsProvider>(context, listen: false);
-    var response;
+
     SharedPreferences prefs = await SharedPreferences.getInstance();
     const int responseCode200 = 200; // For successful request.
     const int responseCode400 = 400; // For Bad Request.
@@ -88,7 +89,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
     const int responseCode405 = 405; // Method not allowed
     const int responseCode500 = 500; // Internal server error.
     setState(() {
-      checkLoadDataFromAPI = false;
+      checkLoadDataFromAPI = true;
     });
     try {
       response = await dio.get(path: AppUrls.searchParameterUrl);
@@ -113,7 +114,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
           }
         } else {
           setState(() {
-            checkLoadDataFromAPI = true;
+            checkLoadDataFromAPI = false;
           });
           var encodeData = jsonEncode(responseData);
           prefs.setString(PrefKey.parametersLists, encodeData);
@@ -288,8 +289,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
       }
     } catch (e) {
       setState(() {
-        checkLoadDataFromAPI = true;
-        NoInternetConnection = true;
+        checkLoadDataFromAPI = false;
       });
       print("Something went Wrong ${e}");
     }
@@ -312,7 +312,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
         Provider.of<RegionalDelicacyProvider>(context, listen: true);
     final kitchenProvider =
         Provider.of<KitchenResourcesProvider>(context, listen: true);
-    return checkLoadDataFromAPI == false
+    return checkLoadDataFromAPI == true
         ?  Scaffold(
             backgroundColor: Colors.white,
             body: Container(
@@ -323,48 +323,47 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                 color: AppTheme.appColor,
               )),
             ),
-          ):
-    // NoInternetConnection == true?
-    // Scaffold(
-    //   backgroundColor: AppTheme.whiteColor,
-    //   body: Center(
-    //     child: Column(
-    //       mainAxisAlignment: MainAxisAlignment.center,
-    //       children: [
-    //         Image.asset('assets/images/internet_lost.png',
-    //             height: 200, width: 200),
-    //         const SizedBox(height: 30),
-    //         AppText.appText(
-    //           "No Internet Connection",
-    //           fontSize: 25,
-    //           fontWeight: FontWeight.bold,
-    //           textColor: AppTheme.appColor,
-    //         ),
-    //         const SizedBox(height: 10),
-    //         AppText.appText(
-    //           "Check your connection, then refresh the \n page",
-    //           fontWeight: FontWeight.bold,
-    //           textColor: AppTheme.appColor,
-    //           textAlign: TextAlign.center,
-    //         ),
-    //         const SizedBox(height: 30),
-    //         AppButton.appButton(
-    //           "Refresh",
-    //           onTap: (){
-    //             pushReplacement(context, BottomNavView());
-    //           },
-    //           width: 100,
-    //           height: 40,
-    //           border: true,
-    //           textColor: AppTheme.appColor,
-    //           fontWeight: FontWeight.bold,
-    //           backgroundColor: Colors.white,
-    //         ),
-    //       ],
-    //     ),
-    //   ),
-    // ):
+          ): response == null ?
     Scaffold(
+      backgroundColor: AppTheme.whiteColor,
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset('assets/images/internet_lost.png',
+                height: 200, width: 200),
+            const SizedBox(height: 30),
+            AppText.appText(
+              "Something went wrong!",
+              fontSize: 25,
+              fontWeight: FontWeight.bold,
+              textColor: AppTheme.appColor,
+            ),
+            const SizedBox(height: 10),
+            AppText.appText(
+              "Check your connection, then refresh the \n page",
+              fontWeight: FontWeight.bold,
+              textColor: AppTheme.appColor,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 30),
+            AppButton.appButton(
+              "Refresh",
+              onTap: (){
+                pushReplacement(context, BottomNavView());
+              },
+              width: 100,
+              height: 40,
+              border: true,
+              textColor: AppTheme.appColor,
+              fontWeight: FontWeight.bold,
+              backgroundColor: Colors.white,
+            ),
+          ],
+        ),
+      ),
+    )
+        : Scaffold(
                 backgroundColor: Colors.white,
                 appBar: AppBar(
                   backgroundColor: Colors.white,

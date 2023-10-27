@@ -350,7 +350,7 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
       }
     } catch (e) {
       print("Something went Wrong ${e}");
-      showSnackBar(context, "Something went Wrong.");
+      // showSnackBar(context, "Something went Wrong.");
       setState(() {
         _isLoading = false;
       });

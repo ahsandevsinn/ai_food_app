@@ -41,7 +41,6 @@ dependencies:
   dio: ^5.3.2
   shared_preferences: ^2.2.0
 #  req_fun: ^1.0.5
-  connectivity: ^3.0.6
   cached_network_image: ^3.2.3
   url_launcher: ^6.1.11
   persistent_bottom_nav_bar: ^5.0.2

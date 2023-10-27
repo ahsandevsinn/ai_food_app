@@ -9,6 +9,11 @@ class AuthUtil {
   static Future<void> logout(BuildContext context) async {
     final clearChatProvider = Provider.of<ChatBotProvider>(context, listen: false);
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove(PrefKey.dataonBoardScreenAllergies);
+    await prefs.remove(PrefKey.dataonBoardScreenDietryRestriction);
+    await prefs.remove(PrefKey.dateOfBirth);
+    await prefs.remove(PrefKey.userName);
+    await prefs.remove(PrefKey.unit);
     await prefs.remove(PrefKey.authorization);
     await prefs.remove(PrefKey.socialId);
     clearChatProvider.clearDisplayChatsWidget();

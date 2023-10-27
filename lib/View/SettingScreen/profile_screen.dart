@@ -65,7 +65,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             colorScheme: ColorScheme.light(
                 primary: AppTheme.appColor), // Change overall color scheme
             buttonTheme:
-                const ButtonThemeData(textTheme: ButtonTextTheme.primary),
+            const ButtonThemeData(textTheme: ButtonTextTheme.primary),
           ),
           child: child!,
         );
@@ -104,6 +104,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       try {
         recipesParams = jsonDecode(recipesParamsJson);
         allergies = recipesParams["data"]["allergies"];
+        print("burger${allergies.keys}");
         dietaryRestrictions = recipesParams["data"]["dietaryRestrictions"];
       } catch (e) {
         print("Error decoding JSON: $e");
@@ -114,26 +115,37 @@ class _ProfileScreenState extends State<ProfileScreen> {
     selectedDateFromPref = prefs.getString(PrefKey.dateOfBirth);
     print("check if i recieve the data of birth${selectedDateFromPref}");
     List<String> storedData =
-        prefs.getStringList(PrefKey.dataonBoardScreenAllergies)!;
+    prefs.getStringList(PrefKey.dataonBoardScreenAllergies)!;
+    print("what is this storedData value?${storedData}");
     for (String entry in storedData) {
       String result = entry.replaceAll(RegExp(r'^MapEntry\(|\)'), '');
       List<String> parts = result.split(':');
       if (parts.length == 2) {
         String key = parts[0].trim();
+        print("what are the keys in SharedPReferences${key}");
         String value = parts[1].trim();
-        addAllergies[key] = value;
+        if(allergies.containsKey(key)){
+          addAllergies[key] = value;
+        }else{
+
+        }
+
 
       }
     }
     List<String> storedData2 =
-        prefs.getStringList(PrefKey.dataonBoardScreenDietryRestriction)!;
+    prefs.getStringList(PrefKey.dataonBoardScreenDietryRestriction)!;
     for (String entry in storedData2) {
       String result = entry.replaceAll(RegExp(r'^MapEntry\(|\)'), '');
       List<String> parts = result.split(':');
       if (parts.length == 2) {
         String key = parts[0].trim();
         String value = parts[1].trim();
-        addDietaryRestrictions[key] = value;
+        if(dietaryRestrictions.containsKey(key)){
+          addDietaryRestrictions[key] = value;
+        }else{
+
+        }
       }
     }
     _userNameController.text = prefs.getString(PrefKey.userName)!;
@@ -216,7 +228,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         flex: 5,
                                         fit: FlexFit.tight,
                                         child: AppText.appText(
-                                          "DOB: ${selectedDate == null ? "${selectedDateFromPref == "" ? "MM-DD-YYYY" : selectedDateFromPref}" : DateFormat('MM-dd-yyyy').format(selectedDate!)}",
+                                          "DOB: ${selectedDate == null ? "${selectedDateFromPref == "" ? "MM-DD-YYYY" : selectedDateFromPref ?? "MM-DD-YYYY"}" : DateFormat('MM-dd-yyyy').format(selectedDate!)}",
                                           fontSize: 11.sp,
                                           textColor: AppTheme.appColor,
                                           fontWeight: FontWeight.w500,
@@ -248,7 +260,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   child: Row(
                                     mainAxisSize: MainAxisSize.max,
                                     mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceBetween,
                                     children: [
                                       Flexible(
                                         fit: FlexFit.loose,
@@ -352,22 +364,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             spacing: 10,
                             runSpacing: 10,
                             children:
-                                dietaryRestrictions.entries.map((restriction) {
+                            dietaryRestrictions.entries.map((restriction) {
                               String key = restriction.key;
                               dynamic value = restriction.value;
                               return CustomContainer(
                                 borderColor:
-                                    addDietaryRestrictions.containsKey(key)
-                                        ? AppTheme.whiteColor
-                                        : AppTheme.appColor,
+                                addDietaryRestrictions.containsKey(key)
+                                    ? AppTheme.whiteColor
+                                    : AppTheme.appColor,
                                 containerColor:
-                                    addDietaryRestrictions.containsKey(key)
-                                        ? AppTheme.appColor
-                                        : Colors.white,
+                                addDietaryRestrictions.containsKey(key)
+                                    ? AppTheme.appColor
+                                    : Colors.white,
                                 textColor:
-                                    addDietaryRestrictions.containsKey(key)
-                                        ? Colors.white
-                                        : AppTheme.appColor,
+                                addDietaryRestrictions.containsKey(key)
+                                    ? Colors.white
+                                    : AppTheme.appColor,
                                 text: value.toString(),
                                 onTap: () {
                                   setState(() {
@@ -386,11 +398,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       measuringUnit
                           ? Align(
-                              alignment: Alignment.topRight,
-                              child: Padding(
-                                padding: const EdgeInsets.only(top: 77),
-                                child: customMeasuringUnit(),
-                              ))
+                          alignment: Alignment.topRight,
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 77),
+                            child: customMeasuringUnit(),
+                          ))
                           : const SizedBox.shrink(),
                     ],
                   ),
@@ -400,93 +412,93 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 checkAPI == false
                     ? Center(
-                        child: AppButton.appButton(
-                          "Save",
-                          onTap: () async {
-                            setState(() {
-                              checkAPI = true;
-                            });
+                  child: AppButton.appButton(
+                    "Save",
+                    onTap: () async {
+                      setState(() {
+                        checkAPI = true;
+                      });
 
 
-                            allergiesProvider.showAllergiesParameterDetailsload(context, "Allergies");
-                            allergiesProvider.removeAllergyParams();
-                            allergiesProvider.clearAllergiesAllCheckboxStates();
+                      allergiesProvider.showAllergiesParameterDetailsload(context, "Allergies");
+                      allergiesProvider.removeAllergyParams();
+                      allergiesProvider.clearAllergiesAllCheckboxStates();
 
-                            var index=0;
-                            allergiesProvider.addAllergies.clear();
-                            addAllergies.forEach((key, value) {
+                      var index=0;
+                      allergiesProvider.addAllergies.clear();
+                      addAllergies.forEach((key, value) {
 
-                              // int intKey = int.parse(key) -1;
-                              //  //allergiesProvider.toggleAllergiesRecipeStatefalse(intKey);
+                        // int intKey = int.parse(key) -1;
+                        //  //allergiesProvider.toggleAllergiesRecipeStatefalse(intKey);
 
-                              allergiesProvider.addAllergiesValue(value,int.parse(key));
+                        allergiesProvider.addAllergiesValue(value,int.parse(key));
 
-                              for(var data in allergiesProvider.preferredAllergiesRecipe){
+                        for(var data in allergiesProvider.preferredAllergiesRecipe){
 
-                                if(data.parameter==value&&!data.isChecked){
-                                  data.isChecked=true;
-                                }
-                              }
+                          if(data.parameter==value&&!data.isChecked){
+                            data.isChecked=true;
+                          }
+                        }
 
-                              // if (allergiesProvider.preferredAllergiesRecipe[index].isChecked == true) {
-                              //   allergiesProvider.toggleAllergiesRecipeState(index);
-                              //   allergiesProvider.addAllergiesValue(value, int.parse(key));
-                              // }
+                        // if (allergiesProvider.preferredAllergiesRecipe[index].isChecked == true) {
+                        //   allergiesProvider.toggleAllergiesRecipeState(index);
+                        //   allergiesProvider.addAllergiesValue(value, int.parse(key));
+                        // }
 
-                              index++;
-                            });
+                        index++;
+                      });
 
-                            dietaryRestrictionsProvider.showDietaryRestrictionsParameterDetailsload(context, "Dietary Restrictions");
-                            dietaryRestrictionsProvider.removeDietaryRestrictions();
-                            dietaryRestrictionsProvider.clearDietaryRestrictionsAllCheckboxStates();
-                            var index2=0;
-                            dietaryRestrictionsProvider.addDietaryRestrictions.clear();
-                            addDietaryRestrictions.forEach((key, value) {
+                      dietaryRestrictionsProvider.showDietaryRestrictionsParameterDetailsload(context, "Dietary Restrictions");
+                      dietaryRestrictionsProvider.removeDietaryRestrictions();
+                      dietaryRestrictionsProvider.clearDietaryRestrictionsAllCheckboxStates();
+                      var index2=0;
+                      dietaryRestrictionsProvider.addDietaryRestrictions.clear();
+                      addDietaryRestrictions.forEach((key, value) {
 
 
-                              dietaryRestrictionsProvider.addDietaryRestrictionsValue(value,int.parse(key));
-                              for(var data in dietaryRestrictionsProvider.preferredDietaryRestrictionsParametersRecipe){
-                                if(data.parameter==value&&!data.isChecked){
-                                  data.isChecked=true;
-                                }
-                              }
-                              //int intKey = int.parse(key) -1;
-                              // dietaryRestrictionsProvider.toggleDietaryRestrictionsRecipeStatefalse(intKey);
-                              // if (dietaryRestrictionsProvider.preferredDietaryRestrictionsParametersRecipe[intKey].isChecked == false) {
-                              //   dietaryRestrictionsProvider.toggleDietaryRestrictionsRecipeState(intKey);
-                              //   dietaryRestrictionsProvider.addDietaryRestrictionsValue(value, intKey);
-                              // }
-                              index2++;
-                            });
+                        dietaryRestrictionsProvider.addDietaryRestrictionsValue(value,int.parse(key));
+                        for(var data in dietaryRestrictionsProvider.preferredDietaryRestrictionsParametersRecipe){
+                          if(data.parameter==value&&!data.isChecked){
+                            data.isChecked=true;
+                          }
+                        }
+                        //int intKey = int.parse(key) -1;
+                        // dietaryRestrictionsProvider.toggleDietaryRestrictionsRecipeStatefalse(intKey);
+                        // if (dietaryRestrictionsProvider.preferredDietaryRestrictionsParametersRecipe[intKey].isChecked == false) {
+                        //   dietaryRestrictionsProvider.toggleDietaryRestrictionsRecipeState(intKey);
+                        //   dietaryRestrictionsProvider.addDietaryRestrictionsValue(value, intKey);
+                        // }
+                        index2++;
+                      });
 
-                            SaveUnit();
-                            //allergiesProvider.addAllergies.clear();
+                      SaveUnit();
+                      //allergiesProvider.addAllergies.clear();
 
-                            List<String> allergiesList = addAllergies.entries
-                                .map((value) => value.toString())
-                                .toList();
-                            //dietaryRestrictionsProvider.addDietaryRestrictions.clear();
-                            List<String> dietaryRestrictionsList =
-                                addDietaryRestrictions.entries
-                                    .map((value) => value.toString())
-                                    .toList();
+                      List<String> allergiesList = addAllergies.entries
+                          .map((value) => value.toString())
+                          .toList();
+                      //dietaryRestrictionsProvider.addDietaryRestrictions.clear();
+                      List<String> dietaryRestrictionsList =
+                      addDietaryRestrictions.entries
+                          .map((value) => value.toString())
+                          .toList();
 
-                             StoreDatainSharedPref(
-                                allergiesList, dietaryRestrictionsList);
-                          await UpdateSetupProfileOnUpdateAPI();
-                          },
-                          fontSize: 24,
-                          fontWeight: FontWeight.w600,
-                          textColor: Colors.white,
-                          width: 200,
-                          height: 48,
-                          backgroundColor: AppTheme.appColor,
-                        ),
-                      )
+                      StoreDatainSharedPref(
+                          allergiesList, dietaryRestrictionsList);
+                      await UpdateSetupProfileOnUpdateAPI();
+                    },
+                    fontSize: 24,
+                    fontWeight: FontWeight.w600,
+                    textColor: Colors.white,
+                    width: 200,
+                    height: 48,
+                    backgroundColor: AppTheme.appColor,
+                  ),
+                )
                     : Center(
-                        child:
-                            CircularProgressIndicator(color: AppTheme.appColor),
-                      ),
+                  child:
+                  CircularProgressIndicator(color: AppTheme.appColor),
+                ),
                 const SizedBox(height: 30),
               ],
             ),
@@ -615,86 +627,94 @@ class _ProfileScreenState extends State<ProfileScreen> {
     //----------------------//
     //check if username is empty or not
     if (_userNameController.text.isEmpty) {
-      // showSnackBar(context, "field cannot be empty");
+      showSnackBar(context, "Field cannot be empty");
+      setState(() {
+        checkAPI = false;
+      });
+    }else if (selectedDate == null&&selectedDateFromPref ==  null) {
+      showSnackBar(context, "Choose your date of birth");
       setState(() {
         checkAPI = false;
       });
     }
-    Map<String, dynamic> params = {
-      "name": _userNameController.text,
-      "DOB": selectedDateFromPref ??
-          DateFormat('yyyy-MM-dd').format(selectedDate!),
-      "measuring_unit": updatedvalueM.toLowerCase(),
-      ...arrangeIndexParam,
-      ...arrangeIndexParam2,
-    };
-    try {
-      response = await dio.post(
-        path: AppUrls.updateUrl,
-        data: params,
-      );
-      var responseData = response.data;
-      switch (response.statusCode) {
-        case responseCode400:
-          setState(() {
-            checkAPI = false;
-          });
-          print("Bad Request.");
-          break;
-        case responseCode401:
-          setState(() {
-            checkAPI = false;
-          });
-          print("Unauthorized access.");
-          break;
-        case responseCode404:
-          setState(() {
-            checkAPI = false;
-          });
-          print(
-              "The requested resource could not be found but may be available again in the future. Subsequent requests by the client are permissible.");
-          break;
-        case responseCode500:
-          setState(() {
-            checkAPI = false;
-          });
-          print("Internal server error.");
-          break;
-        case responseCode200:
-          if (responseData["status"] == false) {
-            if(responseData["data"]["statusCode"] == 403){
-              alertDialogErrorBan(context: context,message:"${responseData["message"]}");
-              setState(() {
-                checkAPI = false;
-              });
-            }else{
-              setState(() {
-                checkAPI = false;
-              });
-              showSnackBar(context, "Enter your name");
-            }
-
-          } else {
+    else{
+      Map<String, dynamic> params = {
+        "name": _userNameController.text,
+        "DOB": selectedDateFromPref == null? DateFormat('yyyy-MM-dd').format(selectedDate!):selectedDateFromPref,
+        "measuring_unit": updatedvalueM.toLowerCase(),
+        ...arrangeIndexParam,
+        ...arrangeIndexParam2,
+      };
+      try {
+        response = await dio.post(
+          path: AppUrls.updateUrl,
+          data: params,
+        );
+        var responseData = response.data;
+        switch (response.statusCode) {
+          case responseCode400:
             setState(() {
               checkAPI = false;
             });
-            showSnackBar(context,"Profile updated successfully");
-            Navigator.of(context).pop();
-          }
-          break;
-        default:
-          setState(() {
-            checkAPI = false;
-          });
-          // Handle other response codes here if needed.
-          break;
+            print("Bad Request.");
+            break;
+          case responseCode401:
+            setState(() {
+              checkAPI = false;
+            });
+            print("Unauthorized access.");
+            break;
+          case responseCode404:
+            setState(() {
+              checkAPI = false;
+            });
+            print(
+                "The requested resource could not be found but may be available again in the future. Subsequent requests by the client are permissible.");
+            break;
+          case responseCode500:
+            setState(() {
+              checkAPI = false;
+            });
+            print("Internal server error.");
+            break;
+          case responseCode200:
+            if (responseData["status"] == false) {
+              showSnackBar(context, "Enter your name");
+
+              if(responseData["data"]["statusCode"] == 403){
+                alertDialogErrorBan(context: context,message:"${responseData["message"]}");
+                setState(() {
+                  checkAPI = false;
+                });
+              }else{
+                setState(() {
+                  checkAPI = false;
+                });
+
+              }
+
+            } else {
+              setState(() {
+                checkAPI = false;
+              });
+              showSnackBar(context,"Profile updated successfully");
+              Navigator.of(context).pop();
+            }
+            break;
+          default:
+            setState(() {
+              checkAPI = false;
+            });
+            // Handle other response codes here if needed.
+            break;
+        }
+      } catch (e) {
+        //check if there is any other issue with the data from server
+        setState(() {
+          checkAPI = false;
+        });
+        print("Something went Wrong ${e}");
       }
-    } catch (e) {
-      //check if there is any other issue with the data from server
-      setState(() {
-        checkAPI = false;
-      });
-      print("Something went Wrong ${e}");
     }
   }
 
@@ -705,7 +725,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     selectedDate == null
         ? prefs.setString(PrefKey.dateOfBirth, selectedDateFromPref!)
         : prefs.setString(PrefKey.dateOfBirth,
-            DateFormat('MM-dd-yyyy').format(selectedDate!));
+        DateFormat('MM-dd-yyyy').format(selectedDate!));
     print("what i got now${allergies}");
     prefs.setStringList(PrefKey.dataonBoardScreenAllergies, allergies);
     final data4 = await prefs.getStringList(PrefKey.dataonBoardScreenAllergies);
@@ -729,11 +749,11 @@ class CustomContainer extends StatelessWidget {
 
   CustomContainer(
       {super.key,
-      this.text,
-      required this.onTap,
-      required this.textColor,
-      required this.containerColor,
-      this.borderColor});
+        this.text,
+        required this.onTap,
+        required this.textColor,
+        required this.containerColor,
+        this.borderColor});
 
   @override
   Widget build(BuildContext context) {
