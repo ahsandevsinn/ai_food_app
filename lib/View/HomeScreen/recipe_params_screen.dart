@@ -299,6 +299,9 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
+    double maxHeight = height > 720 ? 0.03 : 0.02;
+    double maxHeight1 = height > 720 ? 0.02 : 0.01;
+    print("iphone width $width height $height");
     final foodStyleProvider =
         Provider.of<FoodStyleProvider>(context, listen: false);
     print("food_style ${foodStyleProvider.foodStyle}");
@@ -365,34 +368,38 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
     )
         : Scaffold(
                 backgroundColor: Colors.white,
+                resizeToAvoidBottomInset: false,
                 appBar: AppBar(
                   backgroundColor: Colors.white,
                   automaticallyImplyLeading: false,
                   elevation: 0,
                   toolbarHeight: 1,
-                  leading: SizedBox.shrink(),
+                  leading: const SizedBox.shrink(),
                 ),
-                body: GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      showFoodStyle = false;
-                    });
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image: AssetImage("assets/images/logo.png"),
-                            scale: 0.5,
-                            opacity: 0.15)),
-                    width: width,
-                    height: height,
-                    child: SingleChildScrollView(
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 20.0, right: 20),
+                body: Container(
+                  width: width,
+                  height: height,
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(
+                      alignment: Alignment.center,
+                        image: AssetImage("assets/images/logo.png"),
+                        scale: 0.5,
+                        opacity: 0.15,
+                    ),
+                  ),
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        showFoodStyle = false;
+                      });
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 20.0, right: 20),
+                      child: SingleChildScrollView(
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            const SizedBox(height: 28),
+                            SizedBox(height: height * maxHeight1),
                             Container(
                               width: width,
                               height: 50,
@@ -480,20 +487,24 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                                   ),
                                 ],
                               ),
+                            ),//search field
+                            SizedBox(height: height * maxHeight1),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width,
+                              child: AppText.appText(
+                                "Food choices:",
+                                fontSize: 24,
+                                fontWeight: FontWeight.w600,
+                                textColor: AppTheme.appColor,
+                              ),
                             ),
-                            const SizedBox(height: 28),
-                            AppText.appText(
-                              "Food choices:",
-                              fontSize: 24,
-                              fontWeight: FontWeight.w600,
-                              textColor: AppTheme.appColor,
-                            ),
+                            SizedBox(height: height * maxHeight1),
                             Stack(
                               children: [
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const SizedBox(height: 15),
+                                    // const SizedBox(height: 15),
                                     GestureDetector(
                                       onTap: () {
                                         setState(() {
@@ -548,7 +559,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                                         ),
                                       ),
                                     ),
-                                    const SizedBox(height: 20),
+                                    SizedBox(height: height > 720 ? height * 0.02 : height * 0.01),
                                     //here are the allergies
                                     CustomRecipesSelection(
                                       widget: chipWidget(
@@ -564,7 +575,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                                                 context, "Allergies");
                                       },
                                     ),
-                                    const SizedBox(height: 20),
+                                    SizedBox(height: height > 720 ? height * 0.02 : height * 0.01),
                                     //ends allergies
 
                                     //here are the Dietary restrictions
@@ -584,7 +595,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                                                 "Dietary Restrictions");
                                       },
                                     ),
-                                    const SizedBox(height: 20),
+                                    SizedBox(height: height > 720 ? height * 0.02 : height * 0.01),
                                     //ends Dietary restrictions
 
                                     //here are the Regional delicacy
@@ -602,7 +613,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                                                 context, "Preferred Protein");
                                       },
                                     ),
-                                    const SizedBox(height: 20),
+                                    SizedBox(height: height > 720 ? height * 0.02 : height * 0.01),
                                     //ends Regional delicacy
 
                                     //here are the Regional delicacy
@@ -621,7 +632,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                                                 context, "Regional Delicacy");
                                       },
                                     ),
-                                    const SizedBox(height: 20),
+                                    SizedBox(height: height > 720 ? height * 0.02 : height * 0.01),
                                     //ends Regional delicacy
 
                                     //here are the Kitchen resources
@@ -640,7 +651,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                                                 context, "Kitchen Resources");
                                       },
                                     ),
-                                    const SizedBox(height: 16),
+                                    SizedBox(height: height > 720 ? height * 0.02 : height * 0.01),
                                     //ends Kitchen resources
                                   ],
                                 ),
@@ -650,60 +661,62 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                               ],
                             ),
                             //kitchen resources ends
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: GestureDetector(
-                                onTap: () {
-                                  //allergies
-                                  if (allergiesProvider
-                                          .addAllergies.isNotEmpty ||
+                            SizedBox(height: height * 0.01),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width,
+                              child: Align(
+                                alignment: Alignment.topRight,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    //allergies
+                                    if (allergiesProvider
+                                            .addAllergies.isNotEmpty ||
+                                        restrictionsProvider
+                                            .addDietaryRestrictions.isNotEmpty ||
+                                        proteinProvider.addProtein.isNotEmpty ||
+                                        kitchenProvider
+                                            .addKitchenResources.isNotEmpty ||
+                                        delicacyProvider
+                                            .addRegionalDelicacy.isNotEmpty ||
+                                        foodStyleProvider.foodStyle.isNotEmpty) {
+                                      //  allergies
+                                      allergiesProvider.removeAllergyParams();
+                                      allergiesProvider
+                                          .clearAllergiesAllCheckboxStates();
+                                      //restrictions
                                       restrictionsProvider
-                                          .addDietaryRestrictions.isNotEmpty ||
-                                      proteinProvider.addProtein.isNotEmpty ||
-                                      kitchenProvider
-                                          .addKitchenResources.isNotEmpty ||
+                                          .removeDietaryRestrictions();
+                                      restrictionsProvider
+                                          .clearDietaryRestrictionsAllCheckboxStates();
+                                      //protein
+                                      proteinProvider.removePreferredProtein();
+                                      proteinProvider
+                                          .clearProteinAllCheckboxStates();
+                                      //delicacy
+                                      delicacyProvider.removeRegionalDelicacy();
                                       delicacyProvider
-                                          .addRegionalDelicacy.isNotEmpty ||
-                                      foodStyleProvider.foodStyle.isNotEmpty) {
-                                    //  allergies
-                                    allergiesProvider.removeAllergyParams();
-                                    allergiesProvider
-                                        .clearAllergiesAllCheckboxStates();
-                                    //restrictions
-                                    restrictionsProvider
-                                        .removeDietaryRestrictions();
-                                    restrictionsProvider
-                                        .clearDietaryRestrictionsAllCheckboxStates();
-                                    //protein
-                                    proteinProvider.removePreferredProtein();
-                                    proteinProvider
-                                        .clearProteinAllCheckboxStates();
-                                    //delicacy
-                                    delicacyProvider.removeRegionalDelicacy();
-                                    delicacyProvider
-                                        .clearRegionalDelicacyAllCheckboxStates();
-                                    //kitchen
-                                    kitchenProvider.removeKitchenResources();
-                                    kitchenProvider
-                                        .clearKitchenResourcesAllCheckboxStates();
-                                    //food style
-                                    foodStyleProvider.clearFoodStyleValue();
-                                    showSnackBar(
-                                        context, "Filters Reset Succesfully");
-                                  }
-                                },
-                                child: AppText.appText(
-                                  "Reset filters",
-                                  fontSize: 16,
-                                  underLine: true,
-                                  fontWeight: FontWeight.w600,
-                                  textColor: AppTheme.appColor,
+                                          .clearRegionalDelicacyAllCheckboxStates();
+                                      //kitchen
+                                      kitchenProvider.removeKitchenResources();
+                                      kitchenProvider
+                                          .clearKitchenResourcesAllCheckboxStates();
+                                      //food style
+                                      foodStyleProvider.clearFoodStyleValue();
+                                      showSnackBar(
+                                          context, "Filters Reset Succesfully");
+                                    }
+                                  },
+                                  child: AppText.appText(
+                                    "Reset filters",
+                                    fontSize: 16,
+                                    underLine: true,
+                                    fontWeight: FontWeight.w600,
+                                    textColor: AppTheme.appColor,
+                                  ),
                                 ),
                               ),
                             ),
-                            SizedBox(
-                              height: 80,
-                            ),
+                            SizedBox(height: height * 0.03),
                             isLoading
                                 ? Center(
                                     child: CircularProgressIndicator(
@@ -734,9 +747,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                                     ),
                                   ),
                             // ignore: prefer_const_constructors
-                            const SizedBox(
-                              height: 20,
-                            ),
+                            SizedBox(height: height > 720 ? height * 0.02 : height * 0.006),
                           ],
                         ),
                       ),
@@ -755,7 +766,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
     final foodStyleProvider =
         Provider.of<FoodStyleProvider>(context, listen: false);
     return Padding(
-      padding: const EdgeInsets.only(top: 70.0),
+      padding: const EdgeInsets.only(top: 55),
       child: Container(
         decoration: BoxDecoration(
           color: AppTheme.appColor,
@@ -986,7 +997,33 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
 
 
   Future<void> getFood(context) async {
-    // SharedPreferences pref = await SharedPreferences.getInstance();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> getAllergies = prefs.getStringList(PrefKey.dataonBoardScreenAllergies)!;
+    List<String> getRestrictions = prefs.getStringList(PrefKey.dataonBoardScreenDietryRestriction)!;
+    List<String> allergies = [];
+    List<String> restrictions = [];
+    for (String entry in getAllergies) {
+      String result = entry.replaceAll(RegExp(r'^MapEntry\(|\)'), '');
+      List<String> parts = result.split(':');
+      if (parts.length == 2) {
+        String value = parts[1].trim();
+        allergies.add(value);
+      }
+    }
+    for (String entry in getRestrictions) {
+      String result = entry.replaceAll(RegExp(r'^MapEntry\(|\)'), '');
+      List<String> parts = result.split(':');
+      if (parts.length == 2) {
+        String value = parts[1].trim();
+        restrictions.add(value);
+      }
+    }
+    final allergiesSet = allergies.isNotEmpty
+        ? "&intolerances=${allergies.toString().substring(1, allergies.toString().length - 1)}"
+        : "";
+    final restrictionsSet = restrictions.isNotEmpty
+        ? "&diet=${restrictions.toString().substring(1, restrictions.toString().length - 1)}"
+        : "";
     setState(() {
       isLoadingSearch = true;
     });
@@ -997,10 +1034,10 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
     }else{}
 
     final apiUrl =
-        '${AppUrls.spoonacularBaseUrl}/recipes/complexSearch?query=$searchtext&apiKey=$apiKey';
+        '${AppUrls.spoonacularBaseUrl}/recipes/complexSearch?query=$searchtext$allergiesSet$restrictionsSet&apiKey=$apiKey';
 
     final apiUrl2 =
-        '${AppUrls.spoonacularBaseUrl}/recipes/complexSearch?query=$searchtext&apiKey=$apiKey2';
+        '${AppUrls.spoonacularBaseUrl}/recipes/complexSearch?query=$searchtext$allergiesSet$restrictionsSet&apiKey=$apiKey2';
 
     try {
       final response = await spoonDio.get(path: apiUrl);
