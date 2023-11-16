@@ -44,7 +44,7 @@ class RegionalDelicacyProvider extends ChangeNotifier {
   List<RecipesParameterClass> preferredRegionalDelicacyParametersRecipe = [];
 
   void showRegionalDelicacyParameterDetails(context, String parameter) {
-    if (parameter == "Regional Delicacy") {
+    if (parameter == "Popular dishes") {
       _regionalDelicacyRecipesParameters
           .addAll(preferredRegionalDelicacyParametersRecipe);
       Navigator.push(
