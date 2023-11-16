@@ -328,7 +328,7 @@ class _RecipesSelectionState extends State<RecipesSelection> {
           );
         },
       );
-    } else if (widget.parameter == "Regional Delicacy") {
+    } else if (widget.parameter == "Popular dishes") {
       return Consumer<RegionalDelicacyProvider>(
         builder: (context, recipeProvider, _) {
           return Wrap(

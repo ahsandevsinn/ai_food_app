@@ -621,7 +621,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                                       widget: chipWidget(
                                           details: delicacyProvider
                                               .addRegionalDelicacy),
-                                      recipeText: "Regional delicacy",
+                                      recipeText: "Popular dishes",
                                       showListDataInChip:
                                           delicacyProvider.addRegionalDelicacy,
                                       onTap: () {
@@ -629,7 +629,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                                                 context,
                                                 listen: false)
                                             .showRegionalDelicacyParameterDetails(
-                                                context, "Regional Delicacy");
+                                                context, "Popular dishes");
                                       },
                                     ),
                                     SizedBox(height: height > 720 ? height * 0.02 : height * 0.01),
