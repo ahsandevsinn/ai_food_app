@@ -16,13 +16,16 @@ import 'package:ai_food/config/dio/spoonacular_app_dio.dart';
 import 'package:ai_food/config/keys/pref_keys.dart';
 import 'package:ai_food/main.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'result_container_askMaida.dart';
-final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
+
+final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
+    GlobalKey<ScaffoldMessengerState>();
 
 class AskMaidaScreen extends StatefulWidget {
   const AskMaidaScreen({Key? key}) : super(key: key);
@@ -31,8 +34,9 @@ class AskMaidaScreen extends StatefulWidget {
   State<AskMaidaScreen> createState() => _AskMaidaScreenState();
 }
 
-class _AskMaidaScreenState extends State<AskMaidaScreen> with AutomaticKeepAliveClientMixin{
- bool get wantKeepAlive => true;
+class _AskMaidaScreenState extends State<AskMaidaScreen>
+    with AutomaticKeepAliveClientMixin {
+  bool get wantKeepAlive => true;
   final TextEditingController _messageController = TextEditingController();
   late ScrollController _scrollController;
   late AppDio dio;
@@ -40,10 +44,10 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> with AutomaticKeepAlive
   AppLogger logger = AppLogger();
   var queryText;
   var savePreviousQuery;
+
   //new api data adding
   @override
   void initState() {
-
     dio = AppDio(context);
     spoonDio = SpoonAcularAppDio(context);
     logger.init();
@@ -63,6 +67,7 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> with AutomaticKeepAlive
     // });
     super.dispose();
   }
+
   void scrollToBottom() {
     final bottomOffset = _scrollController.position.maxScrollExtent;
     _scrollController.animateTo(
@@ -128,7 +133,6 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> with AutomaticKeepAlive
                   ),
                 ),
               ),
-              // customChat(),
               Expanded(
                 child: Consumer<ChatBotProvider>(
                   builder: (context, chatProvider, _) {
@@ -189,6 +193,7 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> with AutomaticKeepAlive
                           loadingProvider.isLoading
                               ? Image.asset(
                                   "assets/images/loader.gif",
+
                                   // width: 100,
                                   height: 50,
                                   color: AppTheme.appColor,
@@ -250,7 +255,6 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> with AutomaticKeepAlive
                               queryText = null;
                               if (_messageController.text.isNotEmpty) {
                                 savePreviousQuery = _messageController.text;
-
                                 chatBotTalk();
                               }
                             },
@@ -325,58 +329,68 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> with AutomaticKeepAlive
   }
 
   chatBotTalk() async {
-    final width = MediaQuery.of(context).size.width;
-    final pref = await SharedPreferences.getInstance();
+    Dio dio = Dio();
     var response;
     final chatsProvider = Provider.of<ChatBotProvider>(context, listen: false);
+    chatsProvider.containerLoading(false);
+    chatsProvider.displayChatWidgets(Stack(
+      alignment: Alignment.topRight,
+      children: [
+        Align(
+          alignment: Alignment.topRight,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+                horizontal: 8.0, vertical: 8),
+            child: Container(
+              margin: const EdgeInsets.symmetric(
+                  vertical: 4, horizontal: 14),
+              padding: const EdgeInsets.symmetric(
+                  vertical: 10, horizontal: 10),
+              decoration: BoxDecoration(
+                color: AppTheme.appColor,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  bottomLeft: Radius.circular(20),
+                  bottomRight: Radius.circular(10),
+                  topRight: Radius.circular(0),
+                ),
+              ),
+              child: AppText.appText(
+                  "${queryText == null ? savePreviousQuery : queryText}",
+                  textColor: AppTheme.whiteColor),
+            ),
+          ),
+        ),
+      ],
+    ),);
+    _messageController.clear();
     chatsProvider.messageLoading(true);
-    final apiUrlTwo =
-        'https://api.spoonacular.com/food/converse?text=${queryText == null ? savePreviousQuery : queryText}&apiKey=$apiKey2';
-    final apiUrl =
-        'https://api.spoonacular.com/food/converse?text=${queryText == null ? savePreviousQuery : queryText}&apiKey=$apiKey';
-    response = await spoonDio.get(path: apiUrl);
+    Options options = Options(
+      headers: {
+        'Authorization': 'ed145789-9f6e-4000-b971-5e7bad68f1d3',
+        'Content-Type': 'application/json',
+      },
+    );
+
+    // Set up request body
+    Map<String, dynamic> data = {
+      "ingredients": ["${queryText == null ? savePreviousQuery : queryText}"],
+    };
+
+    // Make the Dio request
+    response = await dio.post(
+      'https://api.chefgpt.xyz/api/generate/recipe-from-ingredients',
+      options: options,
+      data: data,
+    );
     if (response.statusCode == 200) {
       final resData = response.data;
-      searchRecipeChatBot(resData, queryText ?? _messageController.text);
       if (resData != null) {
-        // setState(() {
-        //   visibilityContainer = false;
-        // });
-        chatsProvider.containerLoading(false);
+
         chatsProvider.displayChatWidgets(
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Stack(
-                alignment: Alignment.topRight,
-                children: [
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8.0, vertical: 8),
-                      child: Container(
-                        margin: const EdgeInsets.symmetric(
-                            vertical: 4, horizontal: 14),
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 10, horizontal: 10),
-                        decoration: BoxDecoration(
-                          color: AppTheme.appColor,
-                          borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(20),
-                            bottomLeft: Radius.circular(20),
-                            bottomRight: Radius.circular(10),
-                            topRight: Radius.circular(0),
-                          ),
-                        ),
-                        child: AppText.appText(
-                            "${queryText == null ? savePreviousQuery : queryText}",
-                            textColor: AppTheme.whiteColor),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
               Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
@@ -395,118 +409,91 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> with AutomaticKeepAlive
                     ),
                   ),
                   child: AppText.appText(
-                    resData['answerText'],
+                    resData['recipeName'],
                     textColor: AppTheme.appColor,
                   ),
                 ),
               ),
               const SizedBox(width: 4),
-              resData['media'] == null || resData['media'].isEmpty
-                  ? const SizedBox.shrink()
-                  : Column(
-                      children: resData['media']
-                          .map<Widget>(
-                            (item) => resultContainer(data: item,)
-                          )
-                          .toList(),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
+                child: Container(
+                  margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 14),
+                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                  decoration: BoxDecoration(
+                    color: AppTheme.whiteColor,
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(0),
+                      bottomLeft: Radius.circular(10),
+                      bottomRight: Radius.circular(20),
+                      topRight: Radius.circular(20),
                     ),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      resData['instructions'].isNotEmpty?AppText.appText("Instructions:",
+                          textColor: AppTheme.appColor,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold):SizedBox.shrink(),
+
+                      resData['instructions'].isNotEmpty? Align(
+                        alignment: Alignment.topLeft,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: resData['instructions']
+                              .map<Widget>(
+                                (item) => Padding(
+                                  padding: const EdgeInsets.only(top:3,bottom: 3),
+                                  child: AppText.appText(
+                                    "${item}",
+                                    textColor: AppTheme.appColor,
+                                  ),
+                                ),
+                              )
+                              .toList(),
+                        ),
+                      ):SizedBox.shrink(),
+                      const SizedBox(width: 4),
+                      resData['ingredients'].isNotEmpty?AppText.appText("Ingredients:",
+                          textColor: AppTheme.appColor,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold):SizedBox.shrink(),
+                      resData['ingredients'].isNotEmpty?   Column(
+                        children:
+                            List.generate(resData["ingredients"].length, (index) {
+                          var name = resData["ingredients"][index]["name"];
+                          var unit = resData["ingredients"][index]["unit"];
+                          var amount = resData["ingredients"][index]["amount"];
+                          return Padding(
+                            padding: const EdgeInsets.only(top: 5),
+                            child: Align(alignment: Alignment.topLeft,
+                              child: AppText.appText(
+                                "${name}, ${amount} $unit",
+                                textColor: AppTheme.appColor
+                              ),
+                            ),
+                          );
+                        }),
+                      ):SizedBox.shrink(),
+                    ],
+                  ),
+                ),
+              )
             ],
           ),
         );
 
         chatsProvider.regenerateLoaderLoading(true);
-        _messageController.clear();
         chatsProvider.messageLoading(false);
       }
-    } else if (response.statusCode == 402) {
-      response = await spoonDio.get(path: apiUrlTwo);
-      if (response.statusCode == 402) {
-        chatsProvider.messageLoading(false);
-        showSnackBar(context, 'Payment required');
-      } else {
-        final resData = response.data;
-        searchRecipeChatBot(resData, queryText ?? _messageController.text);
-        if (resData != null) {
-          // setState(() {
-          //   visibilityContainer = false;
-          // });
-          chatsProvider.containerLoading(false);
-          chatsProvider.displayChatWidgets(
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Stack(
-                  alignment: Alignment.topRight,
-                  children: [
-                    Align(
-                      alignment: Alignment.topRight,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8.0, vertical: 8),
-                        child: Container(
-                          margin: const EdgeInsets.symmetric(
-                              vertical: 4, horizontal: 14),
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 10),
-                          decoration: BoxDecoration(
-                            color: AppTheme.appColor,
-                            borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(20),
-                              bottomLeft: Radius.circular(20),
-                              bottomRight: Radius.circular(10),
-                              topRight: Radius.circular(0),
-                            ),
-                          ),
-                          child: AppText.appText(
-                              "${queryText == null ? savePreviousQuery : queryText}",
-                              textColor: AppTheme.whiteColor),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
-                  child: Container(
-                    margin:
-                        const EdgeInsets.symmetric(vertical: 4, horizontal: 14),
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 10, horizontal: 10),
-                    decoration: BoxDecoration(
-                      color: AppTheme.whiteColor,
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(0),
-                        bottomLeft: Radius.circular(10),
-                        bottomRight: Radius.circular(20),
-                        topRight: Radius.circular(20),
-                      ),
-                    ),
-                    child: AppText.appText(
-                      resData['answerText'],
-                      textColor: AppTheme.appColor,
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 4),
-                resData['media'] == null || resData['media'].isEmpty
-                    ? const SizedBox.shrink()
-                    : Column(
-                        children: resData['media']
-                            .map<Widget>(
-                              (item) => resultContainer(data: item),).toList(),
-                      ),
-              ],
-            ),
-          );
-          chatsProvider.regenerateLoaderLoading(true);
-          _messageController.clear();
-          chatsProvider.messageLoading(false);
-        } else {
-          showSnackBar(context, '${response.statusCode}');
-          chatsProvider.messageLoading(false);
-        }
-      }
+    } else if (response.statusCode == 294) {
+      showSnackBar(context, "Payment required");
+      chatsProvider.containerLoading(false);
+      chatsProvider.messageLoading(false);
+
     }
   }
 
@@ -556,6 +543,4 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> with AutomaticKeepAlive
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setInt(PrefKey.conditiontoLoad, 0);
   }
-
-
 }
