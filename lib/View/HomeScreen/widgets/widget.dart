@@ -92,3 +92,51 @@ class CustomRecipesSelection extends StatelessWidget {
 
 
 }
+
+
+
+class DisableRecipeSelect extends StatelessWidget {
+  final String recipeText;
+
+  const DisableRecipeSelect(
+      {Key? key,
+      required this.recipeText,})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    print("rescipeText${recipeText}");
+    final width = MediaQuery.of(context).size.width;
+    return Container(
+      width: width,
+      height: 55,
+      decoration: BoxDecoration(
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(5),
+            topRight: Radius.circular(5),
+            bottomLeft: Radius.circular(0),
+            bottomRight: Radius.circular(0),
+          ),
+          border: Border.all(color: AppTheme.appColor2, width: 2)),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15.0),
+        child: Row(mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            AppText.appText(recipeText,
+                fontSize: 15,
+                fontWeight: FontWeight.w500,
+                textColor: AppTheme.appColor2),
+            Icon(
+              Icons.arrow_forward_ios,
+              color: AppTheme.appColor2,
+              size: 20,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+
+}

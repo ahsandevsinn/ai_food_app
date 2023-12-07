@@ -62,9 +62,7 @@ class _BottomNavViewState extends State<BottomNavView> {
               query: widget.query,
               searchList: widget.searchList,
             )
-          : RecipeParamScreen(
-
-                ),
+          : RecipeParamScreen(),
        FavouriteScreen(),
        AskMaidaScreen(),
        SettingScreen(),

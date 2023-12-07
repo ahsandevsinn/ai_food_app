@@ -200,6 +200,7 @@ void login({
         var token = responseData['data']['token'];
         var username = responseData['data']['user']['name'];
         var usermail = responseData['data']['user']['email'];
+        var id = responseData['data']['user']['id'];
         var DOB = responseData['data']['user']['DOB']??"";
         var measuringUnit = responseData['data']['user']['measuring_unit'];
         var dietary_restrictions =
@@ -216,6 +217,7 @@ void login({
             dietaryRestrictionsList);
         prefs.setString(PrefKey.authorization, token ?? '');
         prefs.setString(PrefKey.userName, username ?? name);
+        prefs.setString(PrefKey.id, id ?? "");
         prefs.setString(PrefKey.email, usermail ?? email);
         prefs.setString(PrefKey.unit, measuringUnit);
         prefs.setString(PrefKey.socialId, userId);

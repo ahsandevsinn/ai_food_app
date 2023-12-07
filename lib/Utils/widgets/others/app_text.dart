@@ -1,7 +1,8 @@
+import 'package:ai_food/Utils/resources/res/app_theme.dart';
 import 'package:flutter/material.dart';
 
 class AppText {
-  static Widget appText(String text,
+  static Widget  appText(String text,
       {TextAlign? textAlign,
       Color? textColor,
       double? fontSize,
@@ -26,6 +27,7 @@ class AppText {
           overflow: overflow,
           fontStyle: fontStyle,
           textBaseline: textBaseline,
+          decorationColor: AppTheme.appColor,
           decoration: underLine == false
               ? TextDecoration.none
               : TextDecoration.underline),

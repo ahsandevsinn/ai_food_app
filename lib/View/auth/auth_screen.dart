@@ -715,10 +715,12 @@ class _AuthScreenState extends State<AuthScreen> {
           });
           var token = responseData['data']['token'];
           var name = responseData['data']['user']['name'];
+          var id = responseData['data']['user']['id'];
           print("username_is $name");
           SharedPreferences prefs = await SharedPreferences.getInstance();
 
           prefs.setString(PrefKey.authorization, token ?? '');
+          prefs.setString(PrefKey.id, id ?? '');
           prefs.setString(PrefKey.userName, name ?? '');
           prefs.setString(PrefKey.email, _emailController.text);
           pushReplacement(context, const UserProfileScreen());
@@ -829,6 +831,7 @@ class _AuthScreenState extends State<AuthScreen> {
           });
           var token = responseData['data']['token'];
           var name = responseData['data']['user']['name']??"";
+          var id = responseData['data']['user']['id']??"";
           var usermail = responseData['data']['user']['email']??"";
           var DOB = responseData['data']['user']['DOB']??"";
           var measuringUnit = responseData["data"]["user"]["measuring_unit"]??"us";
@@ -847,6 +850,7 @@ class _AuthScreenState extends State<AuthScreen> {
               dietaryRestrictionsList);
           prefs.setString(PrefKey.dateOfBirth, DOB);
           prefs.setString(PrefKey.authorization, token ?? '');
+          prefs.setString(PrefKey.id, id ?? '');
           prefs.setString(PrefKey.userName, name ?? '');
           prefs.setString(PrefKey.email, usermail);
           prefs.setString(PrefKey.unit, measuringUnit);

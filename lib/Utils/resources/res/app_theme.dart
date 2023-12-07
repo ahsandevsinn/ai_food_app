@@ -5,6 +5,7 @@ class AppTheme {
 
   static Color error = Color(0xffD11E22);
   static Color appColor = const Color(0xffB38ADE);
+  static Color appColor2 = const Color(0xffd1b8eb);
   static Color primaryColor = Colors.grey.shade300;
   static Color whiteColor= Colors.white;
 

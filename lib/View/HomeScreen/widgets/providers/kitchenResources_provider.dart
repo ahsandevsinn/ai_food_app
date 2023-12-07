@@ -43,7 +43,7 @@ class KitchenResourcesProvider extends ChangeNotifier {
   List<RecipesParameterClass> preferredKitchenResourcesParametersRecipe = [];
 
   void showKitchenResourcesParameterDetails(context, String parameter) {
-    if (parameter == "Kitchen Resources") {
+    if (parameter == "Desserts") {
       _kitchenResourcesRecipesParameters
           .addAll(preferredKitchenResourcesParametersRecipe);
       Navigator.push(

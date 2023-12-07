@@ -383,7 +383,7 @@ class _RecipesSelectionState extends State<RecipesSelection> {
           );
         },
       );
-    } else if (widget.parameter == "Kitchen Resources") {
+    } else if (widget.parameter == "Desserts") {
       return Consumer<KitchenResourcesProvider>(
         builder: (context, recipeProvider, _) {
           return Wrap(

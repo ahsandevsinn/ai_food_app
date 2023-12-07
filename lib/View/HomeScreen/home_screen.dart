@@ -108,196 +108,203 @@ class _HomeScreenState extends State<HomeScreen> {
         .size
         .width;
 
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (context) => BottomNavView(),));
+        return true;
+      },
+      child: Scaffold(
         backgroundColor: Colors.white,
-        automaticallyImplyLeading: false,
-        elevation: 0,
-        toolbarHeight: 120,
-        leadingWidth: double.infinity,
-        leading: Column(
-          children: [
-            Align(
-              alignment: Alignment.topLeft,
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  left: 18.0,
-                  // bottom: 19,
-                  top: 20,
-                ),
-                child: InkWell(
-                  onTap: () {
-                    Navigator.of(context).pushReplacement(MaterialPageRoute(
-                      builder: (context) => BottomNavView(),));
-                  },
-                  child: CircleAvatar(
-                    backgroundColor: AppTheme.appColor,
-                    radius: 18,
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 5.0),
-                      child: Icon(Icons.arrow_back_ios,
-                          size: 20, color: AppTheme.whiteColor),
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          automaticallyImplyLeading: false,
+          elevation: 0,
+          toolbarHeight: 120,
+          leadingWidth: double.infinity,
+          leading: Column(
+            children: [
+              Align(
+                alignment: Alignment.topLeft,
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                    left: 18.0,
+                    // bottom: 19,
+                    top: 20,
+                  ),
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                        builder: (context) => BottomNavView(),));
+                    },
+                    child: CircleAvatar(
+                      backgroundColor: AppTheme.appColor,
+                      radius: 18,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 5.0),
+                        child: Icon(Icons.arrow_back_ios,
+                            size: 20, color: AppTheme.whiteColor),
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(
-                left: 20.0,
-                right: 20.0,
+              SizedBox(
+                height: 10,
               ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 13.0),
-                    child: AppText.appText(
-                        type == 0 ? "Recommended:" : "Generated results:",
-                        fontSize: 20,
-                        textColor: AppTheme.appColor,
-                        fontWeight: FontWeight.w600),
-                  ),
-                  // REGENERATE RECIPE BUTTON
-                  regenerateResultLoader == false ? InkWell(
-                    onTap: () {
-                      setState(() {
-                        regenerateResultLoader = true;
-                      });
-                      if(type == 1 && widget.searchType == 1) {
-                        reGenerateRecipe(context);
-                      } else if (type == 1 && widget.searchType == 0){
-                        reGenerateRecipeQuery(context);
-                      }
-                    },
-                    child: Container(
-                      height: 35,
-                      decoration: BoxDecoration(
-                        color: AppTheme.whiteColor,
-                        borderRadius: BorderRadius.circular(50),
-                        border: Border.all(color: AppTheme.appColor),
-                      ),
-                      child: Padding(
-                        padding:
-                        const EdgeInsets.only(left: 10.0, right: 10),
-                        child: Row(
-                          mainAxisAlignment:
-                          MainAxisAlignment.spaceBetween,
-                          children: [
-                            Icon(
-                              Icons.autorenew,
-                              color: AppTheme.appColor,
-                              size: 18,
-                            ),
-                            const SizedBox(
-                              width: 4,
-                            ),
-                            AppText.appText(
-                              "Regenerate result",
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600,
-                              textColor: AppTheme.appColor,
-                            ),
-                          ],
+              Padding(
+                padding: const EdgeInsets.only(
+                  left: 20.0,
+                  right: 20.0,
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 13.0),
+                      child: AppText.appText(
+                          type == 0 ? "Recommended:" : "Generated results:",
+                          fontSize: 20,
+                          textColor: AppTheme.appColor,
+                          fontWeight: FontWeight.w600),
+                    ),
+                    // REGENERATE RECIPE BUTTON
+                    regenerateResultLoader == false ? InkWell(
+                      onTap: () {
+                        setState(() {
+                          regenerateResultLoader = true;
+                        });
+                        if(type == 1 && widget.searchType == 1) {
+                          reGenerateRecipe(context);
+                        } else if (type == 1 && widget.searchType == 0){
+                          reGenerateRecipeQuery(context);
+                        }
+                      },
+                      child: Container(
+                        height: 35,
+                        decoration: BoxDecoration(
+                          color: AppTheme.whiteColor,
+                          borderRadius: BorderRadius.circular(50),
+                          border: Border.all(color: AppTheme.appColor),
+                        ),
+                        child: Padding(
+                          padding:
+                          const EdgeInsets.only(left: 10.0, right: 10),
+                          child: Row(
+                            mainAxisAlignment:
+                            MainAxisAlignment.spaceBetween,
+                            children: [
+                              Icon(
+                                Icons.autorenew,
+                                color: AppTheme.appColor,
+                                size: 18,
+                              ),
+                              const SizedBox(
+                                width: 4,
+                              ),
+                              AppText.appText(
+                                "Regenerate result",
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                                textColor: AppTheme.appColor,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  )
-                      : const SizedBox.shrink()
-                ],
+                    )
+                        : const SizedBox.shrink()
+                  ],
+                ),
               ),
+            ],
+          ),
+        ),
+        body: isLoading
+            ? Center(
+          child: CircularProgressIndicator(
+            color: AppTheme.appColor,
+          ),
+        )
+            : Container(
+          height: double.infinity,
+          // color: Colors.red,
+          decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage("assets/images/logo.png"),
+                  scale: 0.5,
+                  opacity: 0.25)),
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                  horizontal: 10.0, vertical: 10),
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    type == 0
+                        ? responseData == null
+                        ? randomData == false
+                        ? Container(
+                      height: 500,
+                      width:
+                      MediaQuery
+                          .of(context)
+                          .size
+                          .width,
+                      child: Center(
+                        child: CircularProgressIndicator(
+                          color: AppTheme.appColor,
+                        ),
+                      ),
+                    )
+                        : Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20.0),
+                      child: Container(
+                        height: 500,
+                        child: Center(
+                            child: AppText.appText(
+                                "${errorResponse}")),
+                      ),
+                    )
+                        : responseData.isEmpty
+                        ? Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20.0),
+                      child: Container(
+                        height: 500,
+                        child: Center(
+                            child: AppText.appText(
+                                "No results found. Please try adjusting your profile parameters.")),
+                      ),
+                    )
+                        : gridView(data: responseData)
+                        : widget.data.length == 0
+                        ? Container(
+                      height: MediaQuery
+                          .of(context)
+                          .size
+                          .height *
+                          0.6,
+                      width: MediaQuery
+                          .of(context)
+                          .size
+                          .width,
+                      child: Center(
+                        child: Text(
+                          widget.searchType == 1
+                              ? "No results found. Please try adjusting your search parameters."
+                              : "No results found.",
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    )
+                        : gridView(data: widget.data)
+                  ]),
             ),
-          ],
-        ),
-      ),
-      body: isLoading
-          ? Center(
-        child: CircularProgressIndicator(
-          color: AppTheme.appColor,
-        ),
-      )
-          : Container(
-        height: double.infinity,
-        // color: Colors.red,
-        decoration: BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage("assets/images/logo.png"),
-                scale: 0.5,
-                opacity: 0.25)),
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-                horizontal: 10.0, vertical: 10),
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  type == 0
-                      ? responseData == null
-                      ? randomData == false
-                      ? Container(
-                    height: 500,
-                    width:
-                    MediaQuery
-                        .of(context)
-                        .size
-                        .width,
-                    child: Center(
-                      child: CircularProgressIndicator(
-                        color: AppTheme.appColor,
-                      ),
-                    ),
-                  )
-                      : Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20.0),
-                    child: Container(
-                      height: 500,
-                      child: Center(
-                          child: AppText.appText(
-                              "${errorResponse}")),
-                    ),
-                  )
-                      : responseData.isEmpty
-                      ? Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20.0),
-                    child: Container(
-                      height: 500,
-                      child: Center(
-                          child: AppText.appText(
-                              "No results found. Please try adjusting your profile parameters.")),
-                    ),
-                  )
-                      : gridView(data: responseData)
-                      : widget.data.length == 0
-                      ? Container(
-                    height: MediaQuery
-                        .of(context)
-                        .size
-                        .height *
-                        0.6,
-                    width: MediaQuery
-                        .of(context)
-                        .size
-                        .width,
-                    child: Center(
-                      child: Text(
-                        widget.searchType == 1
-                            ? "No results found. Please try adjusting your search parameters."
-                            : "No results found.",
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  )
-                      : gridView(data: widget.data)
-                ]),
           ),
         ),
       ),

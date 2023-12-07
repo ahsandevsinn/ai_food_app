@@ -6,6 +6,8 @@ class AppUrls {
   static const String updateUrl = "/api/user";
   static const String forgetPasswordUrl = "/api/password/email";
   static const String searchRecipe = "/api/search-recipe";
+  static const String store_chat = "/api/store-chat";
+  static const String get_chat = "/api/get-chat";
   static const String verifyUrl = "/api/verify-otp";
   static const String resetPasswordUrl = "/api/password/reset";
   static const String logoutUrl = "/api/logout";
