@@ -58,7 +58,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
   bool isLoadingSearch = false;
   bool checkLoadDataFromAPI = false;
   bool NoInternetConnection = false;
-  bool checkProfileSelection = false;
+  bool checkProfileSelection = true;
 
   @override
   void initState() {
@@ -506,37 +506,74 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                                 ],
                               ),
                             ), //search field
-                            Row(
-                              children: [
-                                Checkbox(
-                                  activeColor: AppTheme.appColor,
-                                  checkColor: Colors.white,
-                                  side: BorderSide(
-                                      color: AppTheme.appColor, width: 2),
-                                  value: checkProfileSelection,
-                                  onChanged: (bool? value) {
-                                    setState(() {
-                                      checkProfileSelection = value!;
-                                      if(allergiesProvider.addAllergies.isEmpty&& restrictionsProvider.addDietaryRestrictions.isEmpty){
-                                        showSnackBar(context, "Please select allergies and dietary restrictions!");
-                                        setState(() {
-                                          checkProfileSelection = false;
-                                        });
-                                      }
-                                    });
-                                  },
-                                ),
-                                AppText.appText("Apply restrictions",textColor: AppTheme.appColor),
-                              ],
-                            ),
+
                             SizedBox(height: height * maxHeight1),
                             SizedBox(
                               width: MediaQuery.of(context).size.width,
-                              child: AppText.appText(
-                                "Food choices:",
-                                fontSize: 24,
-                                fontWeight: FontWeight.w600,
-                                textColor: AppTheme.appColor,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  AppText.appText(
+                                    "Food choices:",
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.w600,
+                                    textColor: AppTheme.appColor,
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      //allergies
+                                      if (allergiesProvider
+                                              .addAllergies.isNotEmpty ||
+                                          restrictionsProvider
+                                              .addDietaryRestrictions.isNotEmpty ||
+                                          proteinProvider
+                                              .addProtein.isNotEmpty ||
+                                          kitchenProvider
+                                              .addKitchenResources.isNotEmpty ||
+                                          delicacyProvider
+                                              .addRegionalDelicacy.isNotEmpty ||
+                                          foodStyleProvider
+                                              .foodStyle.isNotEmpty) {
+                                        //  allergies
+                                        allergiesProvider.removeAllergyParams();
+                                        allergiesProvider
+                                            .clearAllergiesAllCheckboxStates();
+                                        //restrictions
+                                        restrictionsProvider
+                                            .removeDietaryRestrictions();
+                                        restrictionsProvider
+                                            .clearDietaryRestrictionsAllCheckboxStates();
+                                        //protein
+                                        proteinProvider
+                                            .removePreferredProtein();
+                                        proteinProvider
+                                            .clearProteinAllCheckboxStates();
+                                        //delicacy
+                                        delicacyProvider
+                                            .removeRegionalDelicacy();
+                                        delicacyProvider
+                                            .clearRegionalDelicacyAllCheckboxStates();
+                                        //kitchen
+                                        kitchenProvider
+                                            .removeKitchenResources();
+                                        kitchenProvider
+                                            .clearKitchenResourcesAllCheckboxStates();
+                                        //food style
+                                        foodStyleProvider.clearFoodStyleValue();
+                                        showSnackBar(context,
+                                            "Filters Reset Succesfully");
+                                      }
+                                    },
+                                    child: AppText.appText(
+                                      "Reset filters",
+                                      fontSize: 16,
+                                      underLine: true,
+                                      fontWeight: FontWeight.w600,
+                                      textColor: AppTheme.appColor,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                             SizedBox(height: height * maxHeight1),
@@ -630,7 +667,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                                       widget: chipWidget(
                                           details: restrictionsProvider
                                               .addDietaryRestrictions),
-                                      recipeText: "Dietary restrictions",
+                                      recipeText: "Dietary preference",
                                       showListDataInChip: restrictionsProvider
                                           .addDietaryRestrictions,
                                       onTap: () {
@@ -639,7 +676,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                                                 listen: false)
                                             .showDietaryRestrictionsParameterDetails(
                                                 context,
-                                                "Dietary Restrictions");
+                                                "Dietary preference");
                                       },
                                     ),
                                     SizedBox(
@@ -735,93 +772,83 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                               ],
                             ),
                             //kitchen resources ends
-                            SizedBox(height: height * 0.01),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width,
-                              child: Align(
-                                alignment: Alignment.topRight,
-                                child: GestureDetector(
-                                  onTap: () {
-                                    //allergies
-                                    if (allergiesProvider
-                                            .addAllergies.isNotEmpty ||
-                                        restrictionsProvider
-                                            .addDietaryRestrictions
-                                            .isNotEmpty ||
-                                        proteinProvider.addProtein.isNotEmpty ||
-                                        kitchenProvider
-                                            .addKitchenResources.isNotEmpty ||
-                                        delicacyProvider
-                                            .addRegionalDelicacy.isNotEmpty ||
-                                        foodStyleProvider
-                                            .foodStyle.isNotEmpty) {
-                                      //  allergies
-                                      allergiesProvider.removeAllergyParams();
-                                      allergiesProvider
-                                          .clearAllergiesAllCheckboxStates();
-                                      //restrictions
-                                      restrictionsProvider
-                                          .removeDietaryRestrictions();
-                                      restrictionsProvider
-                                          .clearDietaryRestrictionsAllCheckboxStates();
-                                      //protein
-                                      proteinProvider.removePreferredProtein();
-                                      proteinProvider
-                                          .clearProteinAllCheckboxStates();
-                                      //delicacy
-                                      delicacyProvider.removeRegionalDelicacy();
-                                      delicacyProvider
-                                          .clearRegionalDelicacyAllCheckboxStates();
-                                      //kitchen
-                                      kitchenProvider.removeKitchenResources();
-                                      kitchenProvider
-                                          .clearKitchenResourcesAllCheckboxStates();
-                                      //food style
-                                      foodStyleProvider.clearFoodStyleValue();
-                                      showSnackBar(
-                                          context, "Filters Reset Succesfully");
-                                    }
-                                  },
-                                  child: AppText.appText(
-                                    "Reset filters",
-                                    fontSize: 16,
-                                    underLine: true,
-                                    fontWeight: FontWeight.w600,
-                                    textColor: AppTheme.appColor,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            SizedBox(height: height * 0.03),
-                            isLoading
-                                ? Center(
-                                    child: CircularProgressIndicator(
-                                      color: AppTheme.appColor,
-                                    ),
-                                  )
-                                : Center(
-                                    child: AppButton.appButton(
-                                      "Generate",
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w600,
-                                      textColor: Colors.white,
-                                      width:
-                                          (MediaQuery.of(context).size.width /
-                                                  100) *
-                                              45,
-                                      height: 50,
-                                      backgroundColor: AppTheme.appColor,
-                                      onTap: () async {
-                                        await generateRecipe(
-                                            style: addFoodStyle,
-                                            allergy: allergiesProvider,
-                                            dietary: restrictionsProvider,
-                                            regional: delicacyProvider,
-                                            kitchen: kitchenProvider);
-                                        //removeSearchQueryValueFromPref();
+                            // SizedBox(height: height * 0.01),
+
+                            // SizedBox(height: height * 0.03),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    Checkbox(
+                                      activeColor: AppTheme.appColor,
+                                      checkColor: Colors.white,
+                                      side: BorderSide(
+                                          color: AppTheme.appColor, width: 2),
+                                      value: checkProfileSelection,
+                                      onChanged: (bool? value) {
+                                        setState(() {
+                                          checkProfileSelection = value!;
+                                          if (allergiesProvider
+                                                  .addAllergies.isEmpty &&
+                                              restrictionsProvider
+                                                  .addDietaryRestrictions
+                                                  .isEmpty) {
+                                            showSnackBar(context,
+                                                "Please select allergies and dietary restrictions!");
+                                            setState(() {
+                                              checkProfileSelection = false;
+                                            });
+                                          }
+                                        });
                                       },
                                     ),
-                                  ),
+                                    AppText.appText("Apply restrictions",
+                                        textColor: AppTheme.appColor),
+                                  ],
+                                ),
+                                Container(
+                                  height: 40,
+                                  width: 2,
+                                  color: AppTheme.appColor,
+                                ),
+                                isLoading
+                                    ? SizedBox(
+                                  width:
+                                  (MediaQuery.of(context).size.width /
+                                      100) *
+                                      35,
+                                  height: 35,
+                                      child: Center(
+                                          child: CircularProgressIndicator(
+                                            color: AppTheme.appColor,
+
+                                          ),
+                                        ),
+                                    )
+                                    : AppButton.appButton(
+                                        "Find",
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w600,
+                                        textColor: Colors.white,
+                                        width:
+                                            (MediaQuery.of(context).size.width /
+                                                    100) *
+                                                35,
+                                        height: 35,
+                                        backgroundColor: AppTheme.appColor,
+                                        onTap: () async {
+                                          await generateRecipe(
+                                              style: addFoodStyle,
+                                              allergy: allergiesProvider,
+                                              dietary: restrictionsProvider,
+                                              regional: delicacyProvider,
+                                              kitchen: kitchenProvider);
+                                          //removeSearchQueryValueFromPref();
+                                        },
+                                      ),
+                              ],
+                            ),
                             // ignore: prefer_const_constructors
                             SizedBox(
                                 height: height > 720
@@ -1075,23 +1102,23 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
 
   Future<void> getFood(context) async {
     final allergiesProvider =
-    Provider.of<AllergiesProvider>(context, listen: false);
+        Provider.of<AllergiesProvider>(context, listen: false);
     final dietaryRestrictionProvider =
-    Provider.of<DietaryRestrictionsProvider>(context, listen: false);
+        Provider.of<DietaryRestrictionsProvider>(context, listen: false);
     var allergiesSet = "";
     var restrictionsSet = "";
-    if(checkProfileSelection == true){
-      allergiesSet  = allergiesProvider.addAllergies.isNotEmpty
+    if (checkProfileSelection == true) {
+      allergiesSet = allergiesProvider.addAllergies.isNotEmpty
           ? "&intolerances=${allergiesProvider.addAllergies.toString().substring(1, allergiesProvider.addAllergies.toString().length - 1)}"
           : "";
-      restrictionsSet = dietaryRestrictionProvider.addDietaryRestrictions.isNotEmpty
+      restrictionsSet = dietaryRestrictionProvider
+              .addDietaryRestrictions.isNotEmpty
           ? "&diet=${dietaryRestrictionProvider.addDietaryRestrictions.toString().substring(1, dietaryRestrictionProvider.addDietaryRestrictions.toString().length - 1)}"
           : "";
-} else if (checkProfileSelection == false){
+    } else if (checkProfileSelection == false) {
       allergiesSet = "";
       restrictionsSet = "";
-}
-
+    }
 
     setState(() {
       isLoadingSearch = true;

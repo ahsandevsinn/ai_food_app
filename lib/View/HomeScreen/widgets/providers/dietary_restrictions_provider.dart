@@ -45,7 +45,7 @@ class DietaryRestrictionsProvider extends ChangeNotifier {
   List<RecipesParameterClass> preferredDietaryRestrictionsParametersRecipe = [];
 
   void showDietaryRestrictionsParameterDetails(context, String parameter) {
-    if (parameter == "Dietary Restrictions") {
+    if (parameter == "Dietary preference") {
       _dietaryRestrictionsRecipesParameters
           .addAll(preferredDietaryRestrictionsParametersRecipe);
       Navigator.push(
@@ -60,7 +60,7 @@ class DietaryRestrictionsProvider extends ChangeNotifier {
     }
   }
   void showDietaryRestrictionsParameterDetailsload(context, String parameter) {
-    if (parameter == "Dietary Restrictions") {
+    if (parameter == "Dietary preference") {
       _dietaryRestrictionsRecipesParameters.addAll(preferredDietaryRestrictionsParametersRecipe);
       notifyListeners();
     }
@@ -93,7 +93,7 @@ class DietaryRestrictionsProvider extends ChangeNotifier {
     _dietaryRestrictionsRecipesParameters
         .addAll(preferredDietaryRestrictionsParametersRecipe);
     var newScreen = RecipesSelection(
-      parameter: "Dietary Restrictions",
+      parameter: "Dietary preference",
       recipesParameters: preferredDietaryRestrictionsParametersRecipe,
     );
     Navigator.of(context).pushReplacement(

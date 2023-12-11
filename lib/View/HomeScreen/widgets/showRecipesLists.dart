@@ -221,7 +221,7 @@ class _RecipesSelectionState extends State<RecipesSelection> {
           );
         },
       );
-    } else if (widget.parameter == "Dietary Restrictions") {
+    } else if (widget.parameter == "Dietary preference") {
       return Consumer<DietaryRestrictionsProvider>(
         builder: (context, recipeProvider, _) {
           return Wrap(
